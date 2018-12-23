@@ -6,7 +6,8 @@
 
 body{
     margin-top: 100px;
-    background-color: #676767;
+    /*background-color: #676767;*/
+    background-color: #6bbab5;
 }
 .footer{
     color: #dddddd;
@@ -16,7 +17,7 @@ body{
 
 nav{
     /*background-color: #cccccc;*/
-    background-color: white;
+    background-color: #2b7379;
     position: fixed;
     top: 0;
     left: 0;
@@ -35,9 +36,9 @@ nav > a{
     text-decoration: none;
     /*transform: rotateZ(-15deg);*/
     transform: rotate3d(0, 0, 0, -10deg);
-    color: #333333;
-    border-right: solid 2px #333333;
-    border-left: solid 2px #333333;
+    color: #ffffff;
+    border-right: solid 2px #ffffff;
+    border-left: solid 2px #ffffff;
     border-radius: 5px;
 }
 nav > ul{
@@ -49,11 +50,115 @@ nav li{
     list-style: none;
 }
 nav ul a {
-    color: #333;
+    color: #ffffff;
     text-decoration: none;
     margin: 17px;
     padding-bottom: 10px;
 }
 nav ul a:hover{
-    border-bottom: 2px solid black;
+    border-bottom: 2px solid #ffffff;
+}
+.fixed{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 25%;
+    padding-top: 100px;
+    background-color: #112f3b;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.horizontalMargin{
+    margin-top: 17px;
+    margin-bottom: 17px;
+}
+.highlight{
+    background-color: #dddddd;
+    color: #333333;
+    text-decoration: none;
+}
+
+.page{
+    display: flex;
+}
+.page main{
+    flex: 3;
+}
+
+nav a:hover {
+    text-shadow: 0 0 25px white;
+}
+.aside{
+    flex: 1;
+    position: relative;
+}
+.aside h2{
+    text-align: center;
+    color: #ffffff;
+}
+.side-info{
+    color: #ffffff;
+    font-size: 1.2em;
+}
+.side-info a{
+    color: #333333;
+    text-decoration: none;
+    background-color: #dddddd;
+    padding: 5px;
+    border-radius: 10px;
+}
+.side-info li{
+    padding: 17px;
+}
+.btn{
+    padding: 5px;
+    margin: 5px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    position: relative;
+}
+.btn:focus{
+    outline: 0;
+}
+.btn:active::before{
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+}
+
+
+@media screen and (min-width: 845px){
+    .fixed{
+        height: 100vh;
+    }
+}
+@media screen and (max-width: 845px){
+
+    .page {
+        flex-direction: column;
+        /*align-items: center;*/
+        justify-content: center;
+    }
+    .aside{
+        position: relative;
+    }
+    .fixed{
+        position: inherit;
+        width: inherit;
+        flex-basis: 60vh;
+        text-align: center;
+    }
+    body{
+        margin-top: 0;
+    }
+    .questions-section{
+        margin-top: 17px;
+    }
 }

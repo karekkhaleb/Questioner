@@ -1,11 +1,12 @@
 /* eslint-disable no-restricted-syntax */
 import models from './models';
 
-const { Meetup } = models;
+const { Meetup, Question } = models;
 
 class Database {
   constructor() {
     this.meetups = [];
+    this.questions = [];
   }
 
   addMeetup(location, topic, happeningOn, tags = []) {
@@ -28,7 +29,7 @@ class Database {
     return meetup || null;
   }
 
-  getUpcommingMeetups() {
+  getUpcomingMeetups() {
     const upcomingMeetups = [];
     for (const meetup of this.meetups) {
       if (new Date(meetup.happeningOn) > new Date()) {
@@ -36,6 +37,22 @@ class Database {
       }
     }
     return upcomingMeetups;
+  }
+
+  addQuestion(meetup, createdBy, title, body) {
+    const currentQuestionsLength = this.questions.length;
+    const id = currentQuestionsLength ? this.questions[currentQuestionsLength - 1].id + 1 : 1;
+    const createdOn = new Date().toLocaleDateString();
+    const newQuestion = new Question(
+      id,
+      createdOn,
+      createdBy,
+      meetup,
+      title,
+      body,
+    );
+    this.questions.push(newQuestion);
+    return newQuestion;
   }
 }
 

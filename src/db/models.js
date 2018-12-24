@@ -1,4 +1,3 @@
-/* eslint-disable linebreak-style */
 class Meetup {
   constructor(id,
     createdOn,
@@ -45,7 +44,6 @@ class Question {
     meetup,
     title,
     body,
-    votes = 0,
   ) {
     this.id = id;
     this.createdOn = createdOn;
@@ -53,7 +51,7 @@ class Question {
     this.meetup = meetup;
     this.title = title;
     this.body = body;
-    this.votes = votes;
+    this.votes = 0;
   }
 }
 

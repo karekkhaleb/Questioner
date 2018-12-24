@@ -70,7 +70,7 @@ class MeetupController {
   };
 
   getUpcoming = (req, res) => {
-    const upcomingMeetups = database.getUpcommingMeetups();
+    const upcomingMeetups = database.getUpcomingMeetups();
     res.status(200).json({ status: 200, data: upcomingMeetups });
   };
 }

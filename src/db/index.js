@@ -1,10 +1,11 @@
+/* eslint-disable no-restricted-syntax */
 import models from './models';
 
 const { Meetup } = models;
 
 class Database {
-  constructor(meetups = []) {
-    this.meetups = meetups;
+  constructor() {
+    this.meetups = [];
   }
 
   addMeetup(location, topic, happeningOn, tags = []) {

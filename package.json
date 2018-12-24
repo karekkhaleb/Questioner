@@ -1,0 +1,48 @@
+{
+  "name": "questioner",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/app.js",
+  "scripts": {
+    "test": "cross-env NODE_ENV=test nyc --reporter=lcov --reporter=text ./node_modules/jasmine/bin/jasmine.js",
+    "start": "cross-env  NODE_ENV=production babel-node ./src/app.js",
+    "dev": "cross-env NODE_ENV=development nodemon --exec babel-node ./src/app.js",
+    "coverage": "nyc report --reporter=text-lcov && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/karekkhaleb/Questioner.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/karekkhaleb/Questioner/issues"
+  },
+  "homepage": "https://github.com/karekkhaleb/Questioner#readme",
+  "devDependencies": {
+    "babel-eslint": "^10.0.1",
+    "eslint": "^5.11.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.14.0"
+  },
+  "dependencies": {
+    "@babel/cli": "^7.2.3",
+    "@babel/core": "^7.2.2",
+    "@babel/node": "^7.2.2",
+    "@babel/plugin-proposal-class-properties": "^7.2.3",
+    "@babel/polyfill": "^7.2.5",
+    "@babel/preset-env": "^7.2.3",
+    "@babel/register": "^7.0.0",
+    "babel-plugin-istanbul": "^5.1.0",
+    "coveralls": "^3.0.2",
+    "cross-env": "^5.2.0",
+    "dotenv": "^6.2.0",
+    "eslint-plugin-jasmine": "^2.10.1",
+    "express": "^4.16.4",
+    "istanbul": "^0.4.5",
+    "jasmine": "^3.3.1",
+    "nyc": "^13.1.0",
+    "request": "^2.88.0"
+  }
+}

@@ -68,6 +68,11 @@ class MeetupController {
       error: 'No match found',
     });
   };
+
+  getUpcoming = (req, res) => {
+    const upcomingMeetups = database.getUpcommingMeetups();
+    res.status(200).json({ status: 200, data: upcomingMeetups });
+  };
 }
 
 export default new MeetupController();

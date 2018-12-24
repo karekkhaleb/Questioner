@@ -27,6 +27,16 @@ class Database {
     }
     return meetup || null;
   }
+
+  getUpcommingMeetups() {
+    const upcomingMeetups = [];
+    for (const meetup of this.meetups) {
+      if (new Date(meetup.happeningOn) > new Date()) {
+        upcomingMeetups.push(meetup);
+      }
+    }
+    return upcomingMeetups;
+  }
 }
 
 export default new Database();

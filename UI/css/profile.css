@@ -22,7 +22,6 @@ hr{
     font-size: 1.5em;
 }
 .aside{
-    background-color: #333333;
     flex: 1;
     position: relative;
 }
@@ -74,18 +73,6 @@ hr{
     color: #333333;
     text-decoration: none;
 }
-.fixed{
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 25%;
-    height: 100vh;
-    padding-top: 100px;
-    background-color: #333333;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-}
 .page{
     display: flex;
 }
@@ -98,27 +85,4 @@ hr{
     padding: 17px;
     background-color: #dddddd;
     line-height: 2em;
-}
-
-@media screen and (max-width: 845px){
-
-    .page {
-        flex-direction: column;
-    }
-    .aside{
-        position: relative;
-    }
-    .fixed{
-        position: inherit;
-        background-color: transparent;
-        width: inherit;
-        height: 60vh;
-        text-align: center;
-    }
-    body{
-        margin-top: 0;
-    }
-    .questions-section{
-        margin-top: 17px;
-    }
 }

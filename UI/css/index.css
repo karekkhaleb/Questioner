@@ -1,0 +1,71 @@
+.container{
+    margin: 0 15%;
+}
+
+.jumbotron{
+    background: url("../images/meetup-pic.jpg") center no-repeat;
+    background-size: cover;
+    position: relative;
+    height: 100%;
+    width: 100%;
+}
+
+.landing-info{
+    background-color: rgba(17, 47, 59, 0.5);
+    box-shadow: 5px 5px 25px black;
+    padding: 25px;
+}
+.landing-info > h1{
+    text-align: center;
+    margin-bottom: 10px;
+    font-size: 4em;
+    color: white;
+}
+hr{
+    margin: 10px 0;
+}
+.description > div {
+    display: inline-block;
+    width: 30%;
+    color: #ffffff;
+    text-align: center;
+    font-size: 1.5em;
+    min-height: 20vh;
+    background-color: rgba(17, 47, 59, 0.49);
+    padding: 17px;
+}
+
+.description {
+    margin: 27px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.description p{
+    font-size: 1em;
+}
+.top-questions li{
+    list-style: none;
+    margin: 17px;
+    padding: 17px;
+    background-color: #dddddd;
+    line-height: 2em;
+}
+@media screen and (max-width: 1000px){
+    .description{
+        flex-direction: column;
+    }
+    .description > div{
+        width: 100%;
+        margin-bottom: 20px;
+    }
+    .landing-info > h1{
+        font-size: 7vw;
+    }
+}
+@media screen and (max-width: 845px){
+    .jumbotron{
+        margin-top: 17px;
+        margin-bottom: 17px;
+    }
+}

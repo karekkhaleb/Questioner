@@ -74,18 +74,7 @@ hr{
     color: #333333;
     text-decoration: none;
 }
-.fixed{
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 25%;
-    height: 100vh;
-    padding-top: 100px;
-    background-color: #333333;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-}
+
 .page{
     display: flex;
 }
@@ -96,7 +85,8 @@ hr{
     font-size: 1.5em;
 }
 .form-container h1, .form-container h2{
-    color: #ffffff;
+    /*color: #ffffff;*/
+    color: #333333;
 }
 .form-container{
     position: relative;
@@ -122,42 +112,25 @@ hr{
 }
 .question-field-container input{
     /*background-color: transparent;*/
-    font-size: 2em;
+    font-size: 1.2em;
     font-family: "David Libre", serif;
     width: 100%;
     padding: 17px;
     background-color: transparent;
     border: none;
 }
+.date-field-container{
+    width: 50%;
+}
 .question-field-container input[name="date"]{
-    width: 80%;
+    width: 60%;
+    padding: 5px;
+    /*background-color: red;*/
+    /*height: 30px;*/
 }
 .question-field-container .date-label{
     width: 20%;
 }
 .date-label{
     margin-left: 17px;
-}
-
-@media screen and (max-width: 845px){
-
-    .page {
-        flex-direction: column;
-    }
-    .aside{
-        position: relative;
-    }
-    .fixed{
-        position: inherit;
-        background-color: transparent;
-        width: inherit;
-        height: 60vh;
-        text-align: center;
-    }
-    body{
-        margin-top: 0;
-    }
-    .meetups{
-        margin-top: 17px;
-    }
 }

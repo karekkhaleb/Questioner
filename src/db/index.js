@@ -16,6 +16,17 @@ class Database {
     this.meetups.push(newMeetup);
     return newMeetup;
   }
+
+  getSingleMeetup(meetupId) {
+    let meetup;
+    for (const tempMeetup of this.meetups) {
+      if (tempMeetup.id === meetupId) {
+        meetup = tempMeetup;
+        break;
+      }
+    }
+    return meetup || null;
+  }
 }
 
 export default new Database();

@@ -9,5 +9,4 @@ Router.get('/upcoming', meetupController.getUpcoming);
 Router.get('/:meetupId', meetupController.getSingle);
 
 
-
 export default Router;

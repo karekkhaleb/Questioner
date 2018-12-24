@@ -2,6 +2,13 @@
 import database from '../db';
 
 class MeetupController {
+  getAll = (req, res) => {
+    res.status(200).json({
+      status: 200,
+      data: database.meetups,
+    });
+  };
+
   create = (req, res) => {
     if (!req.body.location) {
       return res.status(400).json({

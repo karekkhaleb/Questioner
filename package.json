@@ -3,6 +3,13 @@
   "version": "1.0.0",
   "description": "",
   "main": "src/app.js",
+  "nyc": {
+    "require": [
+      "@babel/register"
+    ],
+    "sourceMap": false,
+    "instrument": false
+  },
   "scripts": {
     "test": "cross-env NODE_ENV=test nyc --reporter=lcov --reporter=text ./node_modules/jasmine/bin/jasmine.js",
     "start": "cross-env  NODE_ENV=production babel-node ./src/app.js",

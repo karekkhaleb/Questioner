@@ -47,11 +47,11 @@ class Question {
 }
 
 class Rsvp {
-  constructor(id, meetup, user, response) {
+  constructor(id, meetupId, userId, status) {
     this.id = id;
-    this.meetup = meetup;
-    this.user = user;
-    this.response = response;
+    this.meetup = meetupId;
+    this.userId = userId;
+    this.status = status;
   }
 }
 

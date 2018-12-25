@@ -1,14 +1,16 @@
-/* eslint-disable no-restricted-syntax */
+/* eslint-disable no-restricted-syntax,no-plusplus */
 import models from './models';
-import meetups from '../../my-dev-test/meetups.json';
 
-const { Meetup, Question, User } = models;
+const {
+  Meetup, Question, User, Rsvp,
+} = models;
 
 class Database {
   constructor() {
-    this.meetups = [...meetups];
+    this.meetups = [];
     this.questions = [];
     this.users = [];
+    this.rsvps = [];
   }
 
   addMeetup(location, topic, happeningOn, tags = []) {
@@ -118,6 +120,43 @@ class Database {
     });
     this.users.push(newUser);
     return newUser;
+  }
+
+  respondRsvp({ ...rsvpData }) {
+    const rsvpId = this.rsvps.length ? this.rsvps[this.rsvps.length - 1].id + 1 : 1;
+    /**
+     * Check if this meetup exists
+     */
+    let meetup;
+    for (let i = 0; i < this.meetups.length; i++) {
+      if (this.meetups[i].id === rsvpData.meetupId) {
+        meetup = this.meetups[i];
+        break;
+      }
+    }
+    if (!meetup) return { status: 404, error: 'No matching meetup' };
+    /**
+     * Check if this user exists
+     */
+    let userExists = false;
+    for (let i = 0; i < this.users.length; i++) {
+      if (this.users[i].id === rsvpData.userId) {
+        userExists = true;
+        break;
+      }
+    }
+    if (!userExists) return { status: 404, error: 'No matching user' };
+    const newRsvp = new Rsvp(
+      rsvpId,
+      rsvpData.meetupId,
+      rsvpData.userId,
+      rsvpData.status,
+    );
+    return {
+      meetupId: newRsvp.meetup,
+      meetupTopic: meetup.topic,
+      status: newRsvp.status,
+    };
   }
 }
 

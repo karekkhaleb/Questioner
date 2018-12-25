@@ -73,6 +73,55 @@ class MeetupController {
     const upcomingMeetups = database.getUpcomingMeetups();
     res.status(200).json({ status: 200, data: upcomingMeetups });
   };
+
+  respondRsvp = (req, res) => {
+    if (!req.body.status) {
+      return res.status(400).json({
+        status: 400,
+        error: 'status is required',
+      });
+    }
+    if (!Number.parseInt(req.params.meetupId, 10)) {
+      return res.status(400).json({
+        status: 400,
+        error: 'invalid meetup id',
+      });
+    }
+    if (!req.body.userId) {
+      return res.status(400).json({
+        status: 400,
+        error: 'userId is required',
+      });
+    }
+    const status = req.body.status.toString().trim();
+    if (status !== 'yes' && status !== 'no' && status !== 'maybe') {
+      return res.status(400).json({
+        status: 400,
+        error: 'status should be yes, no, or maybe',
+      });
+    }
+    const rsvp = database.respondRsvp({
+      status,
+      userId: Number.parseInt(req.body.userId, 10),
+      meetupId: Number.parseInt(req.params.meetupId, 10),
+    });
+
+    if (rsvp && rsvp.error) {
+      return res.status(rsvp.status).json({
+        status: rsvp.status,
+        error: rsvp.error,
+      });
+    }
+
+    res.status(200).json({
+      status: 200,
+      data: {
+        meetup: rsvp.meetupId,
+        topic: rsvp.meetupTopic,
+        status: rsvp.status,
+      },
+    });
+  }
 }
 
 export default new MeetupController();

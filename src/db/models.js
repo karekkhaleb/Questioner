@@ -14,25 +14,16 @@ class Meetup {
   }
 }
 class User {
-  constructor(
-    id,
-    firstname,
-    lastname,
-    email,
-    phoneNumber,
-    userName, registered,
-    isAdmin,
-    othername = '',
-  ) {
-    this.id = id;
-    this.firstname = firstname;
-    this.lastname = lastname;
-    this.othername = othername;
-    this.email = email;
-    this.phoneNumber = phoneNumber;
-    this.userName = userName;
-    this.registered = registered;
-    this.isAdmin = isAdmin;
+  constructor({ ...userData }) {
+    this.id = userData.id;
+    this.firstname = userData.firstname;
+    this.lastname = userData.lastname;
+    this.othername = userData.othername || '';
+    this.email = userData.email;
+    this.phoneNumber = userData.phoneNumber;
+    this.userName = userData.userName;
+    this.registered = userData.registered;
+    this.isAdmin = userData.isAdmin;
   }
 }
 

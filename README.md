@@ -111,14 +111,14 @@
   },
   "upvote a  question": {
     "url" : "/api/v1/questions/<question-id>/upvote",
-    "method" : "PATCH"
+    "method" : "PATCH",
     "requirements" : [
       "the question with this id should be present"
     ]
   },
   "downvote a  question" : {
     "url" : "/api/v1/questions/<question-id>/downvote",
-    "method" : "PATCH"
+    "method" : "PATCH",
     "requirements" : [
       "the question with this id should be present"
     ]

@@ -67,15 +67,63 @@ describe('testing create meetup endpoint', () => {
         location: testMeetup.location,
         topic: testMeetup.topic,
         happeningOn: testMeetup.happeningOn,
-        tags: testMeetup.tags,
       },
     }, (error, response, body) => {
       expect(body.data[0]).toEqual({
         topic: testMeetup.topic,
         location: testMeetup.location,
         happeningOn: testMeetup.happeningOn,
-        tags: testMeetup.tags,
+        tags: [],
       });
+      done();
+    });
+  });
+});
+describe('testing get upcoming meetups api endpoint', () => {
+  beforeAll((Done) => {
+    request.post(urlMeetups, {
+      json: {
+        location: testMeetup.location,
+        topic: testMeetup.topic,
+        happeningOn: testMeetup.happeningOn,
+        tags: testMeetup.tags,
+      },
+    }, );
+    Done();
+  });
+  it('should give all upcoming meetups', function (done) {
+    request.get(`${urlMeetups}/upcoming`, (error, response, body) => {
+      expect(JSON.parse(body).status).toBe(200);
+      done();
+    });
+  });
+});
+describe('testing get single meetup api endpoint', () => {
+  beforeAll((Done) => {
+    request.post(urlMeetups, {
+      json: {
+        location: testMeetup.location,
+        topic: testMeetup.topic,
+        happeningOn: testMeetup.happeningOn,
+      },
+    }, );
+    Done();
+  });
+  it('should give a single meetup', function (done) {
+    request.get(`${urlMeetups}/1`, (error, response, body) => {
+      expect(JSON.parse(body).status).toBe(200);
+      done();
+    });
+  });
+  it('should ask for the right type of the id', function (done) {
+    request.get(`${urlMeetups}/wrong-id`, (error, response, body) => {
+      expect(JSON.parse(body).error).toEqual('wrong id type');
+      done();
+    });
+  });
+  it('should tell the meetup is not present', function (done) {
+    request.get(`${urlMeetups}/47854`, (error, response, body) => {
+      expect(JSON.parse(body).error).toEqual('No match found');
       done();
     });
   });

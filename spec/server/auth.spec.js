@@ -1,81 +1,99 @@
 /* eslint-disable no-unused-vars */
 import request from 'request';
-import '@babel/polyfill';
 import server from '../../src/app';
-import { urlMeetups, testMeetup } from './testUtils';
+import { urlAuth } from './testUtils';
 
-describe('get meetups api endpoint', () => {
-  it('should give a proper status code', (done) => {
-    request.get(urlMeetups, (error, response, body) => {
-      expect(response.statusCode).toEqual(200);
-      done();
-    });
-  });
-  it('should give the body with the right status code', (done) => {
-    request.get(urlMeetups, (error, response, body) => {
-      expect(JSON.parse(body).status).toBe(200);
-      done();
-    });
-  });
-  it('should give an array into the body', (done) => {
-    request.get(urlMeetups, (error, response, body) => {
-      expect(JSON.parse(body).data.length).toBeDefined();
-      done();
-    });
-  });
-});
-describe('testing create meetup endpoint', () => {
-  it('should ask for meetup location if absent', (done) => {
-    request.post(urlMeetups, {
+describe('signup api endpoint', () => {
+  it('should create the users if all the fields are gives', (done) => {
+    request.post(`${urlAuth}/signup`, {
       json: {
-        topic: testMeetup.topic,
-        happeningOn: testMeetup.happeningOn,
-        tags: testMeetup.tags,
+        firstname: 'Buhungiro',
+        lastname: 'Caleb',
+        email: 'karekkhaleb@gmail.com',
+        phoneNumber: 250722387998,
+        userName: 'zoar',
       },
     }, (error, response, body) => {
-      expect(body.error).toEqual('Missing location');
+      expect(body.data.firstname).toEqual('Buhungiro');
       done();
     });
   });
-  it('should ask for meetup topic if absent', (done) => {
-    request.post(urlMeetups, {
+  it('should ask for the firstname if absent', (done) => {
+    request.post(`${urlAuth}/signup`, {
       json: {
-        location: testMeetup.location,
-        happeningOn: testMeetup.happeningOn,
-        tags: testMeetup.tags,
+        lastname: 'Caleb',
+        email: 'karekkhaleb@gmail.com',
+        phoneNumber: 250722387998,
+        userName: 'zoar',
       },
     }, (error, response, body) => {
-      expect(body.error).toEqual('Missing topic');
+      expect(body.error).toEqual('Firstname is required');
       done();
     });
   });
-  it('should ask for the date the meetup takes place if absent', (done) => {
-    request.post(urlMeetups, {
+  it('should ask for the firstname if absent', (done) => {
+    request.post(`${urlAuth}/signup`, {
       json: {
-        location: testMeetup.location,
-        topic: testMeetup.topic,
-        tags: testMeetup.tags,
+        firstname: 'Caleb',
+        email: 'karekkhaleb@gmail.com',
+        phoneNumber: 250722387998,
+        userName: 'zoar',
       },
     }, (error, response, body) => {
-      expect(body.error).toEqual('Missing time the meetup takes place');
+      expect(body.error).toEqual('Lastname is required');
       done();
     });
   });
-  it('should create the meetup record if all the required fields are available', (done) => {
-    request.post(urlMeetups, {
+  it('should ask for the email if absent', (done) => {
+    request.post(`${urlAuth}/signup`, {
       json: {
-        location: testMeetup.location,
-        topic: testMeetup.topic,
-        happeningOn: testMeetup.happeningOn,
-        tags: testMeetup.tags,
+        firstname: 'Caleb',
+        lastname: 'abahungu',
+        phoneNumber: 250722387998,
+        userName: 'zoar',
       },
     }, (error, response, body) => {
-      expect(body.data[0]).toEqual({
-        topic: testMeetup.topic,
-        location: testMeetup.location,
-        happeningOn: testMeetup.happeningOn,
-        tags: testMeetup.tags,
-      });
+      expect(body.error).toEqual('Email is required');
+      done();
+    });
+  });
+  it('should ask for the email if absent', (done) => {
+    request.post(`${urlAuth}/signup`, {
+      json: {
+        firstname: 'Caleb',
+        lastname: 'abahungu',
+        email: 'karekkhaleb@gmail.com',
+        userName: 'zoar',
+      },
+    }, (error, response, body) => {
+      expect(body.error).toEqual('PhoneNumber is required');
+      done();
+    });
+  });
+  it('should ask for the email if absent', (done) => {
+    request.post(`${urlAuth}/signup`, {
+      json: {
+        firstname: 'Caleb',
+        lastname: 'abahungu',
+        email: 'karekkhaleb@gmail.com',
+        phoneNumber: 250722387998,
+      },
+    }, (error, response, body) => {
+      expect(body.error).toEqual('UserName is required');
+      done();
+    });
+  });
+  it('should ask the phone number to be a number', (done) => {
+    request.post(`${urlAuth}/signup`, {
+      json: {
+        firstname: 'Buhungiro',
+        lastname: 'Caleb',
+        email: 'karekkhaleb@gmail.com',
+        phoneNumber: 'not a number',
+        userName: 'zoar',
+      },
+    }, (error, response, body) => {
+      expect(body.error).toEqual('Phone Number should be a number');
       done();
     });
   });

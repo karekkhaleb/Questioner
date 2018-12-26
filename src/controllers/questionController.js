@@ -4,28 +4,27 @@ import database from '../db';
 class QuestionController {
   create = (req, res) => {
     const createdQuestion = database.addQuestion(
-      Number.parseInt(req.body.meetup, 10),
+      Number.parseInt(req.body.meetupId, 10),
       Number.parseInt(req.body.createdBy, 10),
       req.body.title,
       req.body.body,
     );
 
     if (createdQuestion && createdQuestion.error) {
-      res.status(createdQuestion.status).json({
+      return res.status(createdQuestion.status).json({
         status: createdQuestion.status,
         error: createdQuestion.error,
       });
-    } else if (createdQuestion && createdQuestion.title) {
-      res.status(201).json({
-        status: 201,
-        data: [{
-          createdBy: createdQuestion.createdBy,
-          meetup: createdQuestion.meetup,
-          title: createdQuestion.title,
-          body: createdQuestion.body,
-        }],
-      });
     }
+    res.status(201).json({
+      status: 201,
+      data: [{
+        createdBy: createdQuestion.createdBy,
+        meetup: createdQuestion.meetup,
+        title: createdQuestion.title,
+        body: createdQuestion.body,
+      }],
+    });
   };
 
   getAll = (req, res) => {

@@ -14,7 +14,7 @@ const testUser = {
 const testMeetup = {
   location: 'kigali',
   topic: 'Server side rendering',
-  happeningOn: '2019-01-27',
+  happeningOn: '2020-01-27',
   tags: ['junior-developers', 'kigali-developers'],
 };
 const testQuestion = {

@@ -6,7 +6,9 @@
 [![Maintainability](https://api.codeclimate.com/v1/badges/5fbdaed021a61dc69a8f/maintainability)](https://codeclimate.com/github/karekkhaleb/Questioner/maintainability)
 
 
-> This api is hosted at https://caleb-questioner.herokuapp.com
+> This api is hosted at `https://caleb-questioner.herokuapp.com`
+
+> UI templates are hosted at `https://karekkhaleb.github.io/Questioner/UI/`
 
 
 # App Description

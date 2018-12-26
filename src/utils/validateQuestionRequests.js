@@ -1,6 +1,6 @@
 /* eslint-disable import/prefer-default-export,consistent-return */
 function checkQuestion(req, res, next) {
-  if (!req.body.meetup) {
+  if (!req.body.meetupId) {
     return res.status(400).json({
       status: 400,
       error: 'Missing meetup',
@@ -30,7 +30,7 @@ function checkQuestion(req, res, next) {
       error: 'createdBy should be an integer',
     });
   }
-  if (!Number.parseInt(req.body.meetup, 10)) {
+  if (!Number.parseInt(req.body.meetupId, 10)) {
     return res.status(400).json({
       status: 400,
       error: 'meetup should be an integer',

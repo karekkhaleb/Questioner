@@ -4,7 +4,7 @@ class Meetup {
     location,
     topic,
     happeningOn,
-    tags = []) {
+    tags) {
     this.id = id;
     this.createdOn = createdOn;
     this.location = location;

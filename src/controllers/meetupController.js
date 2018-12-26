@@ -28,12 +28,14 @@ class MeetupController {
         error: 'Missing time the meetup takes place',
       });
     }
+    const tags = Array.isArray(req.body.tags)?  [...req.body.tags] : [];
     const created = database.addMeetup(
       req.body.location,
       req.body.topic,
       req.body.happeningOn,
-      req.body.tags ? req.body.tags.split(' ') : [],
+      tags,
     );
+
 
     res.status(201).json({
       status: 201,

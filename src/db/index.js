@@ -13,7 +13,7 @@ class Database {
     this.rsvps = [];
   }
 
-  addMeetup(location, topic, happeningOn, tags = []) {
+  addMeetup(location, topic, happeningOn, tags) {
     const currentMeetupsLength = this.meetups.length;
     const id = currentMeetupsLength ? this.meetups[currentMeetupsLength - 1].id + 1 : 1;
     const createdOn = new Date().toLocaleDateString();
@@ -43,19 +43,19 @@ class Database {
     return upcomingMeetups;
   }
 
-  addQuestion(meetup, createdBy, title, body) {
+  addQuestion(meetupId, createdBy, title, body) {
     /**
      * checking if this meetups exists
      */
     let meetupExists = false;
     for (let i = 0; i < this.meetups.length; i++) {
-      if (this.meetups[i].id === meetup) {
+      if (this.meetups[i].id === meetupId) {
         meetupExists = true;
         break;
       }
     }
     if (!meetupExists) {
-      return { error: 'Meetup not found' };
+      return { status: 404, error: 'Meetup not found' };
     }
     /**
      * checking if this user exists
@@ -78,7 +78,7 @@ class Database {
       id,
       createdOn,
       createdBy,
-      meetup,
+      meetupId,
       title,
       body,
     );

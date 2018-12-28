@@ -1,16 +1,11 @@
 class Meetup {
-  constructor(id,
-    createdOn,
-    location,
-    topic,
-    happeningOn,
-    tags) {
-    this.id = id;
-    this.createdOn = createdOn;
-    this.location = location;
-    this.topic = topic;
-    this.happeningOn = happeningOn;
-    this.tags = tags;
+  constructor({...meetupData}) {
+    this.id = meetupData.id;
+    this.createdOn = new Date();
+    this.location = meetupData.location;
+    this.topic = meetupData.topic;
+    this.happeningOn = new Date(meetupData.happeningOn);
+    this.tags = meetupData.tags;
   }
 }
 class User {
@@ -22,7 +17,7 @@ class User {
     this.email = userData.email;
     this.phoneNumber = userData.phoneNumber;
     this.userName = userData.userName;
-    this.registered = userData.registered;
+    this.registered = new Date();
     this.isAdmin = userData.isAdmin;
   }
 }
@@ -30,14 +25,13 @@ class User {
 class Question {
   constructor(
     id,
-    createdOn,
     createdBy,
     meetup,
     title,
     body,
   ) {
     this.id = id;
-    this.createdOn = createdOn;
+    this.createdOn = new Date();
     this.createdBy = createdBy;
     this.meetup = meetup;
     this.title = title;

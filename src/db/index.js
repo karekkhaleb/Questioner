@@ -13,11 +13,10 @@ class Database {
     this.rsvps = [];
   }
 
-  addMeetup(location, topic, happeningOn, tags) {
+  addMeetup({...meetupData}) {
     const currentMeetupsLength = this.meetups.length;
     const id = currentMeetupsLength ? this.meetups[currentMeetupsLength - 1].id + 1 : 1;
-    const createdOn = new Date().toLocaleDateString();
-    const newMeetup = new Meetup(id, createdOn, location, topic, happeningOn, tags);
+    const newMeetup = new Meetup({...meetupData, id});
     this.meetups.push(newMeetup);
     return newMeetup;
   }
@@ -73,10 +72,8 @@ class Database {
 
     const currentQuestionsLength = this.questions.length;
     const id = currentQuestionsLength ? this.questions[currentQuestionsLength - 1].id + 1 : 1;
-    const createdOn = new Date().toLocaleDateString();
     const newQuestion = new Question(
       id,
-      createdOn,
       createdBy,
       meetupId,
       title,
@@ -115,7 +112,6 @@ class Database {
       othername: userCredentials.othername,
       phoneNumber: Number.parseInt(userCredentials.phoneNumber, 10),
       userName: userCredentials.userName,
-      registered: new Date().toLocaleDateString(),
       isAdmin: false,
     });
     this.users.push(newUser);

@@ -32,7 +32,7 @@ describe('respond rsvps api endpoint', () => {
         userId: 1,
       },
     }, (error, response, body) => {
-      expect(body.data.status).toEqual('yes');
+      expect(body.data[0].status).toEqual('yes');
       done();
     });
   });
@@ -43,7 +43,7 @@ describe('respond rsvps api endpoint', () => {
         userId: 1,
       },
     }, (error, response, body) => {
-      expect(body.data.status).toEqual('maybe');
+      expect(body.data[0].status).toEqual('maybe');
       done();
     });
   });

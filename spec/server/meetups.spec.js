@@ -61,6 +61,19 @@ describe('testing create meetup endpoint', () => {
       done();
     });
   });
+  it('should ask for a valid date in the happeningOn field', (done) => {
+    request.post(urlMeetups, {
+      json: {
+        location: testMeetup.location,
+        happeningOn: 'not a valid date',
+        topic: testMeetup.topic,
+        tags: testMeetup.tags,
+      },
+    }, (error, response, body) => {
+      expect(body.error).toEqual('happeningOn should be a valid date: Y/M/D');
+      done();
+    });
+  });
   it('should create the meetup record if all the required fields are available', (done) => {
     request.post(urlMeetups, {
       json: {
@@ -72,7 +85,7 @@ describe('testing create meetup endpoint', () => {
       expect(body.data[0]).toEqual({
         topic: testMeetup.topic,
         location: testMeetup.location,
-        happeningOn: testMeetup.happeningOn,
+        happeningOn: new Date(testMeetup.happeningOn).toISOString(),
         tags: [],
       });
       done();

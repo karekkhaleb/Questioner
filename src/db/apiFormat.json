@@ -1,0 +1,84 @@
+{
+  "get all meetups" : {
+    "url" : "/api/v1/meetups",
+    "method" : "GET"
+  },
+  "get single meetup" : {
+    "url" : "/api/v1/meetups/<meetupId>",
+    "method" : "GET"
+  },
+  "get all upcoming meetups" : {
+    "url" : "/api/v1/meetups/upcoming",
+    "method" : "GET"
+  },
+  "create new meetup record" : {
+    "url" : "/api/v1/meetups",
+    "method" : "POST",
+    "objectFormat" : {
+      "location" : "The location where the meetup will take place",
+      "topic" : "The topic of the meetup",
+      "happeningOn" : "The time that the meetup holds",
+      "tags" : "optional tags for the meetup."
+    },
+    "requirements" : [
+      "tags should be an array of strings",
+      "happeningOn should be a date with this format: `Year/Month/Day`"
+    ]
+  },
+  "respond Rsvps" : {
+    "url" : "/api/v1/meetups/<meetupId>/rsvps",
+    "method" : "POST",
+    "objectFormat" : {
+      "userId" : "The id of the user responding",
+      "status" : "The response"
+    },
+    "requirements" : [
+      "The meetup with the provided id should be available",
+      "The user with the given id must be present",
+      "The response should be yes, no or maybe"
+    ]
+  },
+  "creating the user" : {
+    "url" : "api/v1/auth/signup",
+    "method" : "POST",
+    "objectFormat" : {
+      "firstname" : "user's firstname",
+      "lastname" : "user's last name",
+      "email" : "user's email",
+      "phoneNumber" : "user's phone number",
+      "userName" : "user's username"
+    }
+  },
+  "get all questions" : {
+    "url" : "/api/v1/questions",
+    "method" : "GET"
+  },
+  "create a new question" : {
+    "url" : "/api/v1/questions",
+    "method" : "POST",
+    "objectFormat" : {
+      "meetupId" : "the id of the meetup that correspons to this question",
+      "createdBy" : "the id of the user creatin this question",
+      "title" : "the title for this question",
+      "body" : "the body for this question"
+    },
+    "requirements" : [
+      "the meetup with this id should be present",
+      "the user with this id should be present"
+    ]
+  },
+  "upvote a  question": {
+    "url" : "/api/v1/questions/<question-id>/upvote",
+    "method" : "PATCH",
+    "requirements" : [
+      "the question with this id should be present"
+    ]
+  },
+  "downvote a  question" : {
+    "url" : "/api/v1/questions/<question-id>/downvote",
+    "method" : "PATCH",
+    "requirements" : [
+      "the question with this id should be present"
+    ]
+  }
+}

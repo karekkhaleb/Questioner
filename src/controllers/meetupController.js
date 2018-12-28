@@ -10,32 +10,13 @@ class MeetupController {
   };
 
   create = (req, res) => {
-    if (!req.body.location) {
-      return res.status(400).json({
-        status: 400,
-        error: 'Missing location',
-      });
-    }
-    if (!req.body.topic) {
-      return res.status(400).json({
-        status: 400,
-        error: 'Missing topic',
-      });
-    }
-    if (!req.body.happeningOn) {
-      return res.status(400).json({
-        status: 400,
-        error: 'Missing time the meetup takes place',
-      });
-    }
     const tags = Array.isArray(req.body.tags)?  [...req.body.tags] : [];
-    const created = database.addMeetup(
-      req.body.location,
-      req.body.topic,
-      req.body.happeningOn,
-      tags,
-    );
-
+    const created = database.addMeetup({
+        location: req.body.location,
+        topic: req.body.topic,
+        happeningOn: req.body.happeningOn,
+        tags,
+    });
 
     res.status(201).json({
       status: 201,
@@ -117,11 +98,11 @@ class MeetupController {
 
     res.status(200).json({
       status: 200,
-      data: {
+      data: [{
         meetup: rsvp.meetupId,
         topic: rsvp.meetupTopic,
         status: rsvp.status,
-      },
+      }],
     });
   }
 }

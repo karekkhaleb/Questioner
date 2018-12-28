@@ -21,7 +21,8 @@
       "tags" : "optional tags for the meetup."
     },
     "requirements" : [
-      "tags should be an array of strings"
+      "tags should be an array of strings",
+      "happeningOn should be a date with this format: `Year/Month/Day`"
     ]
   },
   "respond Rsvps" : {

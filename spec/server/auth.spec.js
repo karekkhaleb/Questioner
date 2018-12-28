@@ -4,7 +4,7 @@ import server from '../../src/app';
 import { urlAuth } from './testUtils';
 
 describe('signup api endpoint', () => {
-  it('should create the users if all the fields are gives', (done) => {
+  it('should create the users if all the fields are given', (done) => {
     request.post(`${urlAuth}/signup`, {
       json: {
         firstname: 'Buhungiro',
@@ -14,7 +14,7 @@ describe('signup api endpoint', () => {
         userName: 'zoar',
       },
     }, (error, response, body) => {
-      expect(body.data.firstname).toEqual('Buhungiro');
+      expect(body.data[0].firstname).toEqual('Buhungiro');
       done();
     });
   });

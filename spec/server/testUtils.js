@@ -1,4 +1,5 @@
-const urlRoot = 'http://localhost:9000/api/v1';
+const baseUrl = 'http://localhost:9000';
+const urlRoot = `${baseUrl}/api/v1`;
 const urlMeetups = `${urlRoot}/meetups`;
 const urlAuth = `${urlRoot}/auth`;
 const urlQuestions = `${urlRoot}/questions`;
@@ -32,4 +33,5 @@ export {
   testMeetup,
   testQuestion,
   testUser,
+  baseUrl,
 };

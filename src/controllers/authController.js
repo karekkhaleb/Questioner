@@ -6,7 +6,7 @@ class AuthController {
     const createdUser = database.signup(req.body);
     res.status(201).json({
       status: 201,
-      data: createdUser,
+      data: [createdUser],
     });
   };
 }

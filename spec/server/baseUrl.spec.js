@@ -1,6 +1,5 @@
 /* eslint-disable no-unused-vars */
 import request from 'request';
-import '@babel/polyfill';
 import server from '../../src/app';
 import { baseUrl } from './testUtils';
 

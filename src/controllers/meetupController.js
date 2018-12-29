@@ -9,9 +9,9 @@ class MeetupController {
     });
   };
 
-  create = (req, res) => {
+  create = async (req, res) => {
     const tags = Array.isArray(req.body.tags)?  [...req.body.tags] : [];
-    const created = database.addMeetup({
+    const created = await database.addMeetup({
         location: req.body.location,
         topic: req.body.topic,
         happeningOn: req.body.happeningOn,

@@ -8,6 +8,7 @@ class Meetup {
     this.tags = meetupData.tags;
   }
 }
+
 class User {
   constructor({ ...userData }) {
     this.id = userData.id;

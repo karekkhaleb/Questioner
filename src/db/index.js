@@ -1,16 +1,62 @@
 /* eslint-disable no-restricted-syntax,no-plusplus */
+import {Pool} from 'pg';
+import dotenv from 'dotenv';
 import models from './models';
+import sqlQueries from './sqlQueries';
+
+dotenv.config();
 
 const {
   Meetup, Question, User, Rsvp,
 } = models;
 
+let pool;
+if (process.env.DATABASE_URL) {
+  const connectionString = process.env.DATABASE_URL;
+  pool = new Pool({
+    connectionString,
+  });
+} else {
+  pool = new Pool();
+}
+const connect = async () => await pool.connect();
+
 class Database {
   constructor() {
+    // =========================
     this.meetups = [];
     this.questions = [];
     this.users = [];
     this.rsvps = [];
+    // =========================
+    this.prepareConnect();
+  }
+  async prepareConnect() {
+    const adminData = [
+      process.env.ADMINFIRSTNAME,
+      process.env.ADMINLASTNAME,
+      process.env.ADMINOTHERNAME,
+      process.env.ADMINPHONENUMBER,
+      process.env.ADMINUSERNAME,
+      process.env.ADMINEMAIL,
+    ];
+    const connection = await connect();
+    try {
+      await connection.query(sqlQueries.usersTableQuery);
+      await connection.query(sqlQueries.meetupsTableQuery);
+      await connection.query(sqlQueries.tagsTableQuery);
+      await connection.query(sqlQueries.meetupsTagsTableQuery);
+      await connection.query(sqlQueries.questionsTableQuery);
+      await connection.query(sqlQueries.commentsTableQuery);
+      await connection.query(sqlQueries.rsvpsTableQuery);
+      const admin = await connection.query(sqlQueries.adminQuery, adminData);
+
+      console.log(admin);
+    } catch (e) {
+      console.log(e);
+    } finally {
+      connection.release();
+    }
   }
 
   addMeetup({...meetupData}) {

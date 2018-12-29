@@ -41,28 +41,48 @@ class Database {
       process.env.ADMINEMAIL,
     ];
     const connection = await connect();
-    try {
-      await connection.query(sqlQueries.usersTableQuery);
-      await connection.query(sqlQueries.meetupsTableQuery);
-      await connection.query(sqlQueries.tagsTableQuery);
-      await connection.query(sqlQueries.meetupsTagsTableQuery);
-      await connection.query(sqlQueries.questionsTableQuery);
-      await connection.query(sqlQueries.commentsTableQuery);
-      await connection.query(sqlQueries.rsvpsTableQuery);
-      const admin = await connection.query(sqlQueries.adminQuery, adminData);
-
-      console.log(admin);
-    } catch (e) {
-      console.log(e);
-    } finally {
-      connection.release();
-    }
+    await connection.query(sqlQueries.usersTableQuery);
+    await connection.query(sqlQueries.meetupsTableQuery);
+    await connection.query(sqlQueries.tagsTableQuery);
+    await connection.query(sqlQueries.meetupsTagsTableQuery);
+    await connection.query(sqlQueries.questionsTableQuery);
+    await connection.query(sqlQueries.commentsTableQuery);
+    await connection.query(sqlQueries.rsvpsTableQuery);
+    await connection.query(sqlQueries.adminQuery, adminData);
+    connection.release();
   }
 
-  addMeetup({...meetupData}) {
-    const currentMeetupsLength = this.meetups.length;
-    const id = currentMeetupsLength ? this.meetups[currentMeetupsLength - 1].id + 1 : 1;
-    const newMeetup = new Meetup({...meetupData, id});
+  async addMeetup({...meetupData}) {
+    const query = `insert into meetups (
+      location, topic, happening_on) 
+      values ($1, $2, $3) returning *;
+    `;
+     const queryParams = [
+       meetupData.location,
+       meetupData.topic,
+       meetupData.happeningOn,
+     ];
+     const connection = await connect();
+     try {
+       const result = await connection.query(query, queryParams);
+       const newMeetup = result.rows[0];
+       return {
+         id: newMeetup.id,
+         createdOn: newMeetup.created_on,
+         location: newMeetup.location,
+         topic: newMeetup.topic,
+         happeningOn: newMeetup.happening_on,
+       }
+     } catch (e) {
+       return {
+         status: 500,
+         error: 'Something went wrong on the database'
+       }
+     } finally {
+       connection.release();
+     }
+
+
     this.meetups.push(newMeetup);
     return newMeetup;
   }

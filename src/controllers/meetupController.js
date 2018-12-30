@@ -2,10 +2,17 @@
 import database from '../db';
 
 class MeetupController {
-  getAll = (req, res) => {
+  getAll = async(req, res) => {
+    const meetups = await database.getAllMeetps();
+    if (meetups && meetups.error) {
+      return res.status(meetups.status).json({
+        status: meetups.status,
+        error: meetups.error,
+      });
+    }
     res.status(200).json({
       status: 200,
-      data: database.meetups,
+      data: meetups,
     });
   };
 

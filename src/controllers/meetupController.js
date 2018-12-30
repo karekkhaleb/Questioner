@@ -43,26 +43,17 @@ class MeetupController {
     });
   };
 
-  getSingle = (req, res) => {
+  getSingle = async (req, res) => {
     const meetupId = Number.parseInt(req.params.meetupId, 10);
     if (!meetupId) return res.status(400).json({ status: 400, error: 'wrong id type' });
 
-    const requestedMeetup = database.getSingleMeetup(meetupId);
-    if (requestedMeetup) {
-      return res.status(200).json({
-        status: 200,
-        data: [{
-          id: requestedMeetup.id,
-          topic: requestedMeetup.topic,
-          location: requestedMeetup.location,
-          happeningOn: requestedMeetup.happeningOn,
-          tags: requestedMeetup.tags,
-        }],
-      });
+    const requestedMeetup = await database.getSingleMeetup(meetupId);
+    if (requestedMeetup && requestedMeetup.error) {
+      return res.status(requestedMeetup.status).json(requestedMeetup);
     }
-    return res.status(404).json({
-      status: 404,
-      error: 'No match found',
+    return res.status(200).json({
+      status: 200,
+      data: [requestedMeetup],
     });
   };
 

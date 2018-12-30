@@ -108,15 +108,31 @@ class Database {
     }
   }
 
-  getSingleMeetup(meetupId) {
-    let meetup;
-    for (const tempMeetup of this.meetups) {
-      if (tempMeetup.id === meetupId) {
-        meetup = tempMeetup;
-        break;
+  async getSingleMeetup(meetupId) {
+    const query = 'select * from meetups where id = $1;';
+    const connection = await connect();
+    try {
+      const result = await connection.query(query, [meetupId]);
+      if (result.rows.length === 0) {
+        return {
+          status: 404,
+          error: 'Meetup not found',
+        };
       }
+      return {
+        id: result.rows[0].id,
+        topic: result.rows[0].topic,
+        location: result.rows[0].location,
+        happeningOn: result.rows[0].happening_on
+      }
+    } catch (e) {
+      return {
+        status: 500,
+        error: 'Something went wrong on the server'
+      }
+    } finally {
+      connection.release();
     }
-    return meetup || null;
   }
 
   getUpcomingMeetups() {

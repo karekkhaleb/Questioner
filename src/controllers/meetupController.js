@@ -14,9 +14,16 @@ class MeetupController {
     const created = await database.addMeetup({
         location: req.body.location,
         topic: req.body.topic,
-        happeningOn: req.body.happeningOn,
+        happeningOn: new Date(req.body.happeningOn),
         tags,
     });
+
+    if (created && created.error) {
+      return res.status(created.status).json({
+        status: created.status,
+        error: created.error,
+      });
+    }
 
     res.status(201).json({
       status: 201,
@@ -24,7 +31,7 @@ class MeetupController {
         topic: created.topic,
         location: created.location,
         happeningOn: created.happeningOn,
-        tags: created.tags,
+        tags: [],
       }],
     });
   };

@@ -29,9 +29,9 @@ class Database {
     this.users = [];
     this.rsvps = [];
     // =========================
-    this.prepareConnect();
+    this.prepareDatabase();
   }
-  async prepareConnect() {
+  async prepareDatabase() {
     const adminData = [
       process.env.ADMINFIRSTNAME,
       process.env.ADMINLASTNAME,
@@ -81,10 +81,31 @@ class Database {
      } finally {
        connection.release();
      }
+  }
 
-
-    this.meetups.push(newMeetup);
-    return newMeetup;
+  async getAllMeetps() {
+    const meetupsQuery = 'select * from meetups';
+    const connection = await connect();
+    try {
+      const result = await connection.query(meetupsQuery);
+      const requiredMeetups = [];
+      result.rows.forEach(row => {
+        requiredMeetups.push({
+          id: row.id,
+          title: row.topic,
+          location: row.location,
+          happeningOn: row.happening_on,
+        })
+      });
+      return requiredMeetups;
+    } catch (e) {
+      return {
+        status: 500,
+        error: "Something went wrong on the server"
+      }
+    } finally {
+      connection.release();
+    }
   }
 
   getSingleMeetup(meetupId) {

@@ -3,26 +3,26 @@ import request from 'request';
 import server from '../../src/app';
 import { urlMeetups, testMeetup } from './testUtils';
 
-// describe('get meetups api endpoint', () => {
-//   it('should give a proper status code', (done) => {
-//     request.get(urlMeetups, (error, response, body) => {
-//       expect(response.statusCode).toEqual(200);
-//       done();
-//     });
-//   });
-//   it('should give the body with the right status code', (done) => {
-//     request.get(urlMeetups, (error, response, body) => {
-//       expect(JSON.parse(body).status).toBe(200);
-//       done();
-//     });
-//   });
-//   it('should give an array into the body', (done) => {
-//     request.get(urlMeetups, (error, response, body) => {
-//       expect(JSON.parse(body).data.length).toBeDefined();
-//       done();
-//     });
-//   });
-// });
+describe('get meetups api endpoint', () => {
+  it('should give a proper status code', (done) => {
+    request.get(urlMeetups, (error, response) => {
+      expect(response.statusCode).toEqual(200);
+      done();
+    });
+  });
+  it('should give the body with the right status code', (done) => {
+    request.get(urlMeetups, (error, response, body) => {
+      expect(JSON.parse(body).status).toBe(200);
+      done();
+    });
+  });
+  it('should give an array into the body', (done) => {
+    request.get(urlMeetups, (error, response, body) => {
+      expect(JSON.parse(body).data.length).toBeDefined();
+      done();
+    });
+  });
+});
 describe('testing create meetup endpoint', () => {
   it('should ask for meetup location if absent', (done) => {
     request.post(urlMeetups, {

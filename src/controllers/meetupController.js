@@ -57,8 +57,14 @@ class MeetupController {
     });
   };
 
-  getUpcoming = (req, res) => {
-    const upcomingMeetups = database.getUpcomingMeetups();
+  getUpcoming = async (req, res) => {
+    const upcomingMeetups = await database.getUpcomingMeetups();
+    if (upcomingMeetups && upcomingMeetups.error) {
+      return res.status(upcomingMeetups.status).json({
+        status: upcomingMeetups.status,
+        error: upcomingMeetups.error,
+      });
+    }
     res.status(200).json({ status: 200, data: upcomingMeetups });
   };
 

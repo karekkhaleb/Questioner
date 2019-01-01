@@ -91,25 +91,25 @@ describe('testing create meetup endpoint', () => {
     });
   });
 });
-// describe('testing get upcoming meetups api endpoint', () => {
-//   beforeAll((Done) => {
-//     request.post(urlMeetups, {
-//       json: {
-//         location: testMeetup.location,
-//         topic: testMeetup.topic,
-//         happeningOn: testMeetup.happeningOn,
-//         tags: testMeetup.tags,
-//       },
-//     }, );
-//     Done();
-//   });
-//   it('should give all upcoming meetups', function (done) {
-//     request.get(`${urlMeetups}/upcoming`, (error, response, body) => {
-//       expect(JSON.parse(body).status).toBe(200);
-//       done();
-//     });
-//   });
-// });
+describe('testing get upcoming meetups api endpoint', () => {
+  beforeAll((Done) => {
+    request.post(urlMeetups, {
+      json: {
+        location: testMeetup.location,
+        topic: testMeetup.topic,
+        happeningOn: testMeetup.happeningOn,
+        tags: testMeetup.tags,
+      },
+    }, );
+    Done();
+  });
+  it('should give all upcoming meetups', function (done) {
+    request.get(`${urlMeetups}/upcoming`, (error, response, body) => {
+      expect(JSON.parse(body).status).toBe(200);
+      done();
+    });
+  });
+});
 describe('testing get single meetup api endpoint', () => {
   beforeAll((Done) => {
     request.post(urlMeetups, {

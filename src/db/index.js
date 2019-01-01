@@ -1,5 +1,5 @@
 /* eslint-disable no-restricted-syntax,no-plusplus */
-import {Pool} from 'pg';
+import { Pool } from 'pg';
 import dotenv from 'dotenv';
 import models from './models';
 import sqlQueries from './sqlQueries';
@@ -19,7 +19,7 @@ if (process.env.DATABASE_URL) {
 } else {
   pool = new Pool();
 }
-const connect = async () => await pool.connect();
+const connect = async () => pool.connect();
 
 class Database {
   constructor() {
@@ -31,7 +31,8 @@ class Database {
     // =========================
     this.prepareDatabase();
   }
-  async prepareDatabase() {
+
+  prepareDatabase = async () => {
     const adminData = [
       process.env.ADMINFIRSTNAME,
       process.env.ADMINLASTNAME,
@@ -50,65 +51,65 @@ class Database {
     await connection.query(sqlQueries.rsvpsTableQuery);
     await connection.query(sqlQueries.adminQuery, adminData);
     connection.release();
-  }
+  };
 
-  async addMeetup({...meetupData}) {
+  addMeetup = async ({ ...meetupData }) => {
     const query = `insert into meetups (
       location, topic, happening_on) 
       values ($1, $2, $3) returning *;
     `;
-     const queryParams = [
-       meetupData.location,
-       meetupData.topic,
-       meetupData.happeningOn,
-     ];
-     const connection = await connect();
-     try {
-       const result = await connection.query(query, queryParams);
-       const newMeetup = result.rows[0];
-       return {
-         id: newMeetup.id,
-         createdOn: newMeetup.created_on,
-         location: newMeetup.location,
-         topic: newMeetup.topic,
-         happeningOn: newMeetup.happening_on,
-       }
-     } catch (e) {
-       return {
-         status: 500,
-         error: 'Something went wrong on the database'
-       }
-     } finally {
-       connection.release();
-     }
-  }
+    const queryParams = [
+      meetupData.location,
+      meetupData.topic,
+      meetupData.happeningOn,
+    ];
+    const connection = await connect();
+    try {
+      const result = await connection.query(query, queryParams);
+      const newMeetup = result.rows[0];
+      return {
+        id: newMeetup.id,
+        createdOn: newMeetup.created_on,
+        location: newMeetup.location,
+        topic: newMeetup.topic,
+        happeningOn: newMeetup.happening_on,
+      };
+    } catch (e) {
+      return {
+        status: 500,
+        error: 'Something went wrong on the database',
+      };
+    } finally {
+      connection.release();
+    }
+  };
 
-  async getAllMeetps() {
+  getAllMeetps = async () => {
     const meetupsQuery = 'select * from meetups';
     const connection = await connect();
     try {
       const result = await connection.query(meetupsQuery);
       const requiredMeetups = [];
-      result.rows.forEach(row => {
+      result.rows.forEach((row) => {
         requiredMeetups.push({
           id: row.id,
           title: row.topic,
           location: row.location,
           happeningOn: row.happening_on,
-        })
+        });
       });
       return requiredMeetups;
     } catch (e) {
       return {
         status: 500,
-        error: "Something went wrong on the server"
-      }
+        error: 'Something went wrong on the server',
+      };
     } finally {
       connection.release();
     }
-  }
+  };
 
-  async getSingleMeetup(meetupId) {
+  getSingleMeetup = async (meetupId) => {
     const query = 'select * from meetups where id = $1;';
     const connection = await connect();
     try {
@@ -123,27 +124,42 @@ class Database {
         id: result.rows[0].id,
         topic: result.rows[0].topic,
         location: result.rows[0].location,
-        happeningOn: result.rows[0].happening_on
-      }
+        happeningOn: result.rows[0].happening_on,
+      };
     } catch (e) {
       return {
         status: 500,
-        error: 'Something went wrong on the server'
-      }
+        error: 'Something went wrong on the server',
+      };
     } finally {
       connection.release();
     }
-  }
+  };
 
-  getUpcomingMeetups() {
-    const upcomingMeetups = [];
-    for (const meetup of this.meetups) {
-      if (new Date(meetup.happeningOn) > new Date()) {
-        upcomingMeetups.push(meetup);
-      }
+  getUpcomingMeetups = async () => {
+    const query = 'select * from meetups where happening_on > now();';
+    const connection = await connect();
+    try {
+      const result = await connection.query(query);
+      const meetups = [];
+      result.rows.forEach((row) => {
+        meetups.push({
+          id: row.id,
+          title: row.topic,
+          location: row.location,
+          happeningOn: row.happening_on,
+        });
+      });
+      return meetups;
+    } catch (e) {
+      return {
+        status: 500,
+        error: 'Something went wrong on the server',
+      };
+    } finally {
+      connection.release();
     }
-    return upcomingMeetups;
-  }
+  };
 
   addQuestion(meetupId, createdBy, title, body) {
     /**

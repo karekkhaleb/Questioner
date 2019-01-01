@@ -1,5 +1,5 @@
 import express from 'express';
-import '@babel/register'
+import '@babel/register';
 import '@babel/polyfill';
 import morgan from 'morgan';
 import meetupRoutes from './routes/meetupRoutes';
@@ -23,7 +23,7 @@ app.use(`${rootUrl}/auth`, authRoutes);
 app.get('/', (req, res) => res.status(200).json({
   status: 200,
   message: 'Welcome to my Restful API',
-  apiFormat: apiFormat,
+  apiFormat,
 }));
 
 

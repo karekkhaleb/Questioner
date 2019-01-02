@@ -12,5 +12,19 @@ class TagController {
       data: [createdTag],
     });
   };
+
+  getAll = async (req, res) => {
+    const tags = await database.getAllTags();
+    if (tags && tags.error) {
+      return res.status(tags.status).json({
+        status: tags.status,
+        error: tags.error,
+      });
+    }
+    res.status(200).json({
+      status: 200,
+      data: tags,
+    });
+  };
 }
 export default new TagController();

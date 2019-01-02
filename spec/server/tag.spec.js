@@ -18,7 +18,6 @@ describe('signup api endpoint', () => {
         tagName: 'test',
       },
     }, (error, response, body) => {
-      // console.log(body);
       expect(body.data[0].tagName).toEqual('test');
       done();
     });
@@ -29,22 +28,17 @@ describe('signup api endpoint', () => {
         tagName: 'to-fail',
       },
     }, (error, response, body) => {
-      console.log(body);
       expect(body.error).toEqual('Tag already exists');
       done();
     });
   });
-  // it('should ask for the firstname if absent', (done) => {
-  //   request.post(`${urlAuth}/signup`, {
-  //     json: {
-  //       lastname: 'Caleb',
-  //       email: 'karekkhaleb@gmail.com',
-  //       phoneNumber: 250722387998,
-  //       userName: 'zoar',
-  //     },
-  //   }, (error, response, body) => {
-  //     expect(body.error).toEqual('Firstname is required');
-  //     done();
-  //   });
-  // });
+});
+
+describe('Testing get all tags endpoint', () => {
+  it('should give all available tags', (done) => {
+    request.get(urlTags, (error, response) => {
+      expect(response.statusCode).toBe(200);
+      done();
+    });
+  });
 });

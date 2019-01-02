@@ -171,7 +171,6 @@ class Database {
         tagName: result.rows[0].tag_name,
       };
     } catch (e) {
-      // console.log(e);
       if (e.detail && e.detail.includes('already exists')) {
         return {
           status: 400,
@@ -181,6 +180,22 @@ class Database {
       return {
         status: 500,
         error: 'Something went wrong to the server',
+      };
+    } finally {
+      connection.release();
+    }
+  };
+
+  getAllTags = async () => {
+    const query = 'select * from tags';
+    const connection = await connect();
+    try {
+      const result = await connection.query(query);
+      return result.rows;
+    } catch (e) {
+      return {
+        status: 500,
+        error: 'Something went wrong on the server',
       };
     } finally {
       connection.release();

@@ -3,6 +3,7 @@ const urlRoot = `${baseUrl}/api/v1`;
 const urlMeetups = `${urlRoot}/meetups`;
 const urlAuth = `${urlRoot}/auth`;
 const urlQuestions = `${urlRoot}/questions`;
+const urlTags = `${urlRoot}/tags`;
 
 const testUser = {
   firstname: 'buhungiro',
@@ -34,4 +35,5 @@ export {
   testQuestion,
   testUser,
   baseUrl,
+  urlTags,
 };

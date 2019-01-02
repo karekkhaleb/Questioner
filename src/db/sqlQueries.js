@@ -19,7 +19,7 @@ const meetupsTableQuery = `create table if not exists meetups (
 
 const tagsTableQuery = `create table if not exists tags(
   id serial primary key ,
-  tag_name varchar(200)
+  tag_name varchar(200) unique not null 
 );`;
 
 const meetupsTagsTableQuery = `create table if not exists meetups_tags(
@@ -30,7 +30,7 @@ const meetupsTagsTableQuery = `create table if not exists meetups_tags(
   foreign key (tag_id) references tags(id)
 );`;
 
-const questionsTableQuery =`create table if not exists questions(
+const questionsTableQuery = `create table if not exists questions(
   id serial primary key ,
   created_by integer not null ,
   meetup integer not null ,
@@ -61,7 +61,7 @@ const rsvpsTableQuery = `create table if not exists rsvps(
   foreign key (user_id) references users(id),
   foreign key (meetup) references  meetups(id)
 );`;
-const adminQuery =  `insert into users(
+const adminQuery = `insert into users(
   first_name, 
   last_name, 
   other_name, 
@@ -81,4 +81,4 @@ export default {
   commentsTableQuery,
   rsvpsTableQuery,
   adminQuery,
-}
+};

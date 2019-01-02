@@ -161,6 +161,32 @@ class Database {
     }
   };
 
+  createTag = async (tagName) => {
+    const query = 'insert into tags(tag_name) values ($1) returning *';
+    const connection = await connect();
+    try {
+      const result = await connection.query(query, [tagName]);
+      return {
+        id: result.rows[0].id,
+        tagName: result.rows[0].tag_name,
+      };
+    } catch (e) {
+      // console.log(e);
+      if (e.detail && e.detail.includes('already exists')) {
+        return {
+          status: 400,
+          error: 'Tag already exists',
+        };
+      }
+      return {
+        status: 500,
+        error: 'Something went wrong to the server',
+      };
+    } finally {
+      connection.release();
+    }
+  };
+
   addQuestion(meetupId, createdBy, title, body) {
     /**
      * checking if this meetups exists

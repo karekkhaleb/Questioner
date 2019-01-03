@@ -100,10 +100,10 @@ describe('testing get upcoming meetups api endpoint', () => {
         happeningOn: testMeetup.happeningOn,
         tags: testMeetup.tags,
       },
-    }, );
+    });
     Done();
   });
-  it('should give all upcoming meetups', function (done) {
+  it('should give all upcoming meetups', (done) => {
     request.get(`${urlMeetups}/upcoming`, (error, response, body) => {
       expect(JSON.parse(body).status).toBe(200);
       done();
@@ -118,22 +118,22 @@ describe('testing get single meetup api endpoint', () => {
         topic: testMeetup.topic,
         happeningOn: testMeetup.happeningOn,
       },
-    }, );
+    });
     Done();
   });
-  it('should give a single meetup', function (done) {
+  it('should give a single meetup', (done) => {
     request.get(`${urlMeetups}/1`, (error, response, body) => {
       expect(JSON.parse(body).status).toBe(200);
       done();
     });
   });
-  it('should ask for the right type of the id', function (done) {
+  it('should ask for the right type of the id', (done) => {
     request.get(`${urlMeetups}/wrong-id`, (error, response, body) => {
       expect(JSON.parse(body).error).toEqual('wrong id type');
       done();
     });
   });
-  it('should tell the meetup is not present', function (done) {
+  it('should tell the meetup is not present', (done) => {
     request.get(`${urlMeetups}/47854`, (error, response, body) => {
       expect(JSON.parse(body).error).toEqual('Meetup not found');
       done();

@@ -20,6 +20,26 @@ if (process.env.DATABASE_URL) {
   pool = new Pool();
 }
 const connect = async () => pool.connect();
+const prepareDatabase = async () => {
+  const adminData = [
+    process.env.ADMINFIRSTNAME,
+    process.env.ADMINLASTNAME,
+    process.env.ADMINOTHERNAME,
+    process.env.ADMINPHONENUMBER,
+    process.env.ADMINUSERNAME,
+    process.env.ADMINEMAIL,
+  ];
+  const connection = await connect();
+  console.log('**************************************START**********************************************');
+  try {
+    await connection.query(sqlQueries.tablesQuery);
+    await connection.query(sqlQueries.adminQuery, adminData);
+  } catch (e) {
+    console.log(e);
+  }
+  console.log('****************************************END********************************************');
+  connection.release();
+};
 
 class Database {
   constructor() {
@@ -29,29 +49,7 @@ class Database {
     this.users = [];
     this.rsvps = [];
     // =========================
-    this.prepareDatabase();
   }
-
-  prepareDatabase = async () => {
-    const adminData = [
-      process.env.ADMINFIRSTNAME,
-      process.env.ADMINLASTNAME,
-      process.env.ADMINOTHERNAME,
-      process.env.ADMINPHONENUMBER,
-      process.env.ADMINUSERNAME,
-      process.env.ADMINEMAIL,
-    ];
-    const connection = await connect();
-    await connection.query(sqlQueries.usersTableQuery);
-    await connection.query(sqlQueries.meetupsTableQuery);
-    await connection.query(sqlQueries.tagsTableQuery);
-    await connection.query(sqlQueries.meetupsTagsTableQuery);
-    await connection.query(sqlQueries.questionsTableQuery);
-    await connection.query(sqlQueries.commentsTableQuery);
-    await connection.query(sqlQueries.rsvpsTableQuery);
-    await connection.query(sqlQueries.adminQuery, adminData);
-    connection.release();
-  };
 
   addMeetup = async ({ ...meetupData }) => {
     const query = `insert into meetups (
@@ -354,3 +352,6 @@ class Database {
 }
 
 export default new Database();
+export {
+  prepareDatabase,
+};

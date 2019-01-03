@@ -2,7 +2,7 @@
 import database from '../db';
 
 class MeetupController {
-  getAll = async(req, res) => {
+  getAll = async (req, res) => {
     const meetups = await database.getAllMeetps();
     if (meetups && meetups.error) {
       return res.status(meetups.status).json({
@@ -17,12 +17,12 @@ class MeetupController {
   };
 
   create = async (req, res) => {
-    const tags = Array.isArray(req.body.tags)?  [...req.body.tags] : [];
+    const tags = Array.isArray(req.body.tags) ? [...req.body.tags] : [];
     const created = await database.addMeetup({
-        location: req.body.location,
-        topic: req.body.topic,
-        happeningOn: new Date(req.body.happeningOn),
-        tags,
+      location: req.body.location,
+      topic: req.body.topic,
+      happeningOn: new Date(req.body.happeningOn),
+      tags,
     });
 
     if (created && created.error) {
@@ -66,6 +66,31 @@ class MeetupController {
       });
     }
     res.status(200).json({ status: 200, data: upcomingMeetups });
+  };
+
+  addTag = async (req, res) => {
+    const tagId = Number.parseInt(req.body.tagId, 10);
+    const meetupId = Number.parseInt(req.params.meetupId, 10);
+    if (Number.isNaN(tagId)) {
+      return res.status(400).json({
+        status: 400,
+        error: 'tagId is required and should be a number',
+      });
+    }
+    if (Number.isNaN(meetupId)) {
+      return res.status(400).json({
+        status: 400,
+        error: 'meetupId should be a number',
+      });
+    }
+    const meetupAndTag = await database.addTagToMeetup(tagId, meetupId);
+    if (meetupAndTag && meetupAndTag.error) {
+      return res.status(meetupAndTag.status).json(meetupAndTag);
+    }
+    res.status(200).json({
+      status: 200,
+      data: meetupAndTag,
+    });
   };
 
   respondRsvp = (req, res) => {

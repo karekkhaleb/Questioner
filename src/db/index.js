@@ -202,6 +202,43 @@ class Database {
     }
   };
 
+  addTagToMeetup = async (tagId, meetupId) => {
+    const insertQuery = `insert into meetups_tags (meetup_id, tag_id)
+                          values ($1, $2)`;
+    const getQuery = `select m.id, m.topic, array_agg(t.tag_name) as tag_name
+      from meetups_tags mt
+      join meetups m on mt.meetup_id = m.id
+      join tags t on mt.tag_id = t.id
+      where mt.meetup_id = $1
+      group by m.id;`;
+    let connection;
+    try {
+      connection = await connect();
+      await connection.query(insertQuery, [meetupId, tagId]);
+      const result = await connection.query(getQuery, [meetupId]);
+      return result.rows;
+    } catch (e) {
+      if (e.detail === `Key (meetup_id)=(${meetupId}) is not present in table "meetups".`) {
+        return {
+          status: 404,
+          error: 'Meetup not found',
+        };
+      }
+      if (e.detail === `Key (meetup_id, tag_id)=(${meetupId}, ${tagId}) already exists.`) {
+        return {
+          status: 400,
+          error: 'Record already exists',
+        };
+      }
+      return {
+        status: 500,
+        error: 'Something went wrong on the server',
+      };
+    } finally {
+      connection.release();
+    }
+  };
+
   addQuestion(meetupId, createdBy, title, body) {
     /**
      * checking if this meetups exists

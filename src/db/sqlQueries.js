@@ -23,9 +23,10 @@ const tagsTableQuery = `create table if not exists tags(
 );`;
 
 const meetupsTagsTableQuery = `create table if not exists meetups_tags(
-  id serial primary key ,
+  id serial  ,
   meetup_id integer not null ,
   tag_id integer not null ,
+  primary key (meetup_id, tag_id),
   foreign key (meetup_id) references meetups(id),
   foreign key (tag_id) references tags(id)
 );`;

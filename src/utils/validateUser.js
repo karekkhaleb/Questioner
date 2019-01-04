@@ -60,6 +60,23 @@ function checkSignupData(req, res, next) {
   next();
 }
 
+function checkLoginData(req, res, next) {
+  if (!req.body.email) {
+    return res.status(400).json({
+      status: 400,
+      error: 'Please enter email',
+    });
+  }
+  if (!req.body.password) {
+    return res.status(400).json({
+      status: 400,
+      error: 'Please enter password',
+    });
+  }
+  next();
+}
+
 export {
   checkSignupData,
+  checkLoginData,
 };

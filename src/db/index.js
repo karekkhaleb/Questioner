@@ -338,6 +338,22 @@ class Database {
         };
       }
       return databaseErrorObj;
+    } finally {
+      connection.release();
+    }
+  };
+
+  login = async (email) => {
+    const query = 'select * from users where email = $1 ; ';
+    let connection;
+    try {
+      connection = await connect();
+      const result = await connection.query(query, [email]);
+      return result.rows;
+    } catch (e) {
+      return databaseErrorObj;
+    } finally {
+      connection.release();
     }
   };
 

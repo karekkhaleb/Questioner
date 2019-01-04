@@ -22,6 +22,33 @@ class AuthController {
       }],
     });
   };
+
+  login = async (req, res) => {
+    const databaseUser = await database.login(req.body.email);
+    if (databaseUser && databaseUser.error) {
+      return res.status(databaseUser.status).json(databaseUser);
+    }
+    if (databaseUser.length > 0
+      && bcrypt.compareSync(req.body.password, databaseUser[0].password)
+    ) {
+      const user = databaseUser[0];
+      const token = jwt.sign({
+        exp: Math.floor(Date.now() / 1000) + (60 * 60),
+        data: user,
+      }, 'Top-Secret');
+      return res.status(200).json({
+        status: 200,
+        data: [{
+          token,
+          user,
+        }],
+      });
+    }
+    return res.status(400).json({
+      status: 400,
+      error: 'Wrong email or password',
+    });
+  };
 }
 
 export default new AuthController();

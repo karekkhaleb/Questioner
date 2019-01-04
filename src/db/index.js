@@ -1,6 +1,7 @@
 /* eslint-disable no-restricted-syntax,no-plusplus */
 import { Pool } from 'pg';
 import dotenv from 'dotenv';
+import brcypt from 'bcrypt-nodejs';
 import models from './models';
 import sqlQueries from './sqlQueries';
 import { databaseErrorObj } from './utils';
@@ -8,7 +9,7 @@ import { databaseErrorObj } from './utils';
 dotenv.config();
 
 const {
-  Meetup, Question, User, Rsvp,
+  Question, Rsvp,
 } = models;
 
 let pool;
@@ -29,6 +30,7 @@ const prepareDatabase = async () => {
     process.env.ADMINPHONENUMBER,
     process.env.ADMINUSERNAME,
     process.env.ADMINEMAIL,
+    brcypt.hashSync(process.env.ADMINPASSWORD),
   ];
   const connection = await connect();
   try {
@@ -295,21 +297,49 @@ class Database {
     return votedQuestion || null;
   }
 
-  signup(userCredentials) {
-    const newId = this.users.length ? this.users[this.users.length - 1].id + 1 : 1;
-    const newUser = new User({
-      id: newId,
-      firstname: userCredentials.firstname,
-      lastname: userCredentials.lastname,
-      email: userCredentials.email,
-      othername: userCredentials.othername,
-      phoneNumber: Number.parseInt(userCredentials.phoneNumber, 10),
-      userName: userCredentials.userName,
-      isAdmin: false,
-    });
-    this.users.push(newUser);
-    return newUser;
-  }
+  signup = async (userCredentials) => {
+    const userParams = [
+      userCredentials.firstname,
+      userCredentials.lastname,
+      userCredentials.othername ? userCredentials.othername : '',
+      userCredentials.password,
+      Number.parseInt(userCredentials.phoneNumber, 10),
+      userCredentials.userName,
+      userCredentials.email,
+    ];
+    const query = `insert into users(
+      first_name, 
+      last_name, 
+      other_name, 
+      password, 
+      phone_number, 
+      user_name, 
+      email)
+        VALUES(
+          $1, $2, $3, $4, $5, $6, $7
+        ) returning *;
+    `;
+    let connection;
+    try {
+      connection = await connect();
+      const result = await connection.query(query, userParams);
+      return result.rows[0];
+    } catch (e) {
+      if (e.detail === `Key (user_name)=(${userCredentials.userName}) already exists.`) {
+        return {
+          status: 400,
+          error: 'Please chose another userName',
+        };
+      }
+      if (e.detail === `Key (email)=(${userCredentials.email}) already exists.`) {
+        return {
+          status: 400,
+          error: 'Please chose another email',
+        };
+      }
+      return databaseErrorObj;
+    }
+  };
 
   respondRsvp({ ...rsvpData }) {
     const rsvpId = this.rsvps.length ? this.rsvps[this.rsvps.length - 1].id + 1 : 1;

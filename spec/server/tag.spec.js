@@ -12,6 +12,7 @@ describe('Create tags end point', () => {
     });
     DONE();
   });
+
   it('should create a tag if a tag name is given', (done) => {
     request.post(urlTags, {
       json: {
@@ -22,13 +23,22 @@ describe('Create tags end point', () => {
       done();
     });
   });
-  it('should say that tagName is required if absent', (done) => {
+  it('should tell if the tag already exists', (done) => {
     request.post(urlTags, {
       json: {
         tagName: 'to-fail',
       },
     }, (error, response, body) => {
       expect(body.error).toEqual('Tag already exists');
+      done();
+    });
+  });
+
+  it('should say that tagName is required if absent', (done) => {
+    request.post(urlTags, {
+      json: {},
+    }, (error, response, body) => {
+      expect(body.error).toEqual('tagName is required');
       done();
     });
   });
@@ -59,9 +69,19 @@ describe('Add tag to meetup', () => {
     });
     DONE();
   });
-  it('should ask for tag name', (done) => {
+  it('should ask for tag id', (done) => {
     request.post(`${urlMeetups}/1/tags`, {}, (error, response, body) => {
       expect(JSON.parse(body).error).toEqual('tagId is required and should be a number');
+      done();
+    });
+  });
+  it('should tell if meetup id is not a number', (done) => {
+    request.post(`${urlMeetups}/not-a-number/tags`, {
+      json: {
+        tagId: 1,
+      },
+    }, (error, response, body) => {
+      expect(body.error).toEqual('meetupId should be a number');
       done();
     });
   });

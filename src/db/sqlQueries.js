@@ -3,6 +3,7 @@ const usersTableQuery = `create table if not exists users (
   first_name varchar(200) not null ,
   last_name varchar(200) not null ,
   other_name varchar(200) not null ,
+  password varchar(200) not null ,
   phone_number numeric not null ,
   user_name varchar(200) not null unique ,
   email varchar(200) unique not null ,
@@ -69,7 +70,8 @@ const adminQuery = `insert into users(
   phone_number, 
   user_name, 
   email, 
-  isAdmin) select $1, $2, $3, $4, $5, $6, true
+  isAdmin,
+  password) select $1, $2, $3, $4, $5, $6, true, $7
   where not exists (select * from users) returning *;
 `;
 const tablesQuery = `create table if not exists users (
@@ -77,6 +79,7 @@ const tablesQuery = `create table if not exists users (
   first_name varchar(200) not null ,
   last_name varchar(200) not null ,
   other_name varchar(200) not null ,
+  password varchar(200) not null ,
   phone_number numeric not null ,
   user_name varchar(200) not null unique ,
   email varchar(200) unique not null ,

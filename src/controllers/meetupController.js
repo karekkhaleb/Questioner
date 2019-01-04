@@ -93,6 +93,24 @@ class MeetupController {
     });
   };
 
+  delete = async (req, res) => {
+    const meetupId = Number.parseInt(req.params.meetupId, 10);
+    if (Number.isNaN(meetupId)) {
+      return res.status(400).json({
+        status: 400,
+        error: 'meetupId is required and should be a number',
+      });
+    }
+    const deletedMeetup = await database.deleteMeetup(meetupId);
+    if (deletedMeetup && deletedMeetup.error) {
+      return res.status(deletedMeetup.status).json(deletedMeetup);
+    }
+    res.status(200).json({
+      status: 200,
+      data: ['Meetup deleted'],
+    });
+  };
+
   respondRsvp = (req, res) => {
     if (!req.body.status) {
       return res.status(400).json({

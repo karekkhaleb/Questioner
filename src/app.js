@@ -12,8 +12,8 @@ import { prepareDatabase } from './db';
 
 const app = express();
 const port = process.env.PORT || 9000;
-const db = async () => prepareDatabase();
-console.log(db());
+// noinspection JSIgnoredPromiseFromCall
+prepareDatabase();
 const rootUrl = '/api/v1';
 
 app.use(express.json());

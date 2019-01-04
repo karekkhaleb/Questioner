@@ -102,7 +102,7 @@ create table if not exists meetups_tags(
   meetup_id integer not null ,
   tag_id integer not null ,
   primary key (meetup_id, tag_id),
-  foreign key (meetup_id) references meetups(id),
+  foreign key (meetup_id) references meetups(id) ON DELETE CASCADE,
   foreign key (tag_id) references tags(id)
 );
 

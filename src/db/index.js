@@ -3,6 +3,7 @@ import { Pool } from 'pg';
 import dotenv from 'dotenv';
 import models from './models';
 import sqlQueries from './sqlQueries';
+import { databaseErrorObj } from './utils';
 
 dotenv.config();
 
@@ -30,14 +31,12 @@ const prepareDatabase = async () => {
     process.env.ADMINEMAIL,
   ];
   const connection = await connect();
-  console.log('**************************************START**********************************************');
   try {
     await connection.query(sqlQueries.tablesQuery);
     await connection.query(sqlQueries.adminQuery, adminData);
   } catch (e) {
     console.log(e);
   }
-  console.log('****************************************END********************************************');
   connection.release();
 };
 
@@ -73,10 +72,7 @@ class Database {
         happeningOn: newMeetup.happening_on,
       };
     } catch (e) {
-      return {
-        status: 500,
-        error: 'Something went wrong on the database',
-      };
+      return databaseErrorObj;
     } finally {
       connection.release();
     }
@@ -98,10 +94,7 @@ class Database {
       });
       return requiredMeetups;
     } catch (e) {
-      return {
-        status: 500,
-        error: 'Something went wrong on the server',
-      };
+      return databaseErrorObj;
     } finally {
       connection.release();
     }
@@ -125,10 +118,7 @@ class Database {
         happeningOn: result.rows[0].happening_on,
       };
     } catch (e) {
-      return {
-        status: 500,
-        error: 'Something went wrong on the server',
-      };
+      return databaseErrorObj;
     } finally {
       connection.release();
     }
@@ -150,10 +140,7 @@ class Database {
       });
       return meetups;
     } catch (e) {
-      return {
-        status: 500,
-        error: 'Something went wrong on the server',
-      };
+      return databaseErrorObj;
     } finally {
       connection.release();
     }
@@ -175,10 +162,7 @@ class Database {
           error: 'Tag already exists',
         };
       }
-      return {
-        status: 500,
-        error: 'Something went wrong to the server',
-      };
+      return databaseErrorObj;
     } finally {
       connection.release();
     }
@@ -191,10 +175,7 @@ class Database {
       const result = await connection.query(query);
       return result.rows;
     } catch (e) {
-      return {
-        status: 500,
-        error: 'Something went wrong on the server',
-      };
+      return databaseErrorObj;
     } finally {
       connection.release();
     }
@@ -228,10 +209,27 @@ class Database {
           error: 'Record already exists',
         };
       }
-      return {
-        status: 500,
-        error: 'Something went wrong on the server',
-      };
+      return databaseErrorObj;
+    } finally {
+      connection.release();
+    }
+  };
+
+  deleteMeetup = async (meetupId) => {
+    const query = 'delete from meetups where id = $1 returning *;';
+    let connection;
+    try {
+      connection = await connect();
+      const deleted = await connection.query(query, [meetupId]);
+      if (!deleted.rows.length) {
+        return {
+          status: 404,
+          error: 'Meetup not found',
+        };
+      }
+      return true;
+    } catch (e) {
+      return databaseErrorObj;
     } finally {
       connection.release();
     }

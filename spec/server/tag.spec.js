@@ -3,16 +3,29 @@ import request from 'request';
 import server from '../../src/app';
 import { urlTags, urlMeetups, testMeetup } from './testUtils';
 
-describe('Create tags end point', () => {
-  beforeAll((DONE) => {
-    request.post(urlTags, {
-      json: {
-        tagName: 'to-fail',
-      },
-    });
-    DONE();
+beforeAll((DONE) => {
+  request.post(urlTags, {
+    json: {
+      tagName: 'tagToMeetup',
+    },
   });
+  request.post(urlTags, {
+    json: {
+      tagName: 'to-fail',
+    },
+  });
+  request.post(urlMeetups, {
+    json: {
+      location: testMeetup.location,
+      topic: testMeetup.topic,
+      happeningOn: testMeetup.happeningOn,
+      tags: testMeetup.tags,
+    },
+  });
+  DONE();
+});
 
+describe('Create tags end point', () => {
   it('should create a tag if a tag name is given', (done) => {
     request.post(urlTags, {
       json: {
@@ -53,22 +66,6 @@ describe('Testing get all tags endpoint', () => {
   });
 });
 describe('Add tag to meetup', () => {
-  beforeAll((DONE) => {
-    request.post(urlTags, {
-      json: {
-        tagName: 'tagToMeetup',
-      },
-    });
-    request.post(urlMeetups, {
-      json: {
-        location: testMeetup.location,
-        topic: testMeetup.topic,
-        happeningOn: testMeetup.happeningOn,
-        tags: testMeetup.tags,
-      },
-    });
-    DONE();
-  });
   it('should ask for tag id', (done) => {
     request.post(`${urlMeetups}/1/tags`, {}, (error, response, body) => {
       expect(JSON.parse(body).error).toEqual('tagId is required and should be a number');

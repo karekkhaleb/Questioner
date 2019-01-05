@@ -91,18 +91,17 @@ describe('testing create meetup endpoint', () => {
     });
   });
 });
-describe('testing get upcoming meetups api endpoint', () => {
-  beforeAll((Done) => {
-    request.post(urlMeetups, {
-      json: {
-        location: testMeetup.location,
-        topic: testMeetup.topic,
-        happeningOn: testMeetup.happeningOn,
-        tags: testMeetup.tags,
-      },
-    });
-    Done();
+beforeAll((Done) => {
+  request.post(urlMeetups, {
+    json: {
+      location: testMeetup.location,
+      topic: testMeetup.topic,
+      happeningOn: testMeetup.happeningOn,
+    },
   });
+  Done();
+});
+describe('testing get upcoming meetups api endpoint', () => {
   it('should give all upcoming meetups', (done) => {
     request.get(`${urlMeetups}/upcoming`, (error, response, body) => {
       expect(JSON.parse(body).status).toBe(200);
@@ -111,16 +110,6 @@ describe('testing get upcoming meetups api endpoint', () => {
   });
 });
 describe('testing get single meetup api endpoint', () => {
-  beforeAll((Done) => {
-    request.post(urlMeetups, {
-      json: {
-        location: testMeetup.location,
-        topic: testMeetup.topic,
-        happeningOn: testMeetup.happeningOn,
-      },
-    });
-    Done();
-  });
   it('should give a single meetup', (done) => {
     request.get(`${urlMeetups}/1`, (error, response, body) => {
       expect(JSON.parse(body).status).toBe(200);

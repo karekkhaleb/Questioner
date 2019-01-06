@@ -17,12 +17,10 @@ class MeetupController {
   };
 
   create = async (req, res) => {
-    const tags = Array.isArray(req.body.tags) ? [...req.body.tags] : [];
     const created = await database.addMeetup({
       location: req.body.location,
       topic: req.body.topic,
       happeningOn: new Date(req.body.happeningOn),
-      tags,
     });
 
     if (created && created.error) {

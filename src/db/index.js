@@ -81,7 +81,11 @@ class Database {
   };
 
   getAllMeetps = async () => {
-    const meetupsQuery = 'select * from meetups';
+    const meetupsQuery = `select m.id, m.topic, m.location, m.happening_on, array_agg(t.tag_name) as tags
+      from meetups m
+      left join meetups_tags mt on mt.meetup_id = m.id
+      left join tags t on mt.tag_id = t.id
+      group by m.id;`;
     const connection = await connect();
     try {
       const result = await connection.query(meetupsQuery);
@@ -92,6 +96,7 @@ class Database {
           title: row.topic,
           location: row.location,
           happeningOn: row.happening_on,
+          tags: row.tags,
         });
       });
       return requiredMeetups;
@@ -103,7 +108,14 @@ class Database {
   };
 
   getSingleMeetup = async (meetupId) => {
-    const query = 'select * from meetups where id = $1;';
+    // const query = 'select * from meetups where id = $1;';
+    const query = `select 
+        m.id, m.topic, m.location, m.happening_on, array_remove(array_agg(t.tag_name), null ) as tags
+        from meetups m
+        left join meetups_tags mt on mt.meetup_id = m.id
+        left join tags t on mt.tag_id = t.id
+      where m.id = $1
+        group by m.id;`;
     const connection = await connect();
     try {
       const result = await connection.query(query, [meetupId]);
@@ -118,6 +130,7 @@ class Database {
         topic: result.rows[0].topic,
         location: result.rows[0].location,
         happeningOn: result.rows[0].happening_on,
+        tags: result.rows[0].tags,
       };
     } catch (e) {
       return databaseErrorObj;
@@ -127,7 +140,14 @@ class Database {
   };
 
   getUpcomingMeetups = async () => {
-    const query = 'select * from meetups where happening_on > now();';
+    // const query = 'select * from meetups where happening_on > now();';
+    const query = `select 
+        m.id, m.topic, m.location, m.happening_on, array_remove(array_agg(t.tag_name), null ) as tags
+        from meetups m
+        left join meetups_tags mt on mt.meetup_id = m.id
+        left join tags t on mt.tag_id = t.id
+      where happening_on > now()
+        group by m.id;`;
     const connection = await connect();
     try {
       const result = await connection.query(query);
@@ -138,6 +158,7 @@ class Database {
           title: row.topic,
           location: row.location,
           happeningOn: row.happening_on,
+          tags: row.tags,
         });
       });
       return meetups;

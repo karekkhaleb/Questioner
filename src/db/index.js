@@ -8,9 +8,7 @@ import { databaseErrorObj } from './utils';
 
 dotenv.config();
 
-const {
-  Question, Rsvp,
-} = models;
+const { Rsvp } = models;
 
 let pool;
 if (process.env.DATABASE_URL) {
@@ -258,46 +256,26 @@ class Database {
     }
   };
 
-  addQuestion(meetupId, createdBy, title, body) {
-    /**
-     * checking if this meetups exists
-     */
-    let meetupExists = false;
-    for (let i = 0; i < this.meetups.length; i++) {
-      if (this.meetups[i].id === meetupId) {
-        meetupExists = true;
-        break;
+  addQuestion = async (meetupId, createdBy, title, body) => {
+    const query = `insert into questions (created_by, meetup, title, body)
+      VALUES ($1, $2, $3, $4) returning *;`;
+    let connection;
+    try {
+      connection = await connect();
+      const result = await connection.query(query, [createdBy, meetupId, title, body]);
+      return result.rows[0];
+    } catch (e) {
+      if (e.detail === `Key (created_by)=(${createdBy}) is not present in table "users".`) {
+        return { status: 404, error: 'User creating question not found' };
       }
-    }
-    if (!meetupExists) {
-      return { status: 404, error: 'Meetup not found' };
-    }
-    /**
-     * checking if this user exists
-     */
-    let userExists = false;
-    for (let i = 0; i < this.users.length; i++) {
-      if (this.users[i].id === Number.parseInt(createdBy, 10)) {
-        userExists = true;
-        break;
+      if (e.detail === `Key (meetup)=(${meetupId}) is not present in table "meetups".`) {
+        return { status: 404, error: 'Meetup not found' };
       }
+      return databaseErrorObj;
+    } finally {
+      connection.release();
     }
-    if (!userExists) {
-      return { status: 404, error: 'User creating question not found' };
-    }
-
-    const currentQuestionsLength = this.questions.length;
-    const id = currentQuestionsLength ? this.questions[currentQuestionsLength - 1].id + 1 : 1;
-    const newQuestion = new Question(
-      id,
-      createdBy,
-      meetupId,
-      title,
-      body,
-    );
-    this.questions.push(newQuestion);
-    return newQuestion;
-  }
+  };
 
   vote(questionId, action) {
     let votedQuestion;

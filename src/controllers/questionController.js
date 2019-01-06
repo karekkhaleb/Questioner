@@ -2,8 +2,8 @@
 import database from '../db';
 
 class QuestionController {
-  create = (req, res) => {
-    const createdQuestion = database.addQuestion(
+  create = async (req, res) => {
+    const createdQuestion = await database.addQuestion(
       Number.parseInt(req.body.meetupId, 10),
       Number.parseInt(req.body.createdBy, 10),
       req.body.title,
@@ -19,7 +19,7 @@ class QuestionController {
     res.status(201).json({
       status: 201,
       data: [{
-        createdBy: createdQuestion.createdBy,
+        createdBy: createdQuestion.created_by,
         meetup: createdQuestion.meetup,
         title: createdQuestion.title,
         body: createdQuestion.body,

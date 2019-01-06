@@ -10,6 +10,7 @@ Router.get('/upcoming', meetupController.getUpcoming);
 Router.get('/:meetupId', meetupController.getSingle);
 Router.post('/:meetupId/rsvps', meetupController.respondRsvp);
 Router.post('/:meetupId/tags', meetupController.addTag);
+Router.get('/:meetupId/questions', meetupController.getQuestions);
 Router.delete('/:meetupId', meetupController.delete);
 
 export default Router;

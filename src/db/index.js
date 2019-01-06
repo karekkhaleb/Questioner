@@ -277,6 +277,20 @@ class Database {
     }
   };
 
+  getMeetupQuestions = async (meetupId) => {
+    const query = 'select * from questions where meetup = $1;';
+    let connection;
+    try {
+      connection = await connect();
+      const result = await connection.query(query, [meetupId]);
+      return result.rows;
+    } catch (e) {
+      return databaseErrorObj;
+    } finally {
+      connection.release();
+    }
+  };
+
   vote(questionId, action) {
     let votedQuestion;
     // eslint-disable-next-line no-plusplus

@@ -109,6 +109,24 @@ class MeetupController {
     });
   };
 
+  getQuestions = async (req, res) => {
+    const meetupId = Number.parseInt(req.params.meetupId, 10);
+    if (Number.isNaN(meetupId)) {
+      return res.status(400).json({
+        status: 400,
+        error: 'MeetupId should be a number',
+      });
+    }
+    const questions = await database.getMeetupQuestions(meetupId);
+    if (questions && questions.error) {
+      return res.status(questions.status).json(questions);
+    }
+    res.status(200).json({
+      status: 200,
+      data: questions,
+    });
+  };
+
   respondRsvp = (req, res) => {
     if (!req.body.status) {
       return res.status(400).json({

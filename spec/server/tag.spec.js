@@ -3,6 +3,7 @@ import request from 'request';
 import server from '../../src/app';
 import { urlTags, urlMeetups, testMeetup } from './testUtils';
 
+let meetupId;
 beforeAll((DONE) => {
   request.post(urlTags, {
     json: {
@@ -16,10 +17,9 @@ beforeAll((DONE) => {
   });
   request.post(urlMeetups, {
     json: {
-      location: testMeetup.location,
-      topic: testMeetup.topic,
+      location: 'bujumbura',
+      topic: 'test',
       happeningOn: testMeetup.happeningOn,
-      tags: testMeetup.tags,
     },
   });
   DONE();

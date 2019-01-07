@@ -31,12 +31,8 @@ const prepareDatabase = async () => {
     brcypt.hashSync(process.env.ADMINPASSWORD),
   ];
   const connection = await connect();
-  try {
-    await connection.query(sqlQueries.tablesQuery);
-    await connection.query(sqlQueries.adminQuery, adminData);
-  } catch (e) {
-    console.log(e);
-  }
+  await connection.query(sqlQueries.tablesQuery);
+  await connection.query(sqlQueries.adminQuery, adminData);
   connection.release();
 };
 
@@ -291,24 +287,34 @@ class Database {
     }
   };
 
-  vote(questionId, action) {
-    let votedQuestion;
-    // eslint-disable-next-line no-plusplus
-    for (let i = 0; i < this.questions.length; i++) {
-      if (this.questions[i].id === questionId) {
-        if (action === 'upvote') {
-          this.questions[i].votes += 1;
-          votedQuestion = this.questions[i];
-          break;
-        } else {
-          this.questions[i].votes -= 1;
-          votedQuestion = this.questions[i];
-          break;
-        }
-      }
+  vote = async (questionId, action) => {
+    let query;
+    if (action === 'upvote') {
+      query = `update questions
+      set votes = votes + 1
+      where id = $1 returning *;`;
+    } else {
+      query = `update questions
+      set votes = votes - 1
+      where id = $1 returning *;`;
     }
-    return votedQuestion || null;
-  }
+    let connection;
+    try {
+      connection = await connect();
+      const result = await connection.query(query, [questionId]);
+      if (result.rows.length === 0) {
+        return {
+          status: 404,
+          error: 'No question matches that id',
+        };
+      }
+      return result.rows[0];
+    } catch (e) {
+      return databaseErrorObj;
+    } finally {
+      connection.release();
+    }
+  };
 
   signup = async (userCredentials) => {
     const userParams = [

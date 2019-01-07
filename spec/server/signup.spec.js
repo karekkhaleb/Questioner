@@ -85,7 +85,7 @@ describe('signup api endpoint', () => {
       done();
     });
   });
-  it('should ask for the email if absent', (done) => {
+  it('should ask for the userName if absent', (done) => {
     request.post(`${urlAuth}/signup`, {
       json: {
         firstname: 'Caleb',

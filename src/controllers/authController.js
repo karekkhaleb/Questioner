@@ -25,10 +25,7 @@ class AuthController {
 
   login = async (req, res) => {
     const databaseUser = await database.login(req.body.email);
-    if (databaseUser && databaseUser.error) {
-      return res.status(databaseUser.status).json(databaseUser);
-    }
-    if (databaseUser.length > 0
+    if (Array.isArray(databaseUser) && databaseUser.length > 0
       && bcrypt.compareSync(req.body.password, databaseUser[0].password)
     ) {
       const user = databaseUser[0];
@@ -43,6 +40,9 @@ class AuthController {
           user,
         }],
       });
+    }
+    if (databaseUser && databaseUser.error) {
+      return res.status(databaseUser.status).json(databaseUser);
     }
     return res.status(400).json({
       status: 400,

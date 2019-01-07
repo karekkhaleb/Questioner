@@ -31,6 +31,7 @@ class QuestionController {
     return res.status(200).json({
       status: 200,
       data: [{
+        id: upVotedQuestion.id,
         meetup: upVotedQuestion.meetup,
         title: upVotedQuestion.title,
         body: upVotedQuestion.body,
@@ -48,6 +49,7 @@ class QuestionController {
     res.status(200).json({
       status: 200,
       data: [{
+        id: downVotedQuestion.id,
         meetup: downVotedQuestion.meetup,
         title: downVotedQuestion.title,
         body: downVotedQuestion.body,

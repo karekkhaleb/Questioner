@@ -2,14 +2,10 @@
 import { Pool } from 'pg';
 import dotenv from 'dotenv';
 import brcypt from 'bcrypt-nodejs';
-import models from './models';
 import sqlQueries from './sqlQueries';
 import { databaseErrorObj } from './utils';
 
 dotenv.config();
-
-const { Rsvp } = models;
-
 let pool;
 if (process.env.DATABASE_URL) {
   const connectionString = process.env.DATABASE_URL;
@@ -376,41 +372,46 @@ class Database {
     }
   };
 
-  respondRsvp({ ...rsvpData }) {
-    const rsvpId = this.rsvps.length ? this.rsvps[this.rsvps.length - 1].id + 1 : 1;
-    /**
-     * Check if this meetup exists
-     */
-    let meetup;
-    for (let i = 0; i < this.meetups.length; i++) {
-      if (this.meetups[i].id === rsvpData.meetupId) {
-        meetup = this.meetups[i];
-        break;
+  respondRsvp = async ({ ...rsvpData }) => {
+    const query = `with newrsvps (meetup, response) as (
+          insert into rsvps (user_id, meetup, response)
+        values ($1, $2, $3) returning meetup, response
+        )
+        select * from newrsvps
+        join meetups m on m.id = newrsvps.meetup;`;
+    const params = [rsvpData.userId, rsvpData.meetupId, rsvpData.status];
+    let connection;
+    try {
+      connection = await connect();
+      const result = await connection.query(query, params);
+      return {
+        meetupId: result.rows[0].meetup,
+        meetupTopic: result.rows[0].topic,
+        status: result.rows[0].response,
+      };
+    } catch (e) {
+      if (e.detail === `Key (user_id, meetup)=(${rsvpData.userId}, ${rsvpData.meetupId}) already exists.`) {
+        return {
+          status: 400,
+          error: 'User already responded to this meetup',
+        };
       }
-    }
-    if (!meetup) return { status: 404, error: 'No matching meetup' };
-    /**
-     * Check if this user exists
-     */
-    let userExists = false;
-    for (let i = 0; i < this.users.length; i++) {
-      if (this.users[i].id === rsvpData.userId) {
-        userExists = true;
-        break;
+      if (e.detail === `Key (user_id)=(${rsvpData.userId}) is not present in table "users".`) {
+        return {
+          status: 400,
+          error: 'User not available',
+        };
       }
+      if (e.detail === `Key (meetup)=(${rsvpData.meetupId}) is not present in table "meetups".`) {
+        return {
+          status: 400,
+          error: 'Meetup not available',
+        };
+      }
+      return databaseErrorObj;
+    } finally {
+      connection.release();
     }
-    if (!userExists) return { status: 404, error: 'No matching user' };
-    const newRsvp = new Rsvp(
-      rsvpId,
-      rsvpData.meetupId,
-      rsvpData.userId,
-      rsvpData.status,
-    );
-    return {
-      meetupId: newRsvp.meetup,
-      meetupTopic: meetup.topic,
-      status: newRsvp.status,
-    };
   }
 }
 

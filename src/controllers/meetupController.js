@@ -127,7 +127,7 @@ class MeetupController {
     });
   };
 
-  respondRsvp = (req, res) => {
+  respondRsvp = async (req, res) => {
     if (!req.body.status) {
       return res.status(400).json({
         status: 400,
@@ -153,7 +153,7 @@ class MeetupController {
         error: 'status should be yes, no, or maybe',
       });
     }
-    const rsvp = database.respondRsvp({
+    const rsvp = await database.respondRsvp({
       status,
       userId: Number.parseInt(req.body.userId, 10),
       meetupId: Number.parseInt(req.params.meetupId, 10),

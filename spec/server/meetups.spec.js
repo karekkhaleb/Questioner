@@ -3,6 +3,17 @@ import request from 'request';
 import server from '../../src/app';
 import { urlMeetups, testMeetup } from './testUtils';
 
+beforeAll(async (Done) => {
+  await request.post(urlMeetups, {
+    json: {
+      location: testMeetup.location,
+      topic: testMeetup.topic,
+      happeningOn: testMeetup.happeningOn,
+    },
+  });
+  Done();
+});
+
 describe('get meetups api endpoint', () => {
   it('should give a proper status code', (done) => {
     request.get(urlMeetups, (error, response) => {
@@ -90,16 +101,6 @@ describe('testing create meetup endpoint', () => {
       done();
     });
   });
-});
-beforeAll((Done) => {
-  request.post(urlMeetups, {
-    json: {
-      location: testMeetup.location,
-      topic: testMeetup.topic,
-      happeningOn: testMeetup.happeningOn,
-    },
-  });
-  Done();
 });
 describe('testing get upcoming meetups api endpoint', () => {
   it('should give all upcoming meetups', (done) => {

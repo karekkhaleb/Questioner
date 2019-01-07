@@ -3,8 +3,8 @@ import request from 'request';
 import server from '../../src/app';
 import { urlAuth } from './testUtils';
 
-beforeAll((DONE) => {
-  request.post(`${urlAuth}/signup`, {
+beforeAll(async (DONE) => {
+  await request.post(`${urlAuth}/signup`, {
     json: {
       firstname: 'firstname',
       lastname: 'lastname',

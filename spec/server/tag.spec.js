@@ -4,18 +4,18 @@ import server from '../../src/app';
 import { urlTags, urlMeetups, testMeetup } from './testUtils';
 
 let meetupId;
-beforeAll((DONE) => {
-  request.post(urlTags, {
+beforeAll(async (DONE) => {
+  await request.post(urlTags, {
     json: {
       tagName: 'tagToMeetup',
     },
   });
-  request.post(urlTags, {
+  await request.post(urlTags, {
     json: {
       tagName: 'to-fail',
     },
   });
-  request.post(urlMeetups, {
+  await request.post(urlMeetups, {
     json: {
       location: 'bujumbura',
       topic: 'test',

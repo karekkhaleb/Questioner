@@ -5,8 +5,8 @@ import {
   urlAuth, urlMeetups, urlQuestions,
 } from './testUtils';
 
-beforeAll((Done) => {
-  request.post(`${urlAuth}/signup`, {
+beforeAll(async (Done) => {
+  await request.post(`${urlAuth}/signup`, {
     json: {
       firstname: 'test',
       lastname: 'js',
@@ -16,14 +16,14 @@ beforeAll((Done) => {
       password: 'passquestion',
     },
   });
-  request.post(urlMeetups, {
+  await request.post(urlMeetups, {
     json: {
       location: 'Bujumbura',
       topic: 'html',
       happeningOn: '2017-02-05',
     },
   });
-  request.post(`${urlQuestions}`, {
+  await request.post(`${urlQuestions}`, {
     json: {
       meetupId: 1,
       createdBy: 1,

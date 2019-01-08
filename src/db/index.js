@@ -55,6 +55,7 @@ class Database {
         happeningOn: newMeetup.happening_on,
       };
     } catch (e) {
+      console.log(e);
       return databaseErrorObj;
     } finally {
       connection.release();

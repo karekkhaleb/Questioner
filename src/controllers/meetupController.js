@@ -33,6 +33,7 @@ class MeetupController {
     res.status(201).json({
       status: 201,
       data: [{
+        id: created.id,
         topic: created.topic,
         location: created.location,
         happeningOn: created.happeningOn,

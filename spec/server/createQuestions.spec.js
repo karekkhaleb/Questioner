@@ -20,7 +20,6 @@ beforeAll(async (Done) => {
       location: 'Bujumbura',
       topic: 'html',
       happeningOn: '2017-02-05',
-      tags: ['advanced'],
     },
   });
   Done();

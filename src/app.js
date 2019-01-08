@@ -4,6 +4,7 @@ import '@babel/polyfill';
 import morgan from 'morgan';
 import meetupRoutes from './routes/meetupRoutes';
 import questionRoutes from './routes/questionRoutes';
+import commentRoutes from './routes/commentRoutes';
 import authRoutes from './routes/authRoutes';
 import tagRoutes from './routes/tagRoutes';
 import apiFormat from './db/apiFormat.json';
@@ -24,6 +25,7 @@ app.use(`${rootUrl}/meetups`, meetupRoutes);
 app.use(`${rootUrl}/questions`, questionRoutes);
 app.use(`${rootUrl}/auth`, authRoutes);
 app.use(`${rootUrl}/tags`, tagRoutes);
+app.use(`${rootUrl}/comments`, commentRoutes);
 
 app.get('/', (req, res) => res.status(200).json({
   status: 200,

@@ -447,4 +447,5 @@ class Database {
 export default new Database();
 export {
   prepareDatabase,
+  connect,
 };

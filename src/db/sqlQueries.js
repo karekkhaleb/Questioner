@@ -75,6 +75,13 @@ create table if not exists rsvps(
   primary key (user_id, meetup),
   foreign key (user_id) references users(id),
   foreign key (meetup) references  meetups(id)
+);
+
+create table if not exists images (
+  id serial primary key ,
+  meetup_id integer,
+  image_path varchar(200),
+  foreign key (meetup_id) references meetups(id) on delete cascade
 );`;
 
 export default {

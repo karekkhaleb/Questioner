@@ -26,6 +26,18 @@ function checkMeetup(req, res, next) {
   next();
 }
 
+function checkId(req, res, next) {
+  const meetupId = Number.parseInt(req.params.meetupId, 10);
+  if (Number.isNaN(meetupId)) {
+    return res.status(400).json({
+      status: 400,
+      error: 'meetupId should be an integer',
+    });
+  }
+  next();
+}
+
 export {
   checkMeetup,
-}
+  checkId,
+};

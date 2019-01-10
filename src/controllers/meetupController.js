@@ -1,5 +1,7 @@
 /* eslint-disable consistent-return */
+import fs from 'fs';
 import database from '../db';
+import uploadUtilities from '../utils/uploadUtilities';
 
 class MeetupController {
   getAll = async (req, res) => {
@@ -38,6 +40,7 @@ class MeetupController {
         location: created.location,
         happeningOn: created.happeningOn,
         tags: [],
+        images: [],
       }],
     });
   };
@@ -175,7 +178,35 @@ class MeetupController {
         status: rsvp.status,
       }],
     });
-  }
+  };
+
+  addImage = async (req, res) => {
+    uploadUtilities.upload(req, res, async (err) => {
+      if (err && err.message === 'Unexpected field') {
+        console.log(err);
+        return res.status(400).json({
+          status: 400,
+          error: 'you should give only one image and its field should be meetupImage',
+        });
+      } if (err) {
+        return res.status(400).json({
+          status: 400,
+          error: err.message,
+        });
+      }
+      const meetupId = Number.parseInt(req.params.meetupId, 10);
+      const imagePath = req.file.path;
+      const insertedImage = await database.addImage(meetupId, imagePath);
+      if (insertedImage && insertedImage.error) {
+        fs.unlinkSync(imagePath);
+        return res.status(insertedImage.status).json(insertedImage);
+      }
+      res.status(201).json({
+        status: 201,
+        data: [insertedImage],
+      });
+    });
+  };
 }
 
 export default new MeetupController();

@@ -3,7 +3,6 @@ import request from 'request';
 import server from '../../src/app';
 import { urlTags, urlMeetups, testMeetup } from './testUtils';
 
-let meetupId;
 beforeAll(async (DONE) => {
   await request.post(urlTags, {
     json: {

@@ -63,10 +63,15 @@ class Database {
   };
 
   getAllMeetps = async () => {
-    const meetupsQuery = `select m.id, m.topic, m.location, m.happening_on, array_agg(t.tag_name) as tags
+    const meetupsQuery = `select
+      m.id, m.topic, m.location,
+             m.happening_on,
+             array_remove(array_agg(t.tag_name), null) as tags,
+             array_remove(array_agg(i.image_path), null) as images
       from meetups m
       left join meetups_tags mt on mt.meetup_id = m.id
       left join tags t on mt.tag_id = t.id
+      left join images i on m.id = i.meetup_id
       group by m.id;`;
     const connection = await connect();
     try {
@@ -79,6 +84,7 @@ class Database {
           location: row.location,
           happeningOn: row.happening_on,
           tags: row.tags,
+          images: row.images,
         });
       });
       return requiredMeetups;
@@ -90,11 +96,15 @@ class Database {
   };
 
   getSingleMeetup = async (meetupId) => {
-    const query = `select 
-        m.id, m.topic, m.location, m.happening_on, array_remove(array_agg(t.tag_name), null ) as tags
+    const query = `select
+        m.id, m.topic, m.location,
+             m.happening_on,
+             array_remove(array_agg(t.tag_name), null ) as tags,
+             array_remove(array_agg(i.image_path), null ) as images
         from meetups m
         left join meetups_tags mt on mt.meetup_id = m.id
         left join tags t on mt.tag_id = t.id
+        left join images i on m.id = i.meetup_id
       where m.id = $1
         group by m.id;`;
     const connection = await connect();
@@ -112,6 +122,7 @@ class Database {
         location: result.rows[0].location,
         happeningOn: result.rows[0].happening_on,
         tags: result.rows[0].tags,
+        images: result.rows[0].images,
       };
     } catch (e) {
       return databaseErrorObj;
@@ -121,14 +132,17 @@ class Database {
   };
 
   getUpcomingMeetups = async () => {
-    // const query = 'select * from meetups where happening_on > now();';
-    const query = `select 
-        m.id, m.topic, m.location, m.happening_on, array_remove(array_agg(t.tag_name), null ) as tags
-        from meetups m
+    const query = `select
+      m.id, m.topic, m.location,
+       m.happening_on,
+       array_remove(array_agg(t.tag_name), null) as tags,
+       array_remove(array_agg(i.image_path), null) as images
+      from meetups m
         left join meetups_tags mt on mt.meetup_id = m.id
         left join tags t on mt.tag_id = t.id
+        left join images i on m.id = i.meetup_id
       where happening_on > now()
-        group by m.id;`;
+      group by m.id;`;
     const connection = await connect();
     try {
       const result = await connection.query(query);
@@ -140,6 +154,7 @@ class Database {
           location: row.location,
           happeningOn: row.happening_on,
           tags: row.tags,
+          images: row.images,
         });
       });
       return meetups;
@@ -437,6 +452,32 @@ class Database {
           error: 'Meetup not available',
         };
       }
+      return databaseErrorObj;
+    } finally {
+      connection.release();
+    }
+  };
+
+  addImage = async (meetupId, imagePath) => {
+    const insertQuery = `insert into images (meetup_id, image_path)
+      values ($1, $2) returning meetup_id, image_path;`;
+    const getQuery = `select 
+      m.id as meetup_id, m.topic, array_remove(array_agg(i.image_path),null) as images
+      from meetups m
+      left join images i on m.id = i.meetup_id
+      where m.id = $1
+      group by m.id;`;
+    let connection;
+    try {
+      connection = await connect();
+      await connection.query(insertQuery, [meetupId, imagePath]);
+      const result = await connection.query(getQuery, [meetupId]);
+      return {
+        meetup: result.rows[0].meetup_id,
+        topic: result.rows[0].topic,
+        images: result.rows[0].images,
+      };
+    } catch (e) {
       return databaseErrorObj;
     } finally {
       connection.release();

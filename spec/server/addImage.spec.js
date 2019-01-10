@@ -3,7 +3,7 @@ import request from 'request';
 import fs from 'fs';
 import path from 'path';
 import server from '../../src/app';
-import { urlTags, urlMeetups, testMeetup } from './testUtils';
+import { urlMeetups, testMeetup } from './testUtils';
 
 let meetupId;
 beforeAll(async (DONE) => {
@@ -40,7 +40,6 @@ describe('Add image to meetup', () => {
       url: `${urlMeetups}/${meetupId}/images`,
       formData,
     }, (error, response, body) => {
-      console.log(body);
       expect(JSON.parse(body).error).toEqual('unsupported image format');
       done();
     });
@@ -51,15 +50,4 @@ describe('Add image to meetup', () => {
       done();
     });
   });
-
-  // it('should add tag to a meetup', (done) => {
-  //   request.post(`${urlMeetups}/1/tags`, {
-  //     json: {
-  //       tagId: 1,
-  //     },
-  //   }, (error, response, body) => {
-  //     expect(body.data.length).toBeDefined();
-  //     done();
-  //   });
-  // });
 });

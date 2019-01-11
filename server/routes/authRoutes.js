@@ -1,6 +1,6 @@
 import express from 'express';
 import authController from '../controllers/authController';
-import { checkSignupData, checkLoginData } from '../utils/validateUser';
+import { checkSignupData, checkLoginData } from '../middlewares/validateUser';
 
 const Router = express.Router();
 

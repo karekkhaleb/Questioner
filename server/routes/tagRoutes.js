@@ -1,6 +1,6 @@
 import express from 'express';
 import tagController from '../controllers/tagController';
-import validateTag from '../utils/validateTag';
+import validateTag from '../middlewares/validateTag';
 
 const Router = express.Router();
 

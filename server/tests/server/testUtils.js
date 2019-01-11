@@ -1,0 +1,51 @@
+import request from 'request';
+
+const baseUrl = 'http://localhost:9000';
+const urlRoot = `${baseUrl}/api/v1`;
+const urlMeetups = `${urlRoot}/meetups`;
+const urlAuth = `${urlRoot}/auth`;
+const urlQuestions = `${urlRoot}/questions`;
+const testMeetup = {
+  location: 'kigali',
+  topic: 'Server side rendering',
+  happeningOn: '2020-01-27',
+};
+const admin = {
+  email: process.env.ADMINEMAIL,
+  password: process.env.ADMINPASSWORD,
+};
+
+const loginAdmin = async () => new Promise((resolve) => {
+  request.post(`${urlAuth}/login`, {
+    json: admin,
+  }, (errorU, responseU, bodyU) => {
+    resolve(bodyU.data[0]);
+  });
+});
+
+const createMeetup = async token => new Promise((resolve) => {
+  request.post(urlMeetups, {
+    json: {
+      location: testMeetup.location,
+      topic: testMeetup.topic,
+      happeningOn: testMeetup.happeningOn,
+    },
+    headers: {
+      token,
+    },
+  }, (error, response, body) => {
+    resolve(body.data[0]);
+  });
+});
+
+export {
+  urlRoot,
+  urlAuth,
+  urlMeetups,
+  urlQuestions,
+  testMeetup,
+  baseUrl,
+  admin,
+  loginAdmin,
+  createMeetup,
+};

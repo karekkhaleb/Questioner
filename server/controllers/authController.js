@@ -1,7 +1,7 @@
 /* eslint-disable consistent-return */
 import bcrypt from 'bcrypt-nodejs';
 import jwt from 'jsonwebtoken';
-import database from '../db';
+import database, { jwtSecretWord } from '../db';
 
 class AuthController {
   signup = async (req, res) => {
@@ -12,8 +12,8 @@ class AuthController {
     }
     const token = jwt.sign({
       exp: Math.floor(Date.now() / 1000) + (60 * 60),
-      data: createdUser,
-    }, 'Top-Secret');
+      user: createdUser,
+    }, jwtSecretWord);
     res.status(201).json({
       status: 201,
       data: [{
@@ -31,8 +31,8 @@ class AuthController {
       const user = databaseUser[0];
       const token = jwt.sign({
         exp: Math.floor(Date.now() / 1000) + (60 * 60),
-        data: user,
-      }, 'Top-Secret');
+        user,
+      }, jwtSecretWord);
       return res.status(200).json({
         status: 200,
         data: [{

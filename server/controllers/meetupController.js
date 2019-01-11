@@ -1,7 +1,7 @@
 /* eslint-disable consistent-return */
 import fs from 'fs';
 import database from '../db';
-import uploadUtilities from '../utils/uploadUtilities';
+import uploadUtilities from '../middlewares/uploadUtilities';
 
 class MeetupController {
   getAll = async (req, res) => {

@@ -2,7 +2,7 @@
   "name": "questioner",
   "version": "1.0.0",
   "description": "",
-  "main": "src/app.js",
+  "main": "server/app.js",
   "nyc": {
     "require": [
       "@babel/register"
@@ -11,9 +11,9 @@
     "instrument": false
   },
   "scripts": {
-    "test": "cross-env NODE_ENV=test nyc --reporter=lcov --reporter=text ./node_modules/jasmine/bin/jasmine.js",
-    "start": "cross-env  NODE_ENV=production babel-node ./src/app.js",
-    "dev": "cross-env PORT=9001 NODE_ENV=development nodemon --exec babel-node ./src/app.js",
+    "test": "cross-env NODE_ENV=test nyc --reporter=lcov --reporter=text jasmine JASMINE_CONFIG_PATH=server/tests/support/jasmine.json",
+    "start": "cross-env  NODE_ENV=production babel-node ./server/app.js",
+    "dev": "cross-env PORT=9001 NODE_ENV=development nodemon --exec babel-node ./server/app.js",
     "coverage": "nyc report --reporter=text-lcov && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage"
   },
   "repository": {

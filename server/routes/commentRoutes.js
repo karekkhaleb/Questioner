@@ -1,6 +1,6 @@
 import express from 'express';
 import commentController from '../controllers/commentController';
-import { checkComment } from '../utils/validateComment';
+import { checkComment } from '../middlewares/validateComment';
 
 const Router = express.Router();
 

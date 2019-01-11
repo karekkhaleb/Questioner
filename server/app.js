@@ -9,6 +9,7 @@ import authRoutes from './routes/authRoutes';
 import tagRoutes from './routes/tagRoutes';
 import apiFormat from './db/apiFormat.json';
 import { prepareDatabase } from './db';
+import { insureToken } from './middlewares/validateRegistered';
 
 
 const app = express();
@@ -21,7 +22,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(morgan('dev'));
 
-app.use(`${rootUrl}/meetups`, meetupRoutes);
+app.use(`${rootUrl}/meetups`, insureToken, meetupRoutes);
 app.use(`${rootUrl}/questions`, questionRoutes);
 app.use(`${rootUrl}/auth`, authRoutes);
 app.use(`${rootUrl}/tags`, tagRoutes);

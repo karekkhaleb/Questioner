@@ -1,6 +1,6 @@
 import express from 'express';
 import questionController from '../controllers/questionController';
-import { checkQuestion } from '../utils/validateQuestionRequests';
+import { checkQuestion } from '../middlewares/validateQuestionRequests';
 
 const Router = express.Router();
 

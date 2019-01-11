@@ -31,6 +31,7 @@ const prepareDatabase = async () => {
   await connection.query(sqlQueries.adminQuery, adminData);
   connection.release();
 };
+const jwtSecretWord = process.env.JWTSECRETWORD;
 
 class Database {
   addMeetup = async ({ ...meetupData }) => {
@@ -489,4 +490,5 @@ export default new Database();
 export {
   prepareDatabase,
   connect,
+  jwtSecretWord,
 };

@@ -38,6 +38,22 @@ const createMeetup = async token => new Promise((resolve) => {
   });
 });
 
+const createQuestion = (meetupId, userId, token) => new Promise((resolve) => {
+  request.post(`${urlRoot}/questions`, {
+    json: {
+      meetupId,
+      createdBy: userId,
+      title: 'test vote title',
+      body: 'test vot body',
+    },
+    headers: {
+      token,
+    },
+  }, (error, response, body) => {
+    resolve(body.data[0]);
+  });
+});
+
 export {
   urlRoot,
   urlAuth,
@@ -48,4 +64,5 @@ export {
   admin,
   loginAdmin,
   createMeetup,
+  createQuestion,
 };

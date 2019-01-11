@@ -23,10 +23,10 @@ app.use(express.urlencoded({ extended: false }));
 app.use(morgan('dev'));
 
 app.use(`${rootUrl}/meetups`, insureToken, meetupRoutes);
-app.use(`${rootUrl}/questions`, questionRoutes);
+app.use(`${rootUrl}/questions`, insureToken, questionRoutes);
 app.use(`${rootUrl}/auth`, authRoutes);
-app.use(`${rootUrl}/tags`, tagRoutes);
-app.use(`${rootUrl}/comments`, commentRoutes);
+app.use(`${rootUrl}/tags`, insureToken, tagRoutes);
+app.use(`${rootUrl}/comments`, insureToken, commentRoutes);
 
 app.get('/', (req, res) => res.status(200).json({
   status: 200,

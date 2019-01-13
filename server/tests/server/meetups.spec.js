@@ -38,7 +38,6 @@ describe('testing create meetup endpoint', () => {
       json: {
         topic: testMeetup.topic,
         happeningOn: testMeetup.happeningOn,
-        tags: testMeetup.tags,
       },
       headers: { token: adminObj.token },
     }, (error, response, body) => {
@@ -51,7 +50,6 @@ describe('testing create meetup endpoint', () => {
       json: {
         location: testMeetup.location,
         happeningOn: testMeetup.happeningOn,
-        tags: testMeetup.tags,
       },
       headers: { token: adminObj.token },
     }, (error, response, body) => {
@@ -64,7 +62,6 @@ describe('testing create meetup endpoint', () => {
       json: {
         location: testMeetup.location,
         topic: testMeetup.topic,
-        tags: testMeetup.tags,
       },
       headers: { token: adminObj.token },
     }, (error, response, body) => {
@@ -78,7 +75,6 @@ describe('testing create meetup endpoint', () => {
         location: testMeetup.location,
         happeningOn: 'not a valid date',
         topic: testMeetup.topic,
-        tags: testMeetup.tags,
       },
       headers: { token: adminObj.token },
     }, (error, response, body) => {

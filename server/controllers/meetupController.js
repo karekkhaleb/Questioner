@@ -109,7 +109,7 @@ class MeetupController {
     }
     res.status(200).json({
       status: 200,
-      data: ['Meetup deleted'],
+      data: [{ message: 'Meetup deleted' }],
     });
   };
 

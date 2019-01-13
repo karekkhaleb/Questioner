@@ -8,15 +8,10 @@ import {
 let adminObj;
 let meetupObj;
 let tagId;
+let secondTagId;
 beforeAll(async (DONE) => {
   adminObj = await loginAdmin();
   meetupObj = await createMeetup(adminObj.token);
-  await request.post(`${urlRoot}/tags`, {
-    json: {
-      tagName: 'to-fail',
-    },
-    headers: { token: adminObj.token },
-  });
   request.post(`${urlRoot}/tags`, {
     json: {
       tagName: 'tagToMeetup',
@@ -24,7 +19,22 @@ beforeAll(async (DONE) => {
     headers: { token: adminObj.token },
   }, (error, response, body) => {
     tagId = body.data[0].id;
-    DONE();
+    request.post(`${urlRoot}/tags`, {
+      json: {
+        tagName: 'to-fail',
+      },
+      headers: { token: adminObj.token },
+    }, async (errorT, responseT, bodyT) => {
+      secondTagId = bodyT.data[0].id;
+      // add tag on this meetup to further test that no tag should be added twice
+      await request.post(`${urlMeetups}/${meetupObj.id}/tags`, {
+        json: {
+          tagId: secondTagId,
+        },
+        headers: { token: adminObj.token },
+      });
+      DONE();
+    });
   });
 });
 
@@ -93,8 +103,30 @@ describe('Add tag to meetup', () => {
       done();
     });
   });
+  it('should tell if the meetup given is not found', (done) => {
+    request.post(`${urlMeetups}/547854/tags`, {
+      json: {
+        tagId,
+      },
+      headers: { token: adminObj.token },
+    }, (error, response, body) => {
+      expect(body.error).toEqual('Meetup not found');
+      done();
+    });
+  });
+  it('should not add tag to a meetup twice', (done) => {
+    request.post(`${urlMeetups}/${meetupObj.id}/tags`, {
+      json: {
+        tagId: secondTagId,
+      },
+      headers: { token: adminObj.token },
+    }, (error, response, body) => {
+      expect(body.error).toEqual('Record already exists');
+      done();
+    });
+  });
   it('should add tag to a meetup', (done) => {
-    request.post(`${urlMeetups}/1/tags`, {
+    request.post(`${urlMeetups}/${meetupObj.id}/tags`, {
       json: {
         tagId,
       },

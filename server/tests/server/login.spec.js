@@ -38,6 +38,17 @@ describe('login api endpoint', () => {
       done();
     });
   });
+  it('should tell if the user gives a wrong password', (done) => {
+    request.post(`${urlAuth}/login`, {
+      json: {
+        email: 'login@gmail.com',
+        password: 'wrongPassword',
+      },
+    }, (error, response, body) => {
+      expect(body.error).toEqual('Wrong email or password');
+      done();
+    });
+  });
   it('should log in the user if everything is fine', (done) => {
     request.post(`${urlAuth}/login`, {
       json: {

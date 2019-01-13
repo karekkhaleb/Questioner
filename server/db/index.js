@@ -83,58 +83,26 @@ class Database {
     }
   };
 
-  addQuestion = async (meetupId, createdBy, title, body) => {
-    const query = `insert into questions (created_by, meetup, title, body)
-      VALUES ($1, $2, $3, $4) returning *;`;
-    let connection;
-    try {
-      connection = await connect();
-      const result = await connection.query(query, [createdBy, meetupId, title, body]);
-      return {
-        id: result.rows[0].id,
-        user: result.rows[0].created_by,
-        meetup: result.rows[0].meetup,
-        title: result.rows[0].title,
-        body: result.rows[0].body,
-      };
-    } catch (e) {
-      if (e.detail === `Key (created_by)=(${createdBy}) is not present in table "users".`) {
-        return { status: 404, error: 'User creating question not found' };
-      }
-      if (e.detail === `Key (meetup)=(${meetupId}) is not present in table "meetups".`) {
-        return { status: 404, error: 'Meetup not found' };
-      }
-      return databaseErrorObj;
-    } finally {
-      connection.release();
-    }
-  };
-
-  // addComment = async (questionId, userId, comment) => {
-  //   const query = `with new_comment (user_id, question_id, comment) as (
-  //       insert into  comments (user_id, question_id, comment)
-  //         values ($1, $2, $3)
-  //         returning user_id, question_id, comment
-  //     )
-  //     select comment, q.id as question_id, q.title as question_title, q.body as question_body
-  //     from new_comment
-  //     join questions q on q.id = new_comment.question_id;`;
+  // addQuestion = async (meetupId, createdBy, title, body) => {
+  //   const query = `insert into questions (created_by, meetup, title, body)
+  //     VALUES ($1, $2, $3, $4) returning *;`;
   //   let connection;
   //   try {
   //     connection = await connect();
-  //     const result = await connection.query(query, [userId, questionId, comment]);
+  //     const result = await connection.query(query, [createdBy, meetupId, title, body]);
   //     return {
-  //       question: result.rows[0].question_id,
-  //       title: result.rows[0].question_title,
-  //       body: result.rows[0].question_body,
-  //       comment: result.rows[0].comment,
+  //       id: result.rows[0].id,
+  //       user: result.rows[0].created_by,
+  //       meetup: result.rows[0].meetup,
+  //       title: result.rows[0].title,
+  //       body: result.rows[0].body,
   //     };
   //   } catch (e) {
-  //     if (e.detail === `Key (user_id)=(${userId}) is not present in table "users".`) {
-  //       return { status: 404, error: 'User creating comment not found' };
+  //     if (e.detail === `Key (created_by)=(${createdBy}) is not present in table "users".`) {
+  //       return { status: 404, error: 'User creating question not found' };
   //     }
-  //     if (e.detail === `Key (question_id)=(${questionId}) is not present in table "questions".`) {
-  //       return { status: 404, error: 'Question not found' };
+  //     if (e.detail === `Key (meetup)=(${meetupId}) is not present in table "meetups".`) {
+  //       return { status: 404, error: 'Meetup not found' };
   //     }
   //     return databaseErrorObj;
   //   } finally {
@@ -142,34 +110,34 @@ class Database {
   //   }
   // };
 
-  vote = async (questionId, action) => {
-    let query;
-    if (action === 'upvote') {
-      query = `update questions
-      set votes = votes + 1
-      where id = $1 returning *;`;
-    } else {
-      query = `update questions
-      set votes = votes - 1
-      where id = $1 returning *;`;
-    }
-    let connection;
-    try {
-      connection = await connect();
-      const result = await connection.query(query, [questionId]);
-      if (result.rows.length === 0) {
-        return {
-          status: 404,
-          error: 'No question matches that id',
-        };
-      }
-      return result.rows[0];
-    } catch (e) {
-      return databaseErrorObj;
-    } finally {
-      connection.release();
-    }
-  };
+  // vote = async (questionId, action) => {
+  //   let query;
+  //   if (action === 'upvote') {
+  //     query = `update questions
+  //     set votes = votes + 1
+  //     where id = $1 returning *;`;
+  //   } else {
+  //     query = `update questions
+  //     set votes = votes - 1
+  //     where id = $1 returning *;`;
+  //   }
+  //   let connection;
+  //   try {
+  //     connection = await connect();
+  //     const result = await connection.query(query, [questionId]);
+  //     if (result.rows.length === 0) {
+  //       return {
+  //         status: 404,
+  //         error: 'No question matches that id',
+  //       };
+  //     }
+  //     return result.rows[0];
+  //   } catch (e) {
+  //     return databaseErrorObj;
+  //   } finally {
+  //     connection.release();
+  //   }
+  // };
 }
 
 export default new Database();

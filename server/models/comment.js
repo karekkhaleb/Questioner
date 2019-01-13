@@ -1,5 +1,5 @@
 import { databaseErrorObj } from '../db/utils';
-import { connect } from '../db';
+import { executeQuery } from '../db';
 
 export default class Comment {
   static addComment = async (questionId, userId, comment) => {
@@ -11,15 +11,13 @@ export default class Comment {
       select comment, q.id as question_id, q.title as question_title, q.body as question_body
       from new_comment
       join questions q on q.id = new_comment.question_id;`;
-    let connection;
     try {
-      connection = await connect();
-      const result = await connection.query(query, [userId, questionId, comment]);
+      const result = await executeQuery(query, [userId, questionId, comment]);
       return {
-        question: result.rows[0].question_id,
-        title: result.rows[0].question_title,
-        body: result.rows[0].question_body,
-        comment: result.rows[0].comment,
+        question: result[0].question_id,
+        title: result[0].question_title,
+        body: result[0].question_body,
+        comment: result[0].comment,
       };
     } catch (e) {
       if (e.detail === `Key (user_id)=(${userId}) is not present in table "users".`) {
@@ -29,8 +27,6 @@ export default class Comment {
         return { status: 404, error: 'Question not found' };
       }
       return databaseErrorObj;
-    } finally {
-      connection.release();
     }
   };
 }

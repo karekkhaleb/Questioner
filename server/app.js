@@ -8,14 +8,11 @@ import commentRoutes from './routes/commentRoutes';
 import authRoutes from './routes/authRoutes';
 import tagRoutes from './routes/tagRoutes';
 import apiFormat from './db/apiFormat.json';
-import { prepareDatabase } from './db';
 import { insureToken } from './middlewares/validateRegistered';
 
 
 const app = express();
 const port = process.env.PORT || 9000;
-// noinspection JSIgnoredPromiseFromCall
-prepareDatabase();
 const rootUrl = '/api/v1';
 
 app.use(express.json());

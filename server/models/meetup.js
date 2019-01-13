@@ -2,7 +2,7 @@ import { executeQuery } from '../db';
 import { databaseErrorObj } from '../db/utils';
 
 export default class Meetup {
-  getAllMeetps = async () => {
+  static getAllMeetps = async () => {
     const meetupsQuery = `select
       m.id, m.topic, m.location,
              m.happening_on,
@@ -32,7 +32,7 @@ export default class Meetup {
     }
   };
 
-  addMeetup = async ({ ...meetupData }) => {
+  static addMeetup = async ({ ...meetupData }) => {
     const query = `insert into meetups (
       location, topic, happening_on) 
       values ($1, $2, $3) returning *;
@@ -56,7 +56,7 @@ export default class Meetup {
     }
   };
 
-  getSingleMeetup = async (meetupId) => {
+  static getSingleMeetup = async (meetupId) => {
     const query = `select
         m.id, m.topic, m.location,
              m.happening_on,
@@ -89,7 +89,7 @@ export default class Meetup {
     }
   };
 
-  getUpcomingMeetups = async () => {
+  static getUpcomingMeetups = async () => {
     const query = `select
       m.id, m.topic, m.location,
        m.happening_on,
@@ -120,7 +120,7 @@ export default class Meetup {
     }
   };
 
-  addTagToMeetup = async (tagId, meetupId) => {
+  static addTagToMeetup = async (tagId, meetupId) => {
     const insertQuery = `insert into meetups_tags (meetup_id, tag_id)
                           values ($1, $2)`;
     const getQuery = `select m.id, m.topic, array_agg(t.tag_name) as tag_name
@@ -149,7 +149,7 @@ export default class Meetup {
     }
   };
 
-  deleteMeetup = async (meetupId) => {
+  static deleteMeetup = async (meetupId) => {
     const query = 'delete from meetups where id = $1 returning *;';
     try {
       const deleted = await executeQuery(query, [meetupId]);
@@ -165,7 +165,7 @@ export default class Meetup {
     }
   };
 
-  getMeetupQuestions = async (meetupId) => {
+  static getMeetupQuestions = async (meetupId) => {
     const query = 'select * from questions where meetup = $1;';
     try {
       return await executeQuery(query, [meetupId]);
@@ -174,7 +174,7 @@ export default class Meetup {
     }
   };
 
-  respondRsvp = async ({ ...rsvpData }) => {
+  static respondRsvp = async ({ ...rsvpData }) => {
     const query = `with newrsvps (meetup, response) as (
           insert into rsvps (user_id, meetup, response)
         values ($1, $2, $3) returning meetup, response
@@ -212,7 +212,7 @@ export default class Meetup {
     }
   };
 
-  addImage = async (meetupId, imagePath) => {
+  static addImage = async (meetupId, imagePath) => {
     const insertQuery = `insert into images (meetup_id, image_path)
       values ($1, $2) returning meetup_id, image_path;`;
     const getQuery = `select 

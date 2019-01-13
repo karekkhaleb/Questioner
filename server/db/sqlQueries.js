@@ -40,7 +40,7 @@ create table if not exists meetups_tags(
   meetup_id integer not null ,
   tag_id integer not null ,
   primary key (meetup_id, tag_id),
-  foreign key (meetup_id) references meetups(id) ON DELETE CASCADE,
+  foreign key (meetup_id) references meetups(id) on delete cascade,
   foreign key (tag_id) references tags(id)
 );
 
@@ -53,7 +53,7 @@ create table if not exists questions(
   votes integer not null default 0,
   created_on timestamp without time zone default now(),
   foreign key (created_by) references users(id),
-  foreign key (meetup) references meetups(id)
+  foreign key (meetup) references meetups(id) on delete cascade
 );
 
 create table if not exists comments (

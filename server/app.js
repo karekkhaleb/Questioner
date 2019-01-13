@@ -31,5 +31,10 @@ app.get('/', (req, res) => res.status(200).json({
   apiFormat,
 }));
 
+app.on('ready', () => {
+  app.listen(port, () => console.log(`app started on port ${port}`));
+});
 
-app.listen(port, () => console.log(`app started on port ${port}`));
+prepareDatabase().then(() => {
+  app.emit('ready');
+});

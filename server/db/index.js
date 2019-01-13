@@ -47,6 +47,7 @@ const prepareDatabase = () => new Promise(async (resolve) => {
   connection.release();
   resolve();
 });
+
 const jwtSecretWord = process.env.JWTSECRETWORD;
 
 class Database {

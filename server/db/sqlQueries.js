@@ -74,7 +74,7 @@ create table if not exists rsvps(
   created_on timestamp without time zone default now(),
   primary key (user_id, meetup),
   foreign key (user_id) references users(id),
-  foreign key (meetup) references  meetups(id)
+  foreign key (meetup) references  meetups(id) on delete cascade
 );
 
 create table if not exists images (

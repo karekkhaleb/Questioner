@@ -1,4 +1,5 @@
 import request from 'request';
+import { prepareDatabase } from '../../db';
 
 const baseUrl = 'http://localhost:9000';
 const urlRoot = `${baseUrl}/api/v1`;
@@ -15,7 +16,8 @@ const admin = {
   password: process.env.ADMINPASSWORD,
 };
 
-const loginAdmin = async () => new Promise((resolve) => {
+const loginAdmin = async () => new Promise(async (resolve) => {
+  await prepareDatabase();
   request.post(`${urlAuth}/login`, {
     json: admin,
   }, (errorU, responseU, bodyU) => {

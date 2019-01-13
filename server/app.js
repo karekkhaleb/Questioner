@@ -8,13 +8,11 @@ import commentRoutes from './routes/commentRoutes';
 import authRoutes from './routes/authRoutes';
 import tagRoutes from './routes/tagRoutes';
 import apiFormat from './db/apiFormat.json';
-import { prepareDatabase } from './db';
 import { insureToken } from './middlewares/validateRegistered';
 
 
 const app = express();
 const port = process.env.PORT || 9000;
-// noinspection JSIgnoredPromiseFromCall
 const rootUrl = '/api/v1';
 
 app.use(express.json());
@@ -33,10 +31,5 @@ app.get('/', (req, res) => res.status(200).json({
   apiFormat,
 }));
 
-app.on('ready', () => {
-  app.listen(port, () => console.log(`app started on port ${port}`));
-});
 
-prepareDatabase().then(() => {
-  app.emit('ready');
-});
+app.listen(port, () => console.log(`app started on port ${port}`));

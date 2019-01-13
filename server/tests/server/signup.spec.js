@@ -3,6 +3,20 @@ import request from 'request';
 import server from '../../app';
 import { urlAuth } from './testUtils';
 
+beforeAll(async (Done) => {
+  await request.post(`${urlAuth}/signup`, {
+    json: {
+      firstname: 'firstname',
+      lastname: 'lastname',
+      email: 'readonly@gmail.com',
+      phoneNumber: 250722387998,
+      userName: 'readonly',
+      password: 'testpassword',
+    },
+  });
+  Done();
+});
+
 describe('signup api endpoint', () => {
   it('should create the users if all the fields are given', (done) => {
     request.post(`${urlAuth}/signup`, {
@@ -139,6 +153,36 @@ describe('signup api endpoint', () => {
       },
     }, (error, response, body) => {
       expect(body.error).toEqual('Phone Number should be a number');
+      done();
+    });
+  });
+  it('should not allow duplicated userName', (done) => {
+    request.post(`${urlAuth}/signup`, {
+      json: {
+        firstname: 'firstname',
+        lastname: 'lastname',
+        email: 'noproblem@gmail.com',
+        phoneNumber: 250722387998,
+        userName: 'readonly',
+        password: 'testpassword',
+      },
+    }, (error, response, body) => {
+      expect(body.error).toEqual('Please chose another userName');
+      done();
+    });
+  });
+  it('should not allow duplicated email', (done) => {
+    request.post(`${urlAuth}/signup`, {
+      json: {
+        firstname: 'firstname',
+        lastname: 'lastname',
+        email: 'readonly@gmail.com',
+        phoneNumber: 250722387998,
+        userName: 'noproblem',
+        password: 'testpassword',
+      },
+    }, (error, response, body) => {
+      expect(body.error).toEqual('Please chose another email');
       done();
     });
   });

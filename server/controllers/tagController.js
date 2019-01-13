@@ -1,9 +1,9 @@
 /* eslint-disable consistent-return */
-import database from '../db';
+import Tag from '../models/tag';
 
 class TagController {
   create = async (req, res) => {
-    const createdTag = await database.createTag(req.body.tagName);
+    const createdTag = await Tag.createTag(req.body.tagName);
     if (createdTag && createdTag.error) {
       return res.status(createdTag.status).json(createdTag);
     }
@@ -14,7 +14,7 @@ class TagController {
   };
 
   getAll = async (req, res) => {
-    const tags = await database.getAllTags();
+    const tags = await Tag.getAllTags();
     if (tags && tags.error) {
       return res.status(tags.status).json({
         status: tags.status,

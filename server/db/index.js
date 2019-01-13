@@ -16,7 +16,22 @@ if (process.env.DATABASE_URL) {
   pool = new Pool();
 }
 const connect = async () => pool.connect();
-const prepareDatabase = async () => {
+// const prepareDatabase = async () => {
+//   const adminData = [
+//     process.env.ADMINFIRSTNAME,
+//     process.env.ADMINLASTNAME,
+//     process.env.ADMINOTHERNAME,
+//     process.env.ADMINPHONENUMBER,
+//     process.env.ADMINUSERNAME,
+//     process.env.ADMINEMAIL,
+//     brcypt.hashSync(process.env.ADMINPASSWORD),
+//   ];
+//   const connection = await connect();
+//   await connection.query(sqlQueries.tablesQuery);
+//   await connection.query(sqlQueries.adminQuery, adminData);
+//   connection.release();
+// };
+const prepareDatabase = () => new Promise(async (resolve) => {
   const adminData = [
     process.env.ADMINFIRSTNAME,
     process.env.ADMINLASTNAME,
@@ -30,10 +45,17 @@ const prepareDatabase = async () => {
   await connection.query(sqlQueries.tablesQuery);
   await connection.query(sqlQueries.adminQuery, adminData);
   connection.release();
-};
+  resolve();
+});
 const jwtSecretWord = process.env.JWTSECRETWORD;
 
 class Database {
+  constructor() {
+    if (process.env.NODE_ENV !== 'test') {
+      prepareDatabase();
+    }
+  }
+
   addMeetup = async ({ ...meetupData }) => {
     const query = `insert into meetups (
       location, topic, happening_on) 
@@ -56,7 +78,6 @@ class Database {
         happeningOn: newMeetup.happening_on,
       };
     } catch (e) {
-      console.log(e);
       return databaseErrorObj;
     } finally {
       connection.release();

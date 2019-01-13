@@ -1,9 +1,9 @@
 /* eslint-disable consistent-return */
-import database from '../db';
+import Comment from '../models/comment';
 
-class QuestionController {
+class CommentController {
   create = async (req, res) => {
-    const createdComment = await database.addComment(
+    const createdComment = await Comment.addComment(
       Number.parseInt(req.body.questionId, 10),
       Number.parseInt(req.body.userId, 10),
       req.body.comment,
@@ -22,4 +22,4 @@ class QuestionController {
   };
 }
 
-export default new QuestionController();
+export default new CommentController();

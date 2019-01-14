@@ -1,0 +1,201 @@
+body{
+    position: relative;
+}
+.container{
+    margin: 0 15%;
+}
+.container li{
+    list-style: none;
+    margin-bottom: 25px;
+    color: #333333;
+}
+.question{
+    background-color: #ffffff;
+    box-shadow: 5px 5px 25px black;
+    padding: 25px;
+}
+.question > h2{
+    text-align: center;
+    margin-bottom: 10px;
+}
+hr{
+    margin: 10px 0;
+}
+.description p{
+    font-size: 1.5em;
+}
+.aside{
+    background-color: #333333;
+    flex: 1;
+    position: relative;
+}
+.aside h2{
+    text-align: center;
+    color: #ffffff;
+}
+.side-info{
+    color: #ffffff;
+    font-size: 1.2em;
+}
+.side-info a{
+    color: #333333;
+    text-decoration: none;
+    background-color: #dddddd;
+    padding: 5px;
+    border-radius: 10px;
+}
+.side-info li{
+    padding: 17px;
+}
+.btn{
+    padding: 5px;
+    margin: 5px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    position: relative;
+}
+.btn:focus{
+    outline: 0;
+}
+.btn:active::before{
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+}
+.horizontalMargin{
+    margin-top: 17px;
+    margin-bottom: 17px;
+}
+.highlight{
+    background-color: #dddddd;
+    color: #333333;
+    text-decoration: none;
+}
+
+.form-container{
+    position: relative;
+    height: 70vh;
+}
+.questions > h1{
+    /*color: #ffffff;*/
+    color: #333333;
+    padding-bottom: 17px;
+    border-bottom: 2px solid #ffffff;
+    margin-bottom: 17px;
+}
+.form-container button{
+    font-size: 1.5em;
+}
+.form-container h1, .form-container h2{
+    /*color: #ffffff;*/
+    color: #333333;
+}
+.question-field-container{
+    background-color: #dddddd;
+    border-radius: 10px;
+    margin: 17px 0;
+}
+.question-field-container textarea{
+    width: 100%;
+    min-height: 40vh;
+    font-size: 2em;
+    font-family: "David Libre", serif;
+    padding: 17px;
+    background-color: transparent;
+    border: none;
+}
+.question-field-container textarea:focus{
+    outline: 0;
+}
+.comments-container{
+    display: none;
+    background-color: rgb(17, 47, 59);
+    height: 100vh;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    /*display: flex;*/
+    justify-content: center;
+    align-items: center;
+    overflow-y: auto;
+}
+.comments-container > div{
+    /*margin: auto;*/
+    /*background-color: #ffffff;*/
+    color: #333333;
+    padding: 17px;
+    height: 80%;
+    width: 80%;
+    display: flex;
+}
+.comments-container  li{
+    list-style: none;
+}
+.comments-container > div > div{
+    flex: 1;
+    margin: 17px;
+    padding: 17px;
+    text-align: center;
+    background-color: #6bbab5;
+    border-radius: 10px;
+}
+.cursor-pointer{
+    cursor: pointer;
+}
+.comments-list{
+    overflow-y: auto;
+}
+.comments-list ul li {
+    background-color: #dddddd;
+    margin: 17px 0;
+    padding: 17px;
+    border-radius: 10px;
+}
+.comments-list ul li > h3{
+    text-decoration: underline;
+    margin-bottom: 17px;
+}
+.comments-container > div > div p{
+    font-size: 1.2em;
+}
+.comments-container form > div{
+    background-color: #112f3b;
+    border-radius: 10px;
+    margin: 17px 0;
+}
+.comments-container form > div textarea{
+    background: none;
+    font-size: 1.5em;
+    color: #ffffff;
+    width: 100%;
+    padding: 17px;
+    border: none;
+}
+.comments-container form > div textarea:focus{
+    outline: 0;
+}
+@media screen and (max-width: 700px){
+    .comments-container > div{
+        /*flex-direction: column;*/
+        display: block;
+    }
+    .comments-container{
+        min-height:50vh;
+    }
+}
+@media screen and (min-width: 700px){
+    .comments-container > div > div{
+        height: 100%;
+    }
+    .comments-container > div > div .question-body{
+        max-height: 50%;
+        overflow: auto;
+    }
+}

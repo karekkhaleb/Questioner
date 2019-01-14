@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="css/fontawesome/css/fontawesome-all.css">
+    <link rel="stylesheet" href="css/questions.css">
+    <link rel="stylesheet" href="css/universal.css">
+    <title>Questions</title>
+</head>
+<body>
+<nav>
+    <a href="./index.html">Questioner</a>
+    <ul>
+        <li><a href="meetups.html">Meetups</a></li>
+        <li><a href="profile.html">Profile</a></li>
+        <li><a href="#">Log out</a></li>
+    </ul>
+</nav>
+<div class="page">
+    <aside class="aside">
+        <div class="fixed">
+            <div>
+                <h2>ALL QUESTIONS</h2>
+                <hr>
+                <div>
+                    <ul class="side-info">
+                        <li><i class="fa fa-question-circle"></i> 6 Questions</li>
+                        <li><i class="fa fa-users"></i> 12 Participants</li>
+                        <li><i class="fa fa-star"></i> <a href="#">Up coming Meet-up</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer">
+                <small>Questioner &copy; 2019</small>
+            </div>
+        </div>
+    </aside>
+    <main>
+        <div class="container">
+            <div class="form-container">
+                <h1>React Native Meetup</h1>
+                <hr>
+                <h2>Ask a question:</h2>
+                <form>
+                    <div class="question-field-container">
+                        <textarea id="question-field"></textarea>
+                    </div>
+                    <div>
+                        <button class="btn highlight" type="submit">Post Question</button>
+                    </div>
+                </form>
+            </div>
+            <ul id="questions" class="questions">
+                <h1>Questions</h1>
+                <li  class="question">
+                    <h2>React Native Meetup</h2>
+                    <hr>
+                    <div class="description">
+                        <p>
+                            No more jumping around languages when build apps
+                            You can now use one programing language that you know and love JavaScript,
+                            And build app for any platform you can dream of!!
+                        </p>
+                    </div>
+                    <div class="info">
+                        <p class="horizontalMargin ">
+                            <button class="btn highlight"><i class="fa fa-thumbs-up"></i>54 Upvotes</button> | <button class="btn highlight"><i class="fa fa-thumbs-down"></i>0 Downvotes</button>
+                            |
+                            <button class="btn highlight commentsBtn"><i class="fa fa-comments"></i>5 comments</button>
+                        </p>
+                    </div>
+                </li>
+                <li  class="question">
+                    <h2>React Native Meetup</h2>
+                    <hr>
+                    <div class="description">
+                        <p>
+                            No more jumping around languages when build apps
+                            You can now use one programing language that you know and love JavaScript,
+                            And build app for any platform you can dream of!!
+                        </p>
+                    </div>
+                    <div class="info">
+                        <p class="horizontalMargin ">
+                            <button class="btn highlight"><i class="fa fa-thumbs-up"></i>54 Upvotes</button> | <button class="btn highlight"><i class="fa fa-thumbs-down"></i>0 Downvotes</button>
+                            |
+                            <button class="btn highlight commentsBtn"><i class="fa fa-comments"></i>5 comments</button>
+                        </p>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </main>
+</div>
+<div class="comments-container">
+    <div>
+        <div>
+            <p class="cursor-pointer"><i class="fa fa-arrow-left"></i>Back</p>
+            <h1>Question</h1>
+            <p class="question-body">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aperiam aspernatur dolores impedit laboriosam libero praesentium, veritatis? Architecto delectus eligendi itaque laborum officiis perspiciatis quidem soluta sunt? At dolores eveniet laborum!Architecto delectus eligendi itaque laborum officiis perspiciatis quidem soluta sunt? At dolores eveniet laborum!Architecto delectus eligendi itaque laborum officiis perspiciatis quidem soluta sunt? At dolores eveniet </p>
+            <form action="#">
+                <div>
+                    <textarea name="comment" placeholder="Enter your comment..."></textarea>
+                </div>
+                <button class="btn">Post Comment</button>
+            </form>
+        </div>
+        <div class="comments-list">
+            <h1>Comments</h1>
+            <hr>
+            <ul>
+                <li>
+                    <h3>
+                        <i class="fa fa-user"></i>
+                        Buhungiro Caleb
+                    </h3>
+                    <p><i class="fa fa-comment"></i>
+                        Good question bro, I had the same question
+                    </p>
+                </li>
+                <li>
+                    <h3>
+                        <i class="fa fa-user"></i>
+                        Buhungiro Caleb
+                    </h3>
+                    <p><i class="fa fa-comment"></i>
+                        Good question bro, I had the same question
+                    </p>
+                </li>
+                <li>
+                    <h3>
+                        <i class="fa fa-user"></i>
+                        Buhungiro Caleb
+                    </h3>
+                    <p><i class="fa fa-comment"></i>
+                        Good question bro, I had the same question
+                    </p>
+                </li>
+                <li>
+                    <h3>
+                        <i class="fa fa-user"></i>
+                        Buhungiro Caleb
+                    </h3>
+                    <p><i class="fa fa-comment"></i>
+                        Good question bro, I had the same question
+                    </p>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<script src="./js/questions.js"></script>
+</body>
+</html>

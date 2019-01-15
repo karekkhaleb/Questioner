@@ -48,6 +48,18 @@ nav > ul{
 }
 nav li{
     list-style: none;
+    position: relative;
+}
+nav  button{
+    position: relative;
+    background-color: transparent;
+    color: white;
+    border: none;
+    padding-top: 0;
+    padding-bottom: 10px;
+}
+nav button:focus{
+    outline: none;
 }
 nav ul a {
     color: #ffffff;
@@ -55,8 +67,8 @@ nav ul a {
     margin: 17px;
     padding-bottom: 10px;
 }
-nav ul a:hover{
-    border-bottom: 2px solid #ffffff;
+nav ul a:hover, nav ul button:hover{
+    border-bottom: 1px solid #ffffff;
 }
 .fixed{
     position: fixed;
@@ -77,16 +89,20 @@ nav ul a:hover{
     background-color: #dddddd;
     color: #333333;
     text-decoration: none;
+    margin: 5px 5px 10px;
+
 }
 
 .page{
     display: flex;
+    position: relative;
+    width: 100%;
 }
 .page main{
     flex: 3;
 }
 
-nav a:hover {
+nav a:hover, nav button:hover {
     text-shadow: 0 0 25px white;
 }
 .aside{
@@ -113,11 +129,12 @@ nav a:hover {
 }
 .btn{
     padding: 5px;
-    margin: 5px;
+    margin: 5px 5px 10px;
     border: none;
     border-radius: 10px;
     cursor: pointer;
     position: relative;
+    display: inline-block;
 }
 .btn:focus{
     outline: 0;

@@ -10,12 +10,12 @@ class MeetupController {
   };
 
   create = (req, res) => {
-    const tags = Array.isArray(req.body.tags)?  [...req.body.tags] : [];
+    const tags = Array.isArray(req.body.tags) ? [...req.body.tags] : [];
     const created = database.addMeetup({
-        location: req.body.location,
-        topic: req.body.topic,
-        happeningOn: req.body.happeningOn,
-        tags,
+      location: req.body.location,
+      topic: req.body.topic,
+      happeningOn: req.body.happeningOn,
+      tags,
     });
 
     res.status(201).json({

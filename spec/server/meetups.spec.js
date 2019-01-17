@@ -7,13 +7,9 @@ import { urlMeetups, testMeetup } from './testUtils';
 describe('get meetups api endpoint', () => {
   it('should give a proper status code', (done) => {
     request.get(urlMeetups, (error, response, body) => {
+      expect(Array.isArray(JSON.parse(body).data)).toBeTruthy();
+      expect(error).toBeNull();
       expect(response.statusCode).toEqual(200);
-      done();
-    });
-  });
-  it('should give the body with the right status code', (done) => {
-    request.get(urlMeetups, (error, response, body) => {
-      expect(JSON.parse(body).status).toBe(200);
       done();
     });
   });
@@ -30,7 +26,6 @@ describe('testing create meetup endpoint', () => {
       json: {
         topic: testMeetup.topic,
         happeningOn: testMeetup.happeningOn,
-        tags: testMeetup.tags,
       },
     }, (error, response, body) => {
       expect(body.error).toEqual('Missing location');
@@ -42,7 +37,6 @@ describe('testing create meetup endpoint', () => {
       json: {
         location: testMeetup.location,
         happeningOn: testMeetup.happeningOn,
-        tags: testMeetup.tags,
       },
     }, (error, response, body) => {
       expect(body.error).toEqual('Missing topic');
@@ -54,7 +48,6 @@ describe('testing create meetup endpoint', () => {
       json: {
         location: testMeetup.location,
         topic: testMeetup.topic,
-        tags: testMeetup.tags,
       },
     }, (error, response, body) => {
       expect(body.error).toEqual('Missing time the meetup takes place');
@@ -67,10 +60,21 @@ describe('testing create meetup endpoint', () => {
         location: testMeetup.location,
         happeningOn: 'not a valid date',
         topic: testMeetup.topic,
-        tags: testMeetup.tags,
       },
     }, (error, response, body) => {
       expect(body.error).toEqual('happeningOn should be a valid date: Y/M/D');
+      done();
+    });
+  });
+  it('should not create a meetup in when happening on is in the past', (done) => {
+    request.post(urlMeetups, {
+      json: {
+        location: testMeetup.location,
+        topic: testMeetup.topic,
+        happeningOn: '2018/01/01',
+      },
+    }, (error, response, body) => {
+      expect(body.error).toEqual('happeningOn should not be in the past');
       done();
     });
   });
@@ -82,12 +86,7 @@ describe('testing create meetup endpoint', () => {
         happeningOn: testMeetup.happeningOn,
       },
     }, (error, response, body) => {
-      expect(body.data[0]).toEqual({
-        topic: testMeetup.topic,
-        location: testMeetup.location,
-        happeningOn: new Date(testMeetup.happeningOn).toISOString(),
-        tags: [],
-      });
+      expect(Array.isArray(body.data)).toBeTruthy();
       done();
     });
   });
@@ -99,12 +98,11 @@ describe('testing get upcoming meetups api endpoint', () => {
         location: testMeetup.location,
         topic: testMeetup.topic,
         happeningOn: testMeetup.happeningOn,
-        tags: testMeetup.tags,
       },
-    }, );
+    });
     Done();
   });
-  it('should give all upcoming meetups', function (done) {
+  it('should give all upcoming meetups', (done) => {
     request.get(`${urlMeetups}/upcoming`, (error, response, body) => {
       expect(JSON.parse(body).status).toBe(200);
       done();
@@ -119,22 +117,22 @@ describe('testing get single meetup api endpoint', () => {
         topic: testMeetup.topic,
         happeningOn: testMeetup.happeningOn,
       },
-    }, );
+    });
     Done();
   });
-  it('should give a single meetup', function (done) {
+  it('should give a single meetup', (done) => {
     request.get(`${urlMeetups}/1`, (error, response, body) => {
       expect(JSON.parse(body).status).toBe(200);
       done();
     });
   });
-  it('should ask for the right type of the id', function (done) {
+  it('should ask for the right type of the id', (done) => {
     request.get(`${urlMeetups}/wrong-id`, (error, response, body) => {
       expect(JSON.parse(body).error).toEqual('wrong id type');
       done();
     });
   });
-  it('should tell the meetup is not present', function (done) {
+  it('should tell the meetup is not present', (done) => {
     request.get(`${urlMeetups}/47854`, (error, response, body) => {
       expect(JSON.parse(body).error).toEqual('No match found');
       done();

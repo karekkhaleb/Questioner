@@ -1,11 +1,11 @@
 class Meetup {
-  constructor({...meetupData}) {
+  constructor({ ...meetupData }) {
     this.id = meetupData.id;
     this.createdOn = new Date();
     this.location = meetupData.location;
     this.topic = meetupData.topic;
     this.happeningOn = new Date(meetupData.happeningOn);
-    this.tags = meetupData.tags;
+    this.tags = [];
   }
 }
 class User {
@@ -22,29 +22,44 @@ class User {
   }
 }
 
+class UpVotes {
+  constructor() {
+    this.userIds = [];
+    this.count = 0;
+  }
+}
+
+class DownVotes {
+  constructor() {
+    this.userIds = [];
+    this.count = 0;
+  }
+}
+
 class Question {
   constructor(
     id,
     createdBy,
-    meetup,
+    meetupId,
     title,
     body,
   ) {
     this.id = id;
     this.createdOn = new Date();
     this.createdBy = createdBy;
-    this.meetup = meetup;
+    this.meetupId = meetupId;
     this.title = title;
     this.body = body;
-    this.votes = 0;
+    this.upVotes = new UpVotes();
+    this.downVotes = new DownVotes();
   }
 }
 
 class Rsvp {
-  constructor(id, meetupId, userId, status) {
+  constructor(id, userId, meetupId, status) {
     this.id = id;
-    this.meetup = meetupId;
     this.userId = userId;
+    this.meetupId = meetupId;
     this.status = status;
   }
 }

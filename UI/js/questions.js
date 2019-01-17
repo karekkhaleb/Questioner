@@ -6,8 +6,8 @@ const openCommentsBtns = document.querySelectorAll('.commentsBtn');
 closeCommentsBtn.addEventListener('click', () => {
   commentsContainer.style.display = 'none';
 });
-openCommentsBtns.forEach(btn => {
+openCommentsBtns.forEach((btn) => {
   btn.addEventListener('click', () => {
     commentsContainer.style.display = 'flex';
-  })
-})
+  });
+});

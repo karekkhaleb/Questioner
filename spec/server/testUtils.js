@@ -18,12 +18,6 @@ const testMeetup = {
   happeningOn: '2020-01-27',
   tags: ['junior-developers', 'kigali-developers'],
 };
-const testQuestion = {
-  meetup: 1,
-  createdBy: 1,
-  title: 'sample question',
-  body: 'why do we need this in the first place?',
-};
 
 export {
   urlRoot,
@@ -31,7 +25,6 @@ export {
   urlMeetups,
   urlQuestions,
   testMeetup,
-  testQuestion,
   testUser,
   baseUrl,
 };

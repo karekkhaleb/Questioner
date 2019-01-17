@@ -11,6 +11,7 @@ Router.post('/', checkMeetup, meetupController.create);
 Router.get('/upcoming', meetupController.getUpcoming);
 Router.get('/:meetupId', meetupController.getSingle);
 Router.post('/:meetupId/questions', checkQuestion, meetupController.addQuestion);
+Router.get('/:meetupId/questions', meetupController.getQuestions);
 Router.post('/:meetupId/rsvps', checkRsvps, meetupController.respondRsvp);
 Router.post('/:meetupId/tags', validateTag.checkTag, meetupController.addTag);
 

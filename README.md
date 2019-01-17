@@ -32,6 +32,10 @@
 * Install dependecies with `npm install` (You can also use yarn) from the terminal
 * Run tests with `npm test` (also yarn may work)
 
+## Information on the UI
+* The UI folder is at the root folder and that is where every UI related file is located
+* If you want to login as an admin use email: `admin@mysite.com` and a password of `admin`
+* If you want to login as a regular user, use email: `user@mysite.com` and a password of `user`
 
 ## Information on the API
  
@@ -60,12 +64,8 @@
     "objectFormat" : {
       "location" : "The location where the meetup will take place",
       "topic" : "The topic of the meetup",
-      "happeningOn" : "The time that the meetup holds",
-      "tags" : "optional tags for the meetup."
-    },
-    "requirements" : [
-      "tags should be an array of strings"
-    ]
+      "happeningOn" : "The time that the meetup holds"
+    }
   },
   "respond Rsvps" : {
     "url" : "/api/v1/meetups/<meetupId>/rsvps",
@@ -91,16 +91,15 @@
       "userName" : "user's username"
     }
   },
-  "get all questions" : {
-    "url" : "/api/v1/questions",
+  "get all questions for a meetup" : {
+    "url" : "/api/v1/meetups/<meetupId>/questions",
     "method" : "GET"
   },
-  "create a new question" : {
-    "url" : "/api/v1/questions",
+  "create a new question for a meetup" : {
+    "url" : "/api/v1/meetups/<meetupId>/questions",
     "method" : "POST",
     "objectFormat" : {
-      "meetupId" : "the id of the meetup that correspons to this question",
-      "createdBy" : "the id of the user creatin this question",
+      "createdBy" : "the id of the user creating this question",
       "title" : "the title for this question",
       "body" : "the body for this question"
     },

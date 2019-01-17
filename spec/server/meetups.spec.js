@@ -7,13 +7,9 @@ import { urlMeetups, testMeetup } from './testUtils';
 describe('get meetups api endpoint', () => {
   it('should give a proper status code', (done) => {
     request.get(urlMeetups, (error, response, body) => {
+      expect(Array.isArray(JSON.parse(body).data)).toBeTruthy();
+      expect(error).toBeNull();
       expect(response.statusCode).toEqual(200);
-      done();
-    });
-  });
-  it('should give the body with the right status code', (done) => {
-    request.get(urlMeetups, (error, response, body) => {
-      expect(JSON.parse(body).status).toBe(200);
       done();
     });
   });

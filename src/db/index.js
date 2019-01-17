@@ -13,113 +13,7 @@ class Database {
     this.rsvps = [];
   }
 
-  getAllMeetups() {
-    const meetupsArr = [];
-    this.meetups.forEach((meetup) => {
-      const questions = [];
-      this.questions.forEach((question) => {
-        if (question.meetupId === meetup.id) {
-          questions.push(question);
-        }
-      });
-      const rsvps = [];
-      this.rsvps.forEach((rsvp) => {
-        if (rsvp.meetupId === meetup.id) {
-          rsvps.push(rsvp);
-        }
-      });
-      meetupsArr.push({
-        ...meetup,
-        questions,
-        rsvps,
-      });
-    });
-    return meetupsArr;
-  }
-
-  addMeetup({ ...meetupData }) {
-    const currentMeetupsLength = this.meetups.length;
-    const id = currentMeetupsLength + 1;
-    const newMeetup = new Meetup({ ...meetupData, id });
-    this.meetups.push(newMeetup);
-    return newMeetup;
-  }
-
-  getSingleMeetup(meetupId) {
-    let meetup;
-    for (const tempMeetup of this.meetups) {
-      if (tempMeetup.id === meetupId) {
-        const questions = [];
-        this.questions.forEach((question) => {
-          if (question.meetupId === meetupId) {
-            questions.push(question);
-          }
-        });
-        const rsvps = [];
-        this.rsvps.forEach((rsvp) => {
-          if (rsvp.meetupId === meetupId) {
-            rsvps.push(rsvp);
-          }
-        });
-        meetup = { ...tempMeetup, questions, rsvps };
-        break;
-      }
-    }
-    return meetup || null;
-  }
-
-  getUpcomingMeetups() {
-    const upcomingMeetups = [];
-    for (const meetup of this.meetups) {
-      if (new Date(meetup.happeningOn) > new Date()) {
-        upcomingMeetups.push(meetup);
-      }
-    }
-    return upcomingMeetups;
-  }
-
-  addQuestion(meetupId, createdBy, title, body) {
-    /**
-     * checking if this meetups exists
-     */
-    let meetupExists = false;
-    for (let i = 0; i < this.meetups.length; i++) {
-      if (this.meetups[i].id === meetupId) {
-        meetupExists = true;
-        break;
-      }
-    }
-    if (!meetupExists) {
-      return { status: 404, error: 'Meetup not found' };
-    }
-    /**
-     * checking if this user exists
-     */
-    let userExists = false;
-    for (let i = 0; i < this.users.length; i++) {
-      if (this.users[i].id === Number.parseInt(createdBy, 10)) {
-        userExists = true;
-        break;
-      }
-    }
-    if (!userExists) {
-      return { status: 404, error: 'User creating question not found' };
-    }
-
-    const currentQuestionsLength = this.questions.length;
-    const id = currentQuestionsLength + 1;
-    const newQuestion = new Question(
-      id,
-      createdBy,
-      meetupId,
-      title,
-      body,
-    );
-    this.questions.push(newQuestion);
-    return { ...newQuestion, meetupId };
-  }
-
-  vote(questionId, userId, action) {
+  vote = (questionId, userId, action) => {
     let votedQuestion;
     // eslint-disable-next-line no-plusplus
     for (let i = 0; i < this.questions.length; i++) {
@@ -165,9 +59,115 @@ class Database {
       status: 404,
       error: 'No question matches that id',
     };
-  }
+  };
 
-  signup(userCredentials) {
+  getAllMeetups = () => {
+    const meetupsArr = [];
+    this.meetups.forEach((meetup) => {
+      const questions = [];
+      this.questions.forEach((question) => {
+        if (question.meetupId === meetup.id) {
+          questions.push(question);
+        }
+      });
+      const rsvps = [];
+      this.rsvps.forEach((rsvp) => {
+        if (rsvp.meetupId === meetup.id) {
+          rsvps.push(rsvp);
+        }
+      });
+      meetupsArr.push({
+        ...meetup,
+        questions,
+        rsvps,
+      });
+    });
+    return meetupsArr;
+  };
+
+  addMeetup = ({ ...meetupData }) => {
+    const currentMeetupsLength = this.meetups.length;
+    const id = currentMeetupsLength + 1;
+    const newMeetup = new Meetup({ ...meetupData, id });
+    this.meetups.push(newMeetup);
+    return newMeetup;
+  };
+
+  getSingleMeetup = (meetupId) => {
+    let meetup;
+    for (const tempMeetup of this.meetups) {
+      if (tempMeetup.id === meetupId) {
+        const questions = [];
+        this.questions.forEach((question) => {
+          if (question.meetupId === meetupId) {
+            questions.push(question);
+          }
+        });
+        const rsvps = [];
+        this.rsvps.forEach((rsvp) => {
+          if (rsvp.meetupId === meetupId) {
+            rsvps.push(rsvp);
+          }
+        });
+        meetup = { ...tempMeetup, questions, rsvps };
+        break;
+      }
+    }
+    return meetup || null;
+  };
+
+  getUpcomingMeetups = () => {
+    const upcomingMeetups = [];
+    for (const meetup of this.meetups) {
+      if (new Date(meetup.happeningOn) > new Date()) {
+        upcomingMeetups.push(meetup);
+      }
+    }
+    return upcomingMeetups;
+  };
+
+  addQuestion = (meetupId, createdBy, title, body) => {
+    /**
+     * checking if this meetups exists
+     */
+    let meetupExists = false;
+    for (let i = 0; i < this.meetups.length; i++) {
+      if (this.meetups[i].id === meetupId) {
+        meetupExists = true;
+        break;
+      }
+    }
+    if (!meetupExists) {
+      return { status: 404, error: 'Meetup not found' };
+    }
+    /**
+     * checking if this user exists
+     */
+    let userExists = false;
+    for (let i = 0; i < this.users.length; i++) {
+      if (this.users[i].id === Number.parseInt(createdBy, 10)) {
+        userExists = true;
+        break;
+      }
+    }
+    if (!userExists) {
+      return { status: 404, error: 'User creating question not found' };
+    }
+
+    const currentQuestionsLength = this.questions.length;
+    const id = currentQuestionsLength + 1;
+    const newQuestion = new Question(
+      id,
+      createdBy,
+      meetupId,
+      title,
+      body,
+    );
+    this.questions.push(newQuestion);
+    return { ...newQuestion, meetupId };
+  };
+
+  signup = (userCredentials) => {
     const newId = this.users.length + 1;
     const newUser = new User({
       id: newId,
@@ -181,7 +181,7 @@ class Database {
     });
     this.users.push(newUser);
     return newUser;
-  }
+  };
 
   respondRsvp = ({ ...rsvpData }) => {
     /**
@@ -248,6 +248,24 @@ class Database {
     }
     this.meetups[meetupIndex].tags.push(tagName);
     return this.meetups[meetupIndex];
+  };
+
+  getMeetupQuestions = (meetupId) => {
+    let meetupExists = false;
+    for (let i = 0; i < this.meetups.length; i++) {
+      if (this.meetups[i].id === meetupId) {
+        meetupExists = true;
+        break;
+      }
+    }
+    if (!meetupExists) return { status: 404, error: 'Meetup not found' };
+    const questions = [];
+    this.questions.forEach((question) => {
+      if (question.meetupId === meetupId) {
+        questions.push(question);
+      }
+    });
+    return questions;
   }
 }
 

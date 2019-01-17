@@ -39,9 +39,8 @@ describe('create question api endpoint', () => {
     });
   });
   it('should ask to give the meetup id as a number', (done) => {
-    request.post(`${urlQuestions}`, {
+    request.post(`${urlMeetups}/not-a-number/questions`, {
       json: {
-        meetupId: 'not a number',
         createdBy: 1,
         title: 'test title',
         body: 'test body',
@@ -52,9 +51,8 @@ describe('create question api endpoint', () => {
     });
   });
   it('should ask to give the user id as a number', (done) => {
-    request.post(`${urlQuestions}`, {
+    request.post(`${urlMeetups}/1/questions`, {
       json: {
-        meetupId: 1,
         createdBy: 'not a number',
         title: 'test title',
         body: 'test body',
@@ -65,9 +63,8 @@ describe('create question api endpoint', () => {
     });
   });
   it('should ask for the body if absent', (done) => {
-    request.post(`${urlQuestions}`, {
+    request.post(`${urlMeetups}/1/questions`, {
       json: {
-        meetupId: 1,
         createdBy: 1,
         title: 'test title',
       },
@@ -76,10 +73,9 @@ describe('create question api endpoint', () => {
       done();
     });
   });
-  it('should ask for the title id if absent', (done) => {
-    request.post(`${urlQuestions}`, {
+  it('should ask for the title if absent', (done) => {
+    request.post(`${urlMeetups}/1/questions`, {
       json: {
-        meetupId: 1,
         createdBy: 1,
         body: 'test body',
       },
@@ -89,9 +85,8 @@ describe('create question api endpoint', () => {
     });
   });
   it('should ask for the user\'s id if absent', (done) => {
-    request.post(`${urlQuestions}`, {
+    request.post(`${urlMeetups}/1/questions`, {
       json: {
-        meetupId: 1,
         title: 'test title',
         body: 'test body',
       },
@@ -108,7 +103,48 @@ describe('create question api endpoint', () => {
         body: 'test body',
       },
     }, (error, response, body) => {
+      expect(error).toBeNull();
       expect(body.error).toEqual('User creating question not found');
+      done();
+    });
+  });
+});
+describe('test add tag to meetup endpoint', () => {
+  it('should ask for the tagName if absent', (done) => {
+    request.post(`${urlMeetups}/1/tags`, (error, response, body) => {
+      expect(error).toBeNull();
+      expect(response.statusCode).toBe(400);
+      expect(JSON.parse(body).error).toEqual('tag name is required');
+      done();
+    });
+  });
+  it('should avoid empty tagNames', (done) => {
+    request.post(`${urlMeetups}/1/tags`, {
+      json: { tagName: '     ' },
+    }, (error, response, body) => {
+      expect(error).toBeNull();
+      expect(response.statusCode).toBe(400);
+      expect(body.error).toEqual('tag name should not be empty');
+      done();
+    });
+  });
+  it('should tell if we give the id of a meetup that does not exist', (done) => {
+    request.post(`${urlMeetups}/5874/tags`, {
+      json: { tagName: 'simple-tag' },
+    }, (error, response, body) => {
+      expect(error).toBeNull();
+      expect(response.statusCode).toBe(404);
+      expect(body.error).toEqual('meetup not found');
+      done();
+    });
+  });
+  it('should add a tag to a meetup tagNames', (done) => {
+    request.post(`${urlMeetups}/1/tags`, {
+      json: { tagName: 'simple-tag' },
+    }, (error, response, body) => {
+      expect(error).toBeNull();
+      expect(response.statusCode).toBe(200);
+      expect(body.data).toBeDefined();
       done();
     });
   });

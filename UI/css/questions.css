@@ -83,7 +83,6 @@ hr{
     height: 70vh;
 }
 .questions > h1{
-    /*color: #ffffff;*/
     color: #333333;
     padding-bottom: 17px;
     border-bottom: 2px solid #ffffff;
@@ -93,7 +92,6 @@ hr{
     font-size: 1.5em;
 }
 .form-container h1, .form-container h2{
-    /*color: #ffffff;*/
     color: #333333;
 }
 .question-field-container{
@@ -103,14 +101,24 @@ hr{
 }
 .question-field-container textarea{
     width: 100%;
-    min-height: 40vh;
-    font-size: 2em;
+    min-height: 20vh;
+    font-size: 1.5em;
     font-family: "David Libre", serif;
     padding: 17px;
     background-color: transparent;
     border: none;
+    color: #333333;
 }
-.question-field-container textarea:focus{
+.question-field-container input{
+    width: 100%;
+    font-size: 1em;
+    font-family: "David Libre", serif;
+    padding: 17px;
+    background-color: transparent;
+    border: none;
+    color: #333333;
+}
+.question-field-container textarea:focus, .question-field-container input:focus{
     outline: 0;
 }
 .comments-container{

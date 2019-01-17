@@ -113,6 +113,24 @@ class MeetupController {
         body: createdQuestion.body,
       }],
     });
+  };
+
+  getQuestions = (req, res) => {
+    const meetupId = Number.parseInt(req.params.meetupId, 10);
+    if (Number.isNaN(meetupId)) {
+      return res.status(400).json({
+        status: 400,
+        error: 'meetupId should be an integer',
+      });
+    }
+    const questions = database.getMeetupQuestions(meetupId);
+    if (questions.error) {
+      return res.status(questions.status).json(questions);
+    }
+    res.status(200).json({
+      status: 200,
+      data: questions,
+    });
   }
 }
 

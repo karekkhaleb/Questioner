@@ -36,41 +36,27 @@ class QuestionController {
 
   upVote = (req, res) => {
     const questionId = Number.parseInt(req.params.questionId, 10);
-    const upVotedQuestion = database.vote(questionId, 'upvote');
-    if (upVotedQuestion) {
-      return res.status(200).json({
-        status: 200,
-        data: [{
-          meetup: upVotedQuestion.meetup,
-          title: upVotedQuestion.title,
-          body: upVotedQuestion.body,
-          votes: upVotedQuestion.votes,
-        }],
-      });
+    const userId = Number.parseInt(req.body.userId, 10);
+    const upVotedQuestion = database.vote(questionId, userId, 'upvote');
+    if (upVotedQuestion && upVotedQuestion.error) {
+      return res.status(upVotedQuestion.status).json(upVotedQuestion);
     }
-    return res.status(404).json({
-      status: 404,
-      error: 'No question matches that id',
+    return res.status(200).json({
+      status: 200,
+      data: [upVotedQuestion],
     });
   };
 
   downVote = (req, res) => {
     const questionId = Number.parseInt(req.params.questionId, 10);
-    const downVotedQuestion = database.vote(questionId, 'downvote');
-    if (downVotedQuestion) {
-      return res.status(200).json({
-        status: 200,
-        data: [{
-          meetup: downVotedQuestion.meetup,
-          title: downVotedQuestion.title,
-          body: downVotedQuestion.body,
-          votes: downVotedQuestion.votes,
-        }],
-      });
+    const userId = Number.parseInt(req.body.userId, 10);
+    const downVotedQuestion = database.vote(questionId, userId, 'downvote');
+    if (downVotedQuestion && downVotedQuestion.error) {
+      return res.status(downVotedQuestion.status).json(downVotedQuestion);
     }
-    return res.status(404).json({
-      status: 404,
-      error: 'No question matches that id',
+    return res.status(200).json({
+      status: 200,
+      data: [downVotedQuestion],
     });
   }
 }

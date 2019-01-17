@@ -3,29 +3,23 @@ import database from '../db';
 
 class MeetupController {
   getAll = (req, res) => {
+    const allMeetups = database.getAllMeetups();
     res.status(200).json({
       status: 200,
-      data: database.meetups,
+      data: allMeetups,
     });
   };
 
   create = (req, res) => {
-    const tags = Array.isArray(req.body.tags) ? [...req.body.tags] : [];
     const created = database.addMeetup({
       location: req.body.location,
       topic: req.body.topic,
       happeningOn: req.body.happeningOn,
-      tags,
     });
 
     res.status(201).json({
       status: 201,
-      data: [{
-        topic: created.topic,
-        location: created.location,
-        happeningOn: created.happeningOn,
-        tags: created.tags,
-      }],
+      data: [created],
     });
   };
 
@@ -43,6 +37,7 @@ class MeetupController {
           location: requestedMeetup.location,
           happeningOn: requestedMeetup.happeningOn,
           tags: requestedMeetup.tags,
+          questions: requestedMeetup.questions,
         }],
       });
     }
@@ -58,31 +53,7 @@ class MeetupController {
   };
 
   respondRsvp = (req, res) => {
-    if (!req.body.status) {
-      return res.status(400).json({
-        status: 400,
-        error: 'status is required',
-      });
-    }
-    if (!Number.parseInt(req.params.meetupId, 10)) {
-      return res.status(400).json({
-        status: 400,
-        error: 'invalid meetup id',
-      });
-    }
-    if (!req.body.userId) {
-      return res.status(400).json({
-        status: 400,
-        error: 'userId is required',
-      });
-    }
     const status = req.body.status.toString().trim();
-    if (status !== 'yes' && status !== 'no' && status !== 'maybe') {
-      return res.status(400).json({
-        status: 400,
-        error: 'status should be yes, no, or maybe',
-      });
-    }
     const rsvp = database.respondRsvp({
       status,
       userId: Number.parseInt(req.body.userId, 10),
@@ -99,9 +70,47 @@ class MeetupController {
     res.status(200).json({
       status: 200,
       data: [{
+        id: rsvp.id,
         meetup: rsvp.meetupId,
         topic: rsvp.meetupTopic,
         status: rsvp.status,
+      }],
+    });
+  };
+
+  addTag = (req, res) => {
+    const addedTag = database.addTag(Number.parseInt(req.params.meetupId, 10), req.body.tagName);
+    if (addedTag.error) {
+      return res.status(addedTag.status).json(addedTag);
+    }
+    return res.status(200).json({
+      status: 200,
+      data: [addedTag],
+    });
+  };
+
+  addQuestion = (req, res) => {
+    const createdQuestion = database.addQuestion(
+      Number.parseInt(req.params.meetupId, 10),
+      Number.parseInt(req.body.createdBy, 10),
+      req.body.title,
+      req.body.body,
+    );
+
+    if (createdQuestion && createdQuestion.error) {
+      return res.status(createdQuestion.status).json({
+        status: createdQuestion.status,
+        error: createdQuestion.error,
+      });
+    }
+    res.status(201).json({
+      status: 201,
+      data: [{
+        id: createdQuestion.id,
+        createdBy: createdQuestion.createdBy,
+        meetup: createdQuestion.meetup,
+        title: createdQuestion.title,
+        body: createdQuestion.body,
       }],
     });
   }

@@ -30,7 +30,6 @@ describe('testing create meetup endpoint', () => {
       json: {
         topic: testMeetup.topic,
         happeningOn: testMeetup.happeningOn,
-        tags: testMeetup.tags,
       },
     }, (error, response, body) => {
       expect(body.error).toEqual('Missing location');
@@ -42,7 +41,6 @@ describe('testing create meetup endpoint', () => {
       json: {
         location: testMeetup.location,
         happeningOn: testMeetup.happeningOn,
-        tags: testMeetup.tags,
       },
     }, (error, response, body) => {
       expect(body.error).toEqual('Missing topic');
@@ -54,7 +52,6 @@ describe('testing create meetup endpoint', () => {
       json: {
         location: testMeetup.location,
         topic: testMeetup.topic,
-        tags: testMeetup.tags,
       },
     }, (error, response, body) => {
       expect(body.error).toEqual('Missing time the meetup takes place');
@@ -67,10 +64,21 @@ describe('testing create meetup endpoint', () => {
         location: testMeetup.location,
         happeningOn: 'not a valid date',
         topic: testMeetup.topic,
-        tags: testMeetup.tags,
       },
     }, (error, response, body) => {
       expect(body.error).toEqual('happeningOn should be a valid date: Y/M/D');
+      done();
+    });
+  });
+  it('should not create a meetup in when happening on is in the past', (done) => {
+    request.post(urlMeetups, {
+      json: {
+        location: testMeetup.location,
+        topic: testMeetup.topic,
+        happeningOn: '2018/01/01',
+      },
+    }, (error, response, body) => {
+      expect(body.error).toEqual('happeningOn should not be in the past');
       done();
     });
   });
@@ -82,12 +90,7 @@ describe('testing create meetup endpoint', () => {
         happeningOn: testMeetup.happeningOn,
       },
     }, (error, response, body) => {
-      expect(body.data[0]).toEqual({
-        topic: testMeetup.topic,
-        location: testMeetup.location,
-        happeningOn: new Date(testMeetup.happeningOn).toISOString(),
-        tags: [],
-      });
+      expect(Array.isArray(body.data)).toBeTruthy();
       done();
     });
   });
@@ -99,7 +102,6 @@ describe('testing get upcoming meetups api endpoint', () => {
         location: testMeetup.location,
         topic: testMeetup.topic,
         happeningOn: testMeetup.happeningOn,
-        tags: testMeetup.tags,
       },
     });
     Done();

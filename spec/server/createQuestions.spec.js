@@ -2,7 +2,7 @@
 import request from 'request';
 import server from '../../src/app';
 import {
-  urlAuth, urlMeetups, urlQuestions,
+  urlAuth, urlMeetups, urlQuestions, urlRoot,
 } from './testUtils';
 
 describe('create question api endpoint', () => {
@@ -20,28 +20,21 @@ describe('create question api endpoint', () => {
       json: {
         location: 'Bujumbura',
         topic: 'html',
-        happeningOn: '2017-02-05',
-        tags: ['advanced'],
+        happeningOn: '2020-02-05',
       },
     });
     Done();
   });
   it(`should create the question if the user and meetup are 
      already present and we give all required fields`, (done) => {
-    request.post(`${urlQuestions}`, {
+    request.post(`${urlMeetups}/1/questions`, {
       json: {
-        meetupId: 1,
         createdBy: 1,
         title: 'test title',
         body: 'test body',
       },
     }, (error, response, body) => {
-      expect(body.data[0]).toEqual({
-        createdBy: 1,
-        meetup: 1,
-        title: 'test title',
-        body: 'test body',
-      });
+      expect(Array.isArray(body.data)).toBeTruthy();
       done();
     });
   });
@@ -54,7 +47,7 @@ describe('create question api endpoint', () => {
         body: 'test body',
       },
     }, (error, response, body) => {
-      expect(body.error).toEqual('meetup should be an integer');
+      expect(body.error).toEqual('meetupId should be an integer');
       done();
     });
   });
@@ -107,35 +100,9 @@ describe('create question api endpoint', () => {
       done();
     });
   });
-  it('should ask for the meetup id if absent', (done) => {
-    request.post(`${urlQuestions}`, {
-      json: {
-        createdBy: 1,
-        title: 'test title',
-        body: 'test body',
-      },
-    }, (error, response, body) => {
-      expect(body.error).toEqual('Missing meetup');
-      done();
-    });
-  });
-  it('should tell if we give an meetup id that does not exist', (done) => {
-    request.post(`${urlQuestions}`, {
-      json: {
-        meetupId: 8798745,
-        createdBy: 1,
-        title: 'test title',
-        body: 'test body',
-      },
-    }, (error, response, body) => {
-      expect(body.error).toEqual('Meetup not found');
-      done();
-    });
-  });
   it('should tell if we give an user id that does not exist', (done) => {
-    request.post(`${urlQuestions}`, {
+    request.post(`${urlMeetups}/1/questions`, {
       json: {
-        meetupId: 1,
         createdBy: 8798745,
         title: 'test title',
         body: 'test body',

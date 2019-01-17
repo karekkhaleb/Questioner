@@ -1,5 +1,6 @@
 .container{
     margin: 0 15%;
+    color: #333333;
 }
 .meetups > li{
     list-style: none;
@@ -90,7 +91,7 @@ hr{
 }
 .form-container{
     position: relative;
-    height: 70vh;
+    height: 40vh;
 }
 .question-field-container{
     background-color: #dddddd;

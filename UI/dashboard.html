@@ -44,38 +44,100 @@
     </aside>
     <main>
         <div class="container">
-            <div class="form-container">
+            <div class="">
                 <h1>Create Meetup</h1>
                 <form>
                     <div class="question-field-container">
-                        <input type="text" name="title" placeholder="meetup title...">
+                        <input type="text" name="topic" placeholder="meetup topic...">
                     </div>
                     <div class="question-field-container">
-                        <textarea id="" name="body" placeholder="meetup body..."></textarea>
+                        <input type="text" name="location" placeholder="meetup location...">
                     </div>
                     <div class="question-field-container date-field-container">
-                        <span class="date-label">Due Date:</span>
+                        <small class="date-label">Due Date:</small>
                         <input type="date" name="date" placeholder="meetup due date">
                     </div>
                     <div>
                         <button class="btn highlight" type="submit">Create Meetup</button>
                     </div>
                 </form>
-                <h1>Meetups:</h1>
             </div>
+            <h1>Meetups:</h1>
             <ul class="meetups">
                 <li  class="meetup">
-                    <h2>React Native Meetup</h2>
+                    <h2>Due date: <span class="scheduled-date">01/05/2019</span></h2>
                     <hr>
                     <div class="description">
                         <p>
-                            No more jumping around languages when build apps
+                            React Native: No more jumping around languages when build apps
                             You can now use one programing language that you know and love JavaScript,
                             And build app for any platform you can dream of!!
                         </p>
                     </div>
                     <div class="info">
-                        <p class="horizontalMargin ">Due date: <span class="scheduled-date">01/05/2019</span></p>
+                        <!--<p class="horizontalMargin ">Due date: <span class="scheduled-date">01/05/2019</span></p>-->
+                        <p class="horizontalMargin ">
+                            <button class="btn highlight meetup-people-btn">5 People attending</button> |
+                            <button class="btn highlight questions-btn">5 Questions</button> | <a href="#" class="btn highlight">Delete meetup</a>
+                        </p>
+                        <label>
+                            <span>Add Tag:</span>
+                            <select class="select-tag">
+                                <option selected disabled>Choose tag</option>
+                                <option>UI</option>
+                                <option>BACKEND</option>
+                            </select>
+                        </label>
+                        <hr>
+                        <div class="tags">
+                            <i>Tags: </i>
+                            <span class="tag">UI</span>
+                        </div>
+                    </div>
+                </li>
+                <li  class="meetup">
+                    <h2>Due date: <span class="scheduled-date">01/05/2019</span></h2>
+                    <hr>
+                    <div class="description">
+                        <p>
+                            React Native: No more jumping around languages when build apps
+                            You can now use one programing language that you know and love JavaScript,
+                            And build app for any platform you can dream of!!
+                        </p>
+                    </div>
+                    <div class="info">
+                        <!--<p class="horizontalMargin ">Due date: <span class="scheduled-date">01/05/2019</span></p>-->
+                        <p class="horizontalMargin ">
+                            <button class="btn highlight meetup-people-btn">5 People attending</button> |
+                            <button class="btn highlight questions-btn">5 Questions</button> | <a href="#" class="btn highlight">Delete meetup</a>
+                        </p>
+                        <label>
+                            <span>Add Tag:</span>
+                            <select class="select-tag">
+                                <option selected disabled>Choose tag</option>
+                                <option>UI</option>
+                                <option>BACKEND</option>
+                            </select>
+                        </label>
+                        <hr>
+                        <div class="tags">
+                            <i>Tags: </i>
+                            <span class="tag">UI</span>
+                        </div>
+                    </div>
+                </li>
+                <li  class="meetup">
+                    <h2>Due date: <span class="scheduled-date">01/05/2019</span></h2>
+                    <hr>
+                    <div class="description">
+                        <p>
+                            React Native: No more jumping around languages when build apps
+                            You can now use one programing language that you know and love JavaScript,
+                            And build app for any platform you can dream of!!
+                        </p>
+                    </div>
+                    <div class="info">
+                        <!--<p class="horizontalMargin ">Due date: <span class="scheduled-date">01/05/2019</span></p>-->
                         <p class="horizontalMargin ">
                             <button class="btn highlight meetup-people-btn">5 People attending</button> |
                             <button class="btn highlight questions-btn">5 Questions</button> | <a href="#" class="btn highlight">Delete meetup</a>
@@ -159,11 +221,26 @@
                     <hr>
                     <p><i class="fa fa-user"></i> Bubungiro Caleb</p>
                 </li>
-                <li>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci aliquam aliquid animi at atque autem commodi cum expedita facilis, laborum maiores minima molestias odio quasi sint tempore vel, voluptate voluptatum.
+                <li>
+                    <p>
+                        <i class="fa fa-comment"></i>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci aliquam aliquid animi at atque autem commodi cum expedita facilis, laborum maiores minima molestias odio quasi sint tempore vel, voluptate voluptatum.
+                    </p>
+                    <hr>
+                    <p><i class="fa fa-user"></i> Bubungiro Caleb</p>
                 </li>
-                <li>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci aliquam aliquid animi at atque autem commodi cum expedita facilis, laborum maiores minima molestias odio quasi sint tempore vel, voluptate voluptatum.
+                <li>
+                    <p>
+                        <i class="fa fa-comment"></i>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci aliquam aliquid animi at atque autem commodi cum expedita facilis, laborum maiores minima molestias odio quasi sint tempore vel, voluptate voluptatum.
+                    </p>
+                    <hr>
+                    <p><i class="fa fa-user"></i> Bubungiro Caleb</p>
                 </li>
-                <li>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci aliquam aliquid animi at atque autem commodi cum expedita facilis, laborum maiores minima molestias odio quasi sint tempore vel, voluptate voluptatum.
+                <li>
+                    <p>
+                        <i class="fa fa-comment"></i>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci aliquam aliquid animi at atque autem commodi cum expedita facilis, laborum maiores minima molestias odio quasi sint tempore vel, voluptate voluptatum.
+                    </p>
+                    <hr>
+                    <p><i class="fa fa-user"></i> Bubungiro Caleb</p>
                 </li>
             </ul>
         </div>

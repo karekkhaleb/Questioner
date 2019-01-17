@@ -14,9 +14,15 @@
 <nav>
     <a href="./index.html">Questioner</a>
     <ul>
-        <li><a href="meetups.html">Meetups</a></li>
-        <li><a href="profile.html">Profile</a></li>
-        <li><a href="#">Log out</a></li>
+        <li><button id="create-tag">Create Tag</button>
+            <div class="tag-form">
+                <form action="#">
+                    <input type="text" name="tagname" placeholder="Enter the tag">
+                    <input type="submit">
+                </form>
+            </div>
+        </li>
+        <li><a href="index.html">Log out</a></li>
     </ul>
 </nav>
 <div class="page">
@@ -28,7 +34,6 @@
                 <div>
                     <ul class="side-info">
                         <li><i class="fa fa-users"></i> 50 meet-ups</li>
-                        <li><i class="fa fa-star"></i> <a href="questions.html">Up coming Meet-up</a></li>
                     </ul>
                 </div>
             </div>
@@ -72,14 +77,98 @@
                     <div class="info">
                         <p class="horizontalMargin ">Due date: <span class="scheduled-date">01/05/2019</span></p>
                         <p class="horizontalMargin ">
-                            <a class="btn highlight" href="questions.html#questions">5 Questions</a> | <a href="#" class="btn highlight">Delete meetup</a>
+                            <button class="btn highlight meetup-people-btn">5 People attending</button> |
+                            <button class="btn highlight questions-btn">5 Questions</button> | <a href="#" class="btn highlight">Delete meetup</a>
                         </p>
-
+                        <label>
+                            <span>Add Tag:</span>
+                            <select class="select-tag">
+                                <option selected disabled>Choose tag</option>
+                                <option>UI</option>
+                                <option>BACKEND</option>
+                            </select>
+                        </label>
+                        <hr>
+                        <div class="tags">
+                            <i>Tags: </i>
+                            <span class="tag">UI</span>
+                        </div>
                     </div>
                 </li>
             </ul>
         </div>
     </main>
+    <div class="users-container">
+        <div class="users-list">
+            <h2>Users Attending</h2>
+            <ul>
+                <li>
+                    <p><i class="fa fa-user"></i>Name: Buhungiro K Caleb</p>
+                    <p><i class="fa fa-envelope"></i>Email: karekkhaleb@gmail.com</p>
+                </li>
+                <li>
+                    <p><i class="fa fa-user"></i>Name: Buhungiro K Caleb</p>
+                    <p><i class="fa fa-envelope"></i>Email: karekkhaleb@gmail.com</p>
+                </li>
+                <li>
+                    <p><i class="fa fa-user"></i>Name: Buhungiro K Caleb</p>
+                    <p><i class="fa fa-envelope"></i>Email: karekkhaleb@gmail.com</p>
+                </li>
+                <li>
+                    <p><i class="fa fa-user"></i>Name: Buhungiro K Caleb</p>
+                    <p><i class="fa fa-envelope"></i>Email: karekkhaleb@gmail.com</p>
+                </li>
+                <li>
+                    <p><i class="fa fa-user"></i>Name: Buhungiro K Caleb</p>
+                    <p><i class="fa fa-envelope"></i>Email: karekkhaleb@gmail.com</p>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="questions-container">
+        <div class="questions-comments">
+            <ul class="questions">
+                <h2>Questions</h2>
+                <li class="active-question">
+                    <h3>Question title</h3>
+                    <hr>
+                    <p>This is the question body</p>
+                </li>
+                <li>
+                    <h3>Question title</h3>
+                    <hr>
+                    <p>This is the question body</p>
+                </li>
+                <li>
+                    <h3>Question title</h3>
+                    <hr>
+                    <p>This is the question body</p>
+                </li>
+                <li>
+                    <h3>Question title</h3>
+                    <hr>
+                    <p>This is the question body</p>
+                </li>
+            </ul>
+            <ul class="comments">
+                <h2>Comments</h2>
+                <li>
+                    <p>
+                        <i class="fa fa-comment"></i>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci aliquam aliquid animi at atque autem commodi cum expedita facilis, laborum maiores minima molestias odio quasi sint tempore vel, voluptate voluptatum.
+                    </p>
+                    <hr>
+                    <p><i class="fa fa-user"></i> Bubungiro Caleb</p>
+                </li>
+                <li>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci aliquam aliquid animi at atque autem commodi cum expedita facilis, laborum maiores minima molestias odio quasi sint tempore vel, voluptate voluptatum.
+                </li>
+                <li>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci aliquam aliquid animi at atque autem commodi cum expedita facilis, laborum maiores minima molestias odio quasi sint tempore vel, voluptate voluptatum.
+                </li>
+                <li>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci aliquam aliquid animi at atque autem commodi cum expedita facilis, laborum maiores minima molestias odio quasi sint tempore vel, voluptate voluptatum.
+                </li>
+            </ul>
+        </div>
+    </div>
 </div>
+<script src="js/dashboard.js"></script>
 </body>
 </html>

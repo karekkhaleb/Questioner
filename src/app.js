@@ -15,11 +15,13 @@ app.use(`${rootUrl}/meetups`, meetupRoutes);
 app.use(`${rootUrl}/questions`, questionRoutes);
 app.use(`${rootUrl}/auth`, authRoutes);
 
+// noinspection JSUnresolvedFunction
 app.get('/', (req, res) => res.status(200).json({
   status: 200,
   message: 'Welcome to my Restful API',
-  apiFormat: apiFormat,
+  apiFormat,
 }));
 
 
+// eslint-disable-next-line no-console
 app.listen(port, () => console.log(`app started on port ${port}`));

@@ -13,10 +13,10 @@ class Database {
     this.rsvps = [];
   }
 
-  addMeetup({...meetupData}) {
+  addMeetup({ ...meetupData }) {
     const currentMeetupsLength = this.meetups.length;
     const id = currentMeetupsLength ? this.meetups[currentMeetupsLength - 1].id + 1 : 1;
-    const newMeetup = new Meetup({...meetupData, id});
+    const newMeetup = new Meetup({ ...meetupData, id });
     this.meetups.push(newMeetup);
     return newMeetup;
   }

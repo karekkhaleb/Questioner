@@ -1,5 +1,5 @@
 class Meetup {
-  constructor({...meetupData}) {
+  constructor({ ...meetupData }) {
     this.id = meetupData.id;
     this.createdOn = new Date();
     this.location = meetupData.location;

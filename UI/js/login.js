@@ -6,11 +6,11 @@ const loginForm = document.querySelector('#login-form');
 const submitForm = (e) => {
   e.preventDefault();
   if (emailField.value.trim() === 'admin@mysite.com' && passwordField.value.trim() === 'admin') {
-    document.location.href = '/dashboard.html';
+    document.location.href = './dashboard.html';
     return;
   }
   if (emailField.value.trim() === 'user@mysite.com' && passwordField.value.trim() === 'user') {
-    document.location.href = '/profile.html';
+    document.location.href = './profile.html';
     return;
   }
   const errorContainer = document.querySelector('.errors');

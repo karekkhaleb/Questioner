@@ -45,6 +45,9 @@ describe('upvote and downvote api endpoint', () => {
     });
     it('should tell if the question we try to upvote does not exists', (done) => {
       request.patch(`${urlQuestions}/1147852/upvote`, (error, response, body) => {
+        expect(error).toBeNull();
+        expect(response.statusCode).toBe(404);
+        expect(JSON.parse(body).status).toEqual(404);
         expect(JSON.parse(body).error).toEqual('No question matches that id');
         done();
       });

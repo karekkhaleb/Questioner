@@ -104,6 +104,8 @@ describe('testing get upcoming meetups api endpoint', () => {
   });
   it('should give all upcoming meetups', (done) => {
     request.get(`${urlMeetups}/upcoming`, (error, response, body) => {
+      expect(error).toBeNull();
+      expect(response.statusCode).toBe(200);
       expect(JSON.parse(body).status).toBe(200);
       done();
     });

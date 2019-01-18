@@ -86,6 +86,14 @@ class Database {
   };
 
   addMeetup = ({ ...meetupData }) => {
+    for (const meetup of this.meetups) {
+      if (meetup.topic === meetupData.topic) {
+        return {
+          status: 309,
+          error: `Meetup "${meetup.topic}" already exists!`,
+        };
+      }
+    }
     const currentMeetupsLength = this.meetups.length;
     const id = currentMeetupsLength + 1;
     const newMeetup = new Meetup({ ...meetupData, id });

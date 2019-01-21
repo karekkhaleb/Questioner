@@ -11,10 +11,20 @@ class MeetupController {
   };
 
   create = (req, res) => {
+    if (req.errors.length) {
+      return res.status(400).json({
+        status: 400,
+        errors: req.errors,
+      });
+    }
+
+    const topic = req.body.topic.trim();
+    const location = req.body.location.trim();
+    const happeningOn = req.body.happeningOn.trim();
     const created = database.addMeetup({
-      location: req.body.location,
-      topic: req.body.topic,
-      happeningOn: req.body.happeningOn,
+      location,
+      topic,
+      happeningOn,
     });
 
     res.status(201).json({
@@ -53,6 +63,12 @@ class MeetupController {
   };
 
   respondRsvp = (req, res) => {
+    if (req.errors.length) {
+      return res.status(400).json({
+        status: 400,
+        errors: req.errors,
+      });
+    }
     const status = req.body.status.toString().trim();
     const rsvp = database.respondRsvp({
       status,
@@ -90,6 +106,12 @@ class MeetupController {
   };
 
   addQuestion = (req, res) => {
+    if (req.errors.length) {
+      return res.status(400).json({
+        status: 400,
+        errors: req.errors,
+      });
+    }
     const createdQuestion = database.addQuestion(
       Number.parseInt(req.params.meetupId, 10),
       Number.parseInt(req.body.createdBy, 10),

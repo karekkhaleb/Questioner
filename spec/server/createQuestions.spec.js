@@ -46,7 +46,7 @@ describe('create question api endpoint', () => {
         body: 'test body',
       },
     }, (error, response, body) => {
-      expect(body.error).toEqual('meetupId should be an integer');
+      expect(body.errors).toContain('meetupId should be an integer');
       done();
     });
   });
@@ -58,7 +58,7 @@ describe('create question api endpoint', () => {
         body: 'test body',
       },
     }, (error, response, body) => {
-      expect(body.error).toEqual('createdBy should be an integer');
+      expect(body.errors).toContain('createdBy should be an integer');
       done();
     });
   });
@@ -69,7 +69,7 @@ describe('create question api endpoint', () => {
         title: 'test title',
       },
     }, (error, response, body) => {
-      expect(body.error).toEqual('Missing the body for this question');
+      expect(body.errors).toContain('Missing the body for this question');
       done();
     });
   });
@@ -80,7 +80,7 @@ describe('create question api endpoint', () => {
         body: 'test body',
       },
     }, (error, response, body) => {
-      expect(body.error).toEqual('Missing the title for this question');
+      expect(body.errors).toContain('Missing the title for this question');
       done();
     });
   });
@@ -91,7 +91,7 @@ describe('create question api endpoint', () => {
         body: 'test body',
       },
     }, (error, response, body) => {
-      expect(body.error).toEqual('Missing the person who created this question');
+      expect(body.errors).toContain('Missing the person who created this question');
       done();
     });
   });
@@ -114,7 +114,7 @@ describe('test add tag to meetup endpoint', () => {
     request.post(`${urlMeetups}/1/tags`, (error, response, body) => {
       expect(error).toBeNull();
       expect(response.statusCode).toBe(400);
-      expect(JSON.parse(body).error).toEqual('tag name is required');
+      expect(JSON.parse(body).errors).toContain('tag name is required');
       done();
     });
   });
@@ -124,7 +124,7 @@ describe('test add tag to meetup endpoint', () => {
     }, (error, response, body) => {
       expect(error).toBeNull();
       expect(response.statusCode).toBe(400);
-      expect(body.error).toEqual('tag name should not be empty');
+      expect(body.errors).toContain('tag name should not be empty');
       done();
     });
   });
@@ -145,6 +145,7 @@ describe('test add tag to meetup endpoint', () => {
       expect(error).toBeNull();
       expect(response.statusCode).toBe(200);
       expect(body.data).toBeDefined();
+      expect(body.data[0].tags).toContain('simple-tag');
       done();
     });
   });

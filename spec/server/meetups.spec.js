@@ -28,7 +28,7 @@ describe('testing create meetup endpoint', () => {
         happeningOn: testMeetup.happeningOn,
       },
     }, (error, response, body) => {
-      expect(body.error).toEqual('Missing location');
+      expect(body.errors).toContain('Missing location');
       done();
     });
   });
@@ -39,7 +39,8 @@ describe('testing create meetup endpoint', () => {
         happeningOn: testMeetup.happeningOn,
       },
     }, (error, response, body) => {
-      expect(body.error).toEqual('Missing topic');
+      expect(body.status).toBe(400);
+      expect(body.errors).toContain('Missing topic');
       done();
     });
   });
@@ -50,7 +51,7 @@ describe('testing create meetup endpoint', () => {
         topic: testMeetup.topic,
       },
     }, (error, response, body) => {
-      expect(body.error).toEqual('Missing time the meetup takes place');
+      expect(body.errors).toContain('Missing time the meetup takes place');
       done();
     });
   });
@@ -62,7 +63,7 @@ describe('testing create meetup endpoint', () => {
         topic: testMeetup.topic,
       },
     }, (error, response, body) => {
-      expect(body.error).toEqual('happeningOn should be a valid date: Y/M/D');
+      expect(body.errors).toContain('happeningOn should be a valid date: Y/M/D');
       done();
     });
   });
@@ -74,7 +75,7 @@ describe('testing create meetup endpoint', () => {
         happeningOn: '2018/01/01',
       },
     }, (error, response, body) => {
-      expect(body.error).toEqual('happeningOn should not be in the past');
+      expect(body.errors).toContain('happeningOn should not be in the past');
       done();
     });
   });
@@ -87,6 +88,8 @@ describe('testing create meetup endpoint', () => {
       },
     }, (error, response, body) => {
       expect(Array.isArray(body.data)).toBeTruthy();
+      expect(body.data[0].topic).toEqual(testMeetup.topic);
+      expect(body.data[0].location).toEqual(testMeetup.location);
       done();
     });
   });
@@ -107,6 +110,7 @@ describe('testing get upcoming meetups api endpoint', () => {
       expect(error).toBeNull();
       expect(response.statusCode).toBe(200);
       expect(JSON.parse(body).status).toBe(200);
+      expect(JSON.parse(body).data).toBeDefined();
       done();
     });
   });
@@ -130,12 +134,14 @@ describe('testing get single meetup api endpoint', () => {
   });
   it('should ask for the right type of the id', (done) => {
     request.get(`${urlMeetups}/wrong-id`, (error, response, body) => {
-      expect(JSON.parse(body).error).toEqual('wrong id type');
+      expect(JSON.parse(body).errors).toContain('wrong id type');
+      expect(JSON.parse(body).status).toBe(400);
       done();
     });
   });
   it('should tell the meetup is not present', (done) => {
     request.get(`${urlMeetups}/47854`, (error, response, body) => {
+      expect(JSON.parse(body).status).toBe(404);
       expect(JSON.parse(body).error).toEqual('No match found');
       done();
     });

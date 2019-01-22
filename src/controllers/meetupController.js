@@ -11,10 +11,20 @@ class MeetupController {
   };
 
   create = (req, res) => {
+    if (req.errors.length) {
+      return res.status(400).json({
+        status: 400,
+        errors: req.errors,
+      });
+    }
+
+    const topic = req.body.topic.trim();
+    const location = req.body.location.trim();
+    const happeningOn = req.body.happeningOn.trim();
     const created = database.addMeetup({
-      location: req.body.location,
-      topic: req.body.topic,
-      happeningOn: req.body.happeningOn,
+      location,
+      topic,
+      happeningOn,
     });
 
     res.status(201).json({
@@ -25,7 +35,7 @@ class MeetupController {
 
   getSingle = (req, res) => {
     const meetupId = Number.parseInt(req.params.meetupId, 10);
-    if (!meetupId) return res.status(400).json({ status: 400, error: 'wrong id type' });
+    if (!meetupId) return res.status(400).json({ status: 400, errors: ['wrong id type'] });
 
     const requestedMeetup = database.getSingleMeetup(meetupId);
     if (requestedMeetup) {
@@ -53,6 +63,12 @@ class MeetupController {
   };
 
   respondRsvp = (req, res) => {
+    if (req.errors.length) {
+      return res.status(400).json({
+        status: 400,
+        errors: req.errors,
+      });
+    }
     const status = req.body.status.toString().trim();
     const rsvp = database.respondRsvp({
       status,
@@ -79,7 +95,14 @@ class MeetupController {
   };
 
   addTag = (req, res) => {
-    const addedTag = database.addTag(Number.parseInt(req.params.meetupId, 10), req.body.tagName);
+    if (req.errors.length) {
+      return res.status(400).json({
+        status: 400,
+        errors: req.errors,
+      });
+    }
+    const tagName = req.body.tagName.trim();
+    const addedTag = database.addTag(Number.parseInt(req.params.meetupId, 10), tagName);
     if (addedTag.error) {
       return res.status(addedTag.status).json(addedTag);
     }
@@ -90,6 +113,12 @@ class MeetupController {
   };
 
   addQuestion = (req, res) => {
+    if (req.errors.length) {
+      return res.status(400).json({
+        status: 400,
+        errors: req.errors,
+      });
+    }
     const createdQuestion = database.addQuestion(
       Number.parseInt(req.params.meetupId, 10),
       Number.parseInt(req.body.createdBy, 10),

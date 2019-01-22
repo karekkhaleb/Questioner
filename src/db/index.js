@@ -14,6 +14,14 @@ class Database {
   }
 
   vote = (questionId, userId, action) => {
+    let userExists = false;
+    for (let i = 0; i < this.users.length; i++) {
+      if (this.users[i].id === userId) {
+        userExists = true;
+        break;
+      }
+    }
+    if (!userExists) return { status: 404, error: 'user not found' };
     let votedQuestion;
     // eslint-disable-next-line no-plusplus
     for (let i = 0; i < this.questions.length; i++) {

@@ -35,7 +35,7 @@ class MeetupController {
 
   getSingle = (req, res) => {
     const meetupId = Number.parseInt(req.params.meetupId, 10);
-    if (!meetupId) return res.status(400).json({ status: 400, error: 'wrong id type' });
+    if (!meetupId) return res.status(400).json({ status: 400, errors: ['wrong id type'] });
 
     const requestedMeetup = database.getSingleMeetup(meetupId);
     if (requestedMeetup) {
@@ -95,7 +95,14 @@ class MeetupController {
   };
 
   addTag = (req, res) => {
-    const addedTag = database.addTag(Number.parseInt(req.params.meetupId, 10), req.body.tagName);
+    if (req.errors.length) {
+      return res.status(400).json({
+        status: 400,
+        errors: req.errors,
+      });
+    }
+    const tagName = req.body.tagName.trim();
+    const addedTag = database.addTag(Number.parseInt(req.params.meetupId, 10), tagName);
     if (addedTag.error) {
       return res.status(addedTag.status).json(addedTag);
     }

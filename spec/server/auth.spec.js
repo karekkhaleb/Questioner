@@ -15,6 +15,10 @@ describe('signup api endpoint', () => {
       },
     }, (error, response, body) => {
       expect(body.data[0].firstname).toEqual('Buhungiro');
+      expect(body.data[0].lastname).toEqual('Caleb');
+      expect(body.data[0].email).toEqual('karekkhaleb@gmail.com');
+      expect(body.data[0].phoneNumber).toEqual(250722387998);
+      expect(body.data[0].userName).toEqual('zoar');
       done();
     });
   });

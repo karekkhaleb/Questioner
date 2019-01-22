@@ -22,6 +22,13 @@ app.get('/', (req, res) => res.status(200).json({
   apiFormat,
 }));
 
+app.use((req, res) => {
+  res.status(404).json({
+    status: 404,
+    error: 'Endpoint not found',
+  });
+});
+
 
 // eslint-disable-next-line no-console
 app.listen(port, () => console.log(`app started on port ${port}`));

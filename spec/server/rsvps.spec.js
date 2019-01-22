@@ -57,7 +57,7 @@ describe('respond rsvps api endpoint', () => {
         userId: 1,
       },
     }, (error, response, body) => {
-      expect(body.error).toEqual('status is required');
+      expect(body.errors).toContain('status is required');
       done();
     });
   });
@@ -67,7 +67,7 @@ describe('respond rsvps api endpoint', () => {
         status: 'yes',
       },
     }, (error, response, body) => {
-      expect(body.error).toEqual('userId is required');
+      expect(body.errors).toContain('userId is required');
       done();
     });
   });
@@ -78,7 +78,7 @@ describe('respond rsvps api endpoint', () => {
         userId: 1,
       },
     }, (error, response, body) => {
-      expect(body.error).toEqual('status should be yes, no, or maybe');
+      expect(body.errors).toContain('status should be yes, no, or maybe');
       done();
     });
   });
@@ -89,7 +89,7 @@ describe('respond rsvps api endpoint', () => {
         userId: 1,
       },
     }, (error, response, body) => {
-      expect(body.error).toEqual('invalid meetup id');
+      expect(body.errors).toContain('invalid meetup id');
       done();
     });
   });

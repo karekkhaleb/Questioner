@@ -38,17 +38,24 @@ beforeAll((Done) => {
 describe('upvote and downvote api endpoint', () => {
   describe('upvote question api endpoint', () => {
     it('should upvote a question if question id given exists', (done) => {
-      request.patch(`${urlQuestions}/1/upvote`, (error, response, body) => {
-        expect(Array.isArray(JSON.parse(body).data)).toBeTruthy();
+      request.patch(`${urlQuestions}/1/upvote`, {
+        json: {
+          userId: 1,
+        },
+      }, (error, response, body) => {
+        expect(Array.isArray(body.data)).toBeTruthy();
+        expect(body.data[0].createdBy).toBe(1);
+        expect(body.data[0].meetupId).toBe(1);
+        expect(body.data[0].title).toEqual('test title');
         done();
       });
     });
     it('should tell if the question we try to upvote does not exists', (done) => {
-      request.patch(`${urlQuestions}/1147852/upvote`, (error, response, body) => {
+      request.patch(`${urlQuestions}/1147852/upvote`, { json: { userId: 1 } }, (error, response, body) => {
         expect(error).toBeNull();
         expect(response.statusCode).toBe(404);
-        expect(JSON.parse(body).status).toEqual(404);
-        expect(JSON.parse(body).error).toEqual('No question matches that id');
+        expect(body.status).toEqual(404);
+        expect(body.error).toEqual('No question matches that id');
         done();
       });
     });
@@ -56,19 +63,25 @@ describe('upvote and downvote api endpoint', () => {
 
   describe('downvote question api endpoint', () => {
     it('should downvote a question if question id given exists', (done) => {
-      request.patch(`${urlQuestions}/1/downvote`, (error, response, body) => {
+      request.patch(`${urlQuestions}/1/downvote`, { json: { userId: 1 } }, (error, response, body) => {
         expect(error).toBeNull();
-        expect(Array.isArray(JSON.parse(body).data)).toBeTruthy();
+        expect(Array.isArray(body.data)).toBeTruthy();
+        expect(body.data[0].meetupId).toBe(1);
+        expect(body.data[0].createdBy).toBe(1);
         done();
       });
     });
-  });
-  it('should tell if the question we try to downvote does not exists', (done) => {
-    request.patch(`${urlQuestions}/8748585/downvote`, (error, response, body) => {
-      expect(error).toBeNull();
-      expect(JSON.parse(body).status).toEqual(404);
-      expect(JSON.parse(body).error).toEqual('No question matches that id');
-      done();
+    it('should tell if the question we try to downvote does not exists', (done) => {
+      request.patch(`${urlQuestions}/8748585/downvote`, {
+        json: {
+          userId: 1,
+        },
+      }, (error, response, body) => {
+        expect(error).toBeNull();
+        expect(body.status).toEqual(404);
+        expect(body.error).toEqual('No question matches that id');
+        done();
+      });
     });
   });
 });

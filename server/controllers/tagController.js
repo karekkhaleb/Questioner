@@ -3,7 +3,13 @@ import database from '../db';
 
 class TagController {
   create = async (req, res) => {
-    const createdTag = await database.createTag(req.body.tagName);
+    if (req.errors.length) {
+      return res.status(400).json({
+        status: 400,
+        errors: req.errors,
+      });
+    }
+    const createdTag = await database.createTag(req.body.tagName.trim());
     if (createdTag && createdTag.error) {
       return res.status(createdTag.status).json(createdTag);
     }

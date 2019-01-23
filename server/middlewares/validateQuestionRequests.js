@@ -1,11 +1,5 @@
 /* eslint-disable import/prefer-default-export,consistent-return */
 function checkQuestion(req, res, next) {
-  if (!req.body.meetupId) {
-    return res.status(400).json({
-      status: 400,
-      error: 'Missing meetup',
-    });
-  }
   if (!req.body.createdBy) {
     return res.status(400).json({
       status: 400,

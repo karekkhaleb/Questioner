@@ -1,28 +1,31 @@
+/* eslint-disable consistent-return */
 function checkMeetup(req, res, next) {
+  const errors = [];
   if (!req.body.location) {
-    return res.status(400).json({
-      status: 400,
-      error: 'Missing location',
-    });
+    errors.push('Missing location');
+  }
+  if (req.body.location && req.body.location.trim() === '') {
+    errors.push('Location should not be an empty string');
   }
   if (!req.body.topic) {
-    return res.status(400).json({
-      status: 400,
-      error: 'Missing topic',
-    });
+    errors.push('Missing topic');
+  }
+  if (req.body.topic && req.body.topic.trim() === '') {
+    errors.push('Topic should not be an empty string');
   }
   if (!req.body.happeningOn) {
-    return res.status(400).json({
-      status: 400,
-      error: 'Missing time the meetup takes place',
-    });
+    errors.push('Missing time the meetup takes place');
+  }
+  if (req.body.happeningOn && req.body.happeningOn.trim() === '') {
+    errors.push('happeningOn should not be an empty string');
   }
   if (new Date(req.body.happeningOn).toString() === 'Invalid Date') {
-    return res.status(400).json({
-      status: 400,
-      error: 'happeningOn should be a valid date: Y/M/D',
-    });
+    errors.push('happeningOn should be a valid date: Y/M/D');
   }
+  if (new Date(req.body.happeningOn) < new Date()) {
+    errors.push('happeningOn should not be in the past');
+  }
+  req.errors = errors;
   next();
 }
 

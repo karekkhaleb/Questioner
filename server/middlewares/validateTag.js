@@ -1,12 +1,14 @@
 /* eslint-disable consistent-return */
 function checkTag(req, res, next) {
   const { body } = req;
+  const errors = [];
   if (!body.tagName) {
-    return res.status(400).json({
-      status: 400,
-      error: 'tagName is required',
-    });
+    errors.push('tagName is required');
   }
+  if (body.tagName && body.tagName.trim() === '') {
+    errors.push('tagName should not be an empty string');
+  }
+  req.errors = errors;
   next();
 }
 

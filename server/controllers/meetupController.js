@@ -19,10 +19,21 @@ class MeetupController {
   };
 
   create = async (req, res) => {
+    if (req.errors.length) {
+      return res.status(400).json({
+        status: 400,
+        errors: req.errors,
+      });
+    }
+
+    const topic = req.body.topic.trim();
+    const location = req.body.location.trim();
+    const happeningOn = req.body.happeningOn.trim();
+
     const created = await database.addMeetup({
-      location: req.body.location,
-      topic: req.body.topic,
-      happeningOn: new Date(req.body.happeningOn),
+      location,
+      topic,
+      happeningOn,
     });
 
     if (created && created.error) {

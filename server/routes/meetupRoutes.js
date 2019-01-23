@@ -4,6 +4,8 @@ import { checkMeetup, checkId } from '../middlewares/validateMeetup';
 import {
   insureAdmin,
 } from '../middlewares/validateRegistered';
+import { checkQuestion } from '../middlewares/validateQuestionRequests';
+import questionController from '../controllers/questionController';
 
 const Router = express.Router();
 
@@ -15,6 +17,7 @@ Router.get('/:meetupId', meetupController.getSingle);
 Router.post('/:meetupId/rsvps', meetupController.respondRsvp);
 Router.post('/:meetupId/tags', insureAdmin, meetupController.addTag);
 Router.get('/:meetupId/questions', meetupController.getQuestions);
+Router.post('/:meetupId/questions', checkQuestion, questionController.create);
 Router.post('/:meetupId/images', insureAdmin, checkId, meetupController.addImage);
 Router.delete('/:meetupId', insureAdmin, meetupController.delete);
 

@@ -68,7 +68,8 @@ describe('testing create meetup endpoint', () => {
       },
       headers: { token: adminObj.token },
     }, (error, response, body) => {
-      expect(body.error).toEqual('Missing time the meetup takes place');
+      expect(body.status).toBe(400);
+      expect(body.errors).toContain('Missing time the meetup takes place');
       done();
     });
   });

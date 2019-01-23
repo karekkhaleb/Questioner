@@ -41,9 +41,8 @@ const createMeetup = async token => new Promise((resolve) => {
 });
 
 const createQuestion = (meetupId, userId, token) => new Promise((resolve) => {
-  request.post(`${urlRoot}/questions`, {
+  request.post(`${urlMeetups}/${meetupId}/questions`, {
     json: {
-      meetupId,
       createdBy: userId,
       title: 'test vote title',
       body: 'test vot body',

@@ -4,8 +4,14 @@ import { databaseErrorObj } from '../db/utils';
 
 class QuestionController {
   create = async (req, res) => {
+    if (req.errors.length) {
+      return res.status(400).json({
+        status: 400,
+        errors: req.errors,
+      });
+    }
     const createdQuestion = await database.addQuestion(
-      Number.parseInt(req.body.meetupId, 10),
+      Number.parseInt(req.params.meetupId, 10),
       Number.parseInt(req.body.createdBy, 10),
       req.body.title,
       req.body.body,

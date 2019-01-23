@@ -57,7 +57,8 @@ describe('Create tags end point', () => {
       json: {},
       headers: { token: adminObj.token },
     }, (error, response, body) => {
-      expect(body.error).toEqual('tagName is required');
+      expect(body.status).toBe(400);
+      expect(body.errors).toContain('tagName is required');
       done();
     });
   });

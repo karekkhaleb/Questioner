@@ -42,7 +42,8 @@ describe('testing create meetup endpoint', () => {
       },
       headers: { token: adminObj.token },
     }, (error, response, body) => {
-      expect(body.error).toEqual('Missing location');
+      expect(body.status).toBe(400);
+      expect(body.errors).toContain('Missing location');
       done();
     });
   });
@@ -55,7 +56,8 @@ describe('testing create meetup endpoint', () => {
       },
       headers: { token: adminObj.token },
     }, (error, response, body) => {
-      expect(body.error).toEqual('Missing topic');
+      expect(body.errors).toContain('Missing topic');
+      expect(body.status).toBe(400);
       done();
     });
   });
@@ -83,7 +85,8 @@ describe('testing create meetup endpoint', () => {
       },
       headers: { token: adminObj.token },
     }, (error, response, body) => {
-      expect(body.error).toEqual('happeningOn should be a valid date: Y/M/D');
+      expect(body.status).toBe(400);
+      expect(body.errors).toContain('happeningOn should be a valid date: Y/M/D');
       done();
     });
   });

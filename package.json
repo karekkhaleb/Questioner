@@ -2,7 +2,7 @@
   "name": "questioner",
   "version": "1.0.0",
   "description": "",
-  "main": "src/app.js",
+  "main": "server/app.js",
   "nyc": {
     "require": [
       "@babel/register"
@@ -11,9 +11,9 @@
     "instrument": false
   },
   "scripts": {
-    "test": "cross-env NODE_ENV=test nyc --reporter=lcov --reporter=text ./node_modules/jasmine/bin/jasmine.js --random=false",
-    "start": "cross-env  NODE_ENV=production babel-node ./src/app.js",
-    "dev": "cross-env PORT=9001 NODE_ENV=development nodemon --exec babel-node ./src/app.js",
+    "test": "cross-env PGDATABASE=travis_ci_test NODE_ENV=test nyc --reporter=lcov --reporter=text jasmine JASMINE_CONFIG_PATH=server/tests/support/jasmine.json",
+    "start": "cross-env  NODE_ENV=production babel-node ./server/app.js",
+    "dev": "cross-env PORT=9001 NODE_ENV=development nodemon --exec babel-node ./server/app.js",
     "coverage": "nyc report --reporter=text-lcov && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage"
   },
   "repository": {
@@ -42,6 +42,7 @@
     "@babel/preset-env": "^7.2.3",
     "@babel/register": "^7.0.0",
     "babel-plugin-istanbul": "^5.1.0",
+    "bcrypt-nodejs": "0.0.3",
     "coveralls": "^3.0.2",
     "cross-env": "^5.2.0",
     "dotenv": "^6.2.0",
@@ -49,7 +50,11 @@
     "express": "^4.16.4",
     "istanbul": "^0.4.5",
     "jasmine": "^3.3.1",
+    "jsonwebtoken": "^8.4.0",
+    "morgan": "^1.9.1",
+    "multer": "^1.4.1",
     "nyc": "^13.1.0",
+    "pg": "^7.7.1",
     "request": "^2.88.0"
   }
 }

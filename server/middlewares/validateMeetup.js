@@ -1,4 +1,3 @@
-/* eslint-disable consistent-return */
 function checkMeetup(req, res, next) {
   const errors = [];
   if (!req.body.location) {
@@ -27,6 +26,7 @@ function checkMeetup(req, res, next) {
   }
   req.errors = errors;
   next();
+  return true;
 }
 
 function checkId(req, res, next) {
@@ -38,6 +38,7 @@ function checkId(req, res, next) {
     });
   }
   next();
+  return true;
 }
 
 export {

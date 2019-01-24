@@ -1,12 +1,12 @@
-/* eslint-disable consistent-return */
 import bcrypt from 'bcrypt-nodejs';
 import jwt from 'jsonwebtoken';
-import database, { jwtSecretWord } from '../db';
+import { jwtSecretWord } from '../db';
+import User from '../models/user';
 
 class AuthController {
   signup = async (req, res) => {
     const password = bcrypt.hashSync(req.body.password.trim());
-    const createdUser = await database.signup({ ...req.body, password });
+    const createdUser = await User.signup({ ...req.body, password });
     if (createdUser && createdUser.error) {
       return res.status(createdUser.status).json(createdUser);
     }
@@ -21,10 +21,11 @@ class AuthController {
         user: createdUser,
       }],
     });
+    return true;
   };
 
   login = async (req, res) => {
-    const databaseUser = await database.login(req.body.email);
+    const databaseUser = await User.login(req.body.email);
     if (Array.isArray(databaseUser) && databaseUser.length > 0
       && bcrypt.compareSync(req.body.password, databaseUser[0].password)
     ) {

@@ -1,6 +1,5 @@
-/* eslint-disable no-unused-vars */
 import request from 'request';
-import server from '../../app';
+import '../../app';
 import { urlAuth } from './testUtils';
 
 describe('signup api endpoint', () => {

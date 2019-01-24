@@ -1,4 +1,3 @@
-/* eslint-disable consistent-return */
 function checkTag(req, res, next) {
   const { body } = req;
   const errors = [];
@@ -10,6 +9,7 @@ function checkTag(req, res, next) {
   }
   req.errors = errors;
   next();
+  return true;
 }
 
 export default {

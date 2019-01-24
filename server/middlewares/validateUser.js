@@ -1,4 +1,3 @@
-/* eslint-disable consistent-return,import/prefer-default-export */
 function checkSignupData(req, res, next) {
   if (!req.body.firstname) {
     return res.status(400).json({
@@ -58,6 +57,7 @@ function checkSignupData(req, res, next) {
     });
   }
   next();
+  return true;
 }
 
 function checkLoginData(req, res, next) {
@@ -74,6 +74,7 @@ function checkLoginData(req, res, next) {
     });
   }
   next();
+  return true;
 }
 
 export {

@@ -1,6 +1,5 @@
-/* eslint-disable no-unused-vars */
 import request from 'request';
-import server from '../../app';
+import '../../app';
 import { baseUrl } from './testUtils';
 
 describe('Testing the base url', () => {

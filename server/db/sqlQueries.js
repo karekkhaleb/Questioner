@@ -82,6 +82,16 @@ create table if not exists images (
   meetup_id integer,
   image_path varchar(200),
   foreign key (meetup_id) references meetups(id) on delete cascade
+);
+
+create table if not exists votes (
+  question_id integer not null ,
+  user_id integer not null ,
+  up_vote boolean default false ,
+  down_vote boolean default false ,
+  primary key (question_id, user_id),
+  foreign key (question_id) references questions(id) on delete cascade ,
+  foreign key (user_id) references users(id) on delete cascade
 );`;
 
 export default {

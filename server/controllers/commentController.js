@@ -1,11 +1,17 @@
-/* eslint-disable consistent-return */
-import database from '../db';
+import Comment from '../models/comment';
 
-class QuestionController {
+class CommentController {
   create = async (req, res) => {
-    const createdComment = await database.addComment(
-      Number.parseInt(req.body.questionId, 10),
-      Number.parseInt(req.body.userId, 10),
+    const questionId = Number.parseInt(req.params.questionId, 10);
+    if (Number.isNaN(questionId)) {
+      req.status(400).json({
+        status: 400,
+        error: 'questionI should be a Number',
+      });
+    }
+    const createdComment = await Comment.addComment(
+      questionId,
+      req.userData.id,
       req.body.comment,
     );
 
@@ -19,7 +25,8 @@ class QuestionController {
       status: 201,
       data: [createdComment],
     });
+    return true;
   };
 }
 
-export default new QuestionController();
+export default new CommentController();

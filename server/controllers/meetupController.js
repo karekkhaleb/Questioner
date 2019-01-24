@@ -1,11 +1,11 @@
 /* eslint-disable consistent-return */
 import fs from 'fs';
-import database from '../db';
+import Meetup from '../models/meetup';
 import uploadUtilities from '../middlewares/uploadUtilities';
 
 class MeetupController {
   getAll = async (req, res) => {
-    const meetups = await database.getAllMeetps();
+    const meetups = await Meetup.getAllMeetps();
     if (meetups && meetups.error) {
       return res.status(meetups.status).json({
         status: meetups.status,
@@ -30,7 +30,7 @@ class MeetupController {
     const location = req.body.location.trim();
     const happeningOn = req.body.happeningOn.trim();
 
-    const created = await database.addMeetup({
+    const created = await Meetup.addMeetup({
       location,
       topic,
       happeningOn,
@@ -60,7 +60,7 @@ class MeetupController {
     const meetupId = Number.parseInt(req.params.meetupId, 10);
     if (!meetupId) return res.status(400).json({ status: 400, error: 'wrong id type' });
 
-    const requestedMeetup = await database.getSingleMeetup(meetupId);
+    const requestedMeetup = await Meetup.getSingleMeetup(meetupId);
     if (requestedMeetup && requestedMeetup.error) {
       return res.status(requestedMeetup.status).json(requestedMeetup);
     }
@@ -71,7 +71,7 @@ class MeetupController {
   };
 
   getUpcoming = async (req, res) => {
-    const upcomingMeetups = await database.getUpcomingMeetups();
+    const upcomingMeetups = await Meetup.getUpcomingMeetups();
     if (upcomingMeetups && upcomingMeetups.error) {
       return res.status(upcomingMeetups.status).json({
         status: upcomingMeetups.status,
@@ -96,7 +96,7 @@ class MeetupController {
         error: 'meetupId should be a number',
       });
     }
-    const meetupAndTag = await database.addTagToMeetup(tagId, meetupId);
+    const meetupAndTag = await Meetup.addTagToMeetup(tagId, meetupId);
     if (meetupAndTag && meetupAndTag.error) {
       return res.status(meetupAndTag.status).json(meetupAndTag);
     }
@@ -114,13 +114,13 @@ class MeetupController {
         error: 'meetupId is required and should be a number',
       });
     }
-    const deletedMeetup = await database.deleteMeetup(meetupId);
+    const deletedMeetup = await Meetup.deleteMeetup(meetupId);
     if (deletedMeetup && deletedMeetup.error) {
       return res.status(deletedMeetup.status).json(deletedMeetup);
     }
     res.status(200).json({
       status: 200,
-      data: ['Meetup deleted'],
+      data: [{ message: 'Meetup deleted' }],
     });
   };
 
@@ -132,7 +132,7 @@ class MeetupController {
         error: 'MeetupId should be a number',
       });
     }
-    const questions = await database.getMeetupQuestions(meetupId);
+    const questions = await Meetup.getMeetupQuestions(meetupId);
     if (questions && questions.error) {
       return res.status(questions.status).json(questions);
     }
@@ -168,7 +168,7 @@ class MeetupController {
         error: 'status should be yes, no, or maybe',
       });
     }
-    const rsvp = await database.respondRsvp({
+    const rsvp = await Meetup.respondRsvp({
       status,
       userId: Number.parseInt(req.body.userId, 10),
       meetupId: Number.parseInt(req.params.meetupId, 10),
@@ -194,7 +194,6 @@ class MeetupController {
   addImage = async (req, res) => {
     uploadUtilities.upload(req, res, async (err) => {
       if (err && err.message === 'Unexpected field') {
-        console.log(err);
         return res.status(400).json({
           status: 400,
           error: 'you should give only one image and its field should be meetupImage',
@@ -207,7 +206,7 @@ class MeetupController {
       }
       const meetupId = Number.parseInt(req.params.meetupId, 10);
       const imagePath = req.file.path;
-      const insertedImage = await database.addImage(meetupId, imagePath);
+      const insertedImage = await Meetup.addImage(meetupId, imagePath);
       if (insertedImage && insertedImage.error) {
         fs.unlinkSync(imagePath);
         return res.status(insertedImage.status).json(insertedImage);

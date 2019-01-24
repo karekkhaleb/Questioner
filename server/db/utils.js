@@ -3,6 +3,6 @@ const databaseErrorObj = {
   error: 'Something went wrong on the server',
 };
 
-export {
+export default {
   databaseErrorObj,
 };

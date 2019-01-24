@@ -1,8 +1,7 @@
-/* eslint-disable no-unused-vars */
 import request from 'request';
-import server from '../../app';
+import '../../app';
 import {
-  urlQuestions, loginAdmin, createMeetup, urlMeetups,
+  loginAdmin, createMeetup, urlMeetups,
 } from './testUtils';
 
 let adminObj;
@@ -100,19 +99,6 @@ describe('create question api endpoint', () => {
       headers: { token: adminObj.token },
     }, (error, response, body) => {
       expect(body.error).toEqual('Meetup not found');
-      done();
-    });
-  });
-  it('should tell if we give an user id that does not exist', (done) => {
-    request.post(`${urlMeetups}/${meetupObj.id}/questions`, {
-      json: {
-        createdBy: 8798745,
-        title: 'test title',
-        body: 'test body',
-      },
-      headers: { token: adminObj.token },
-    }, (error, response, body) => {
-      expect(body.error).toEqual('User creating question not found');
       done();
     });
   });

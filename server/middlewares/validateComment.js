@@ -1,4 +1,3 @@
-/* eslint-disable import/prefer-default-export,consistent-return */
 function checkComment(req, res, next) {
   if (!req.body.questionId) {
     return res.status(400).json({
@@ -31,8 +30,9 @@ function checkComment(req, res, next) {
     });
   }
   next();
+  return true;
 }
 
-export {
+export default {
   checkComment,
 };

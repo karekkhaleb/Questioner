@@ -11,7 +11,7 @@
     "instrument": false
   },
   "scripts": {
-    "test": "cross-env NODE_ENV=test nyc --reporter=lcov --reporter=text jasmine JASMINE_CONFIG_PATH=server/tests/support/jasmine.json",
+    "test": "cross-env PGDATABASE=travis_ci_test NODE_ENV=test nyc --reporter=lcov --reporter=text jasmine JASMINE_CONFIG_PATH=server/tests/support/jasmine.json",
     "start": "cross-env  NODE_ENV=production babel-node ./server/app.js",
     "dev": "cross-env PORT=9001 NODE_ENV=development nodemon --exec babel-node ./server/app.js",
     "coverage": "nyc report --reporter=text-lcov && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage"

@@ -1,4 +1,3 @@
-/* eslint-disable import/prefer-default-export,consistent-return */
 function checkQuestion(req, res, next) {
   const errors = [];
   if (!req.body.createdBy) errors.push('Missing the person who created this question');
@@ -10,8 +9,9 @@ function checkQuestion(req, res, next) {
   }
   req.errors = errors;
   next();
+  return true;
 }
 
-export {
+export default {
   checkQuestion,
 };

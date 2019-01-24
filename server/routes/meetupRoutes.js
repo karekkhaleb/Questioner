@@ -4,8 +4,10 @@ import { checkMeetup, checkId } from '../middlewares/validateMeetup';
 import {
   insureAdmin,
 } from '../middlewares/validateRegistered';
-import { checkQuestion } from '../middlewares/validateQuestionRequests';
+import questionValidation from '../middlewares/validateQuestionRequests';
 import questionController from '../controllers/questionController';
+
+const { checkQuestion } = questionValidation;
 
 const Router = express.Router();
 

@@ -1,6 +1,5 @@
-/* eslint-disable no-unused-vars */
 import request from 'request';
-import server from '../../app';
+import '../../app';
 import {
   urlMeetups, urlRoot, loginAdmin, createMeetup,
 } from './testUtils';

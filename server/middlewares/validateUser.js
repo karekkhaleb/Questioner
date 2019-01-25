@@ -5,10 +5,22 @@ function checkSignupData(req, res, next) {
       error: 'Firstname is required',
     });
   }
+  if (req.body.firstname && req.body.firstname.trim() === '') {
+    return res.status(400).json({
+      status: 400,
+      error: 'Firstname should not be empty',
+    });
+  }
   if (!req.body.lastname) {
     return res.status(400).json({
       status: 400,
       error: 'Lastname is required',
+    });
+  }
+  if (req.body.lastname && req.body.lastname.trim() === '') {
+    return res.status(400).json({
+      status: 400,
+      error: 'Lastname should not be empty',
     });
   }
   if (!req.body.email) {
@@ -38,6 +50,12 @@ function checkSignupData(req, res, next) {
       error: 'UserName is required',
     });
   }
+  if (req.body.userName && req.body.userName.trim() === '') {
+    return res.status(400).json({
+      status: 400,
+      error: 'UserName should not be an empty string',
+    });
+  }
   if (!Number.parseInt(req.body.phoneNumber, 10)) {
     return res.status(400).json({
       status: 400,
@@ -56,6 +74,10 @@ function checkSignupData(req, res, next) {
       error: 'Password should be at least 3 characters',
     });
   }
+  req.body.password = req.body.password.trim();
+  req.body.userName = req.body.userName.trim();
+  req.body.lastname = req.body.lastname.trim();
+  req.body.firstname = req.body.firstname.trim();
   next();
   return true;
 }

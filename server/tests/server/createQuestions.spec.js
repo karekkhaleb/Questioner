@@ -40,19 +40,6 @@ describe('create question api endpoint', () => {
       done();
     });
   });
-  it('should ask to give the user id as a number', (done) => {
-    request.post(`${urlMeetups}/${meetupObj.id}/questions`, {
-      json: {
-        createdBy: 'not a number',
-        title: 'test title',
-        body: 'test body',
-      },
-      headers: { token: adminObj.token },
-    }, (error, response, body) => {
-      expect(body.errors).toContain('createdBy should be an integer');
-      done();
-    });
-  });
   it('should ask for the body if absent', (done) => {
     request.post(`${urlMeetups}/${meetupObj.id}/questions`, {
       json: {
@@ -74,18 +61,6 @@ describe('create question api endpoint', () => {
       headers: { token: adminObj.token },
     }, (error, response, body) => {
       expect(body.errors).toContain('Missing the title for this question');
-      done();
-    });
-  });
-  it('should ask for the user\'s id if absent', (done) => {
-    request.post(`${urlMeetups}/${meetupObj.id}/questions`, {
-      json: {
-        title: 'test title',
-        body: 'test body',
-      },
-      headers: { token: adminObj.token },
-    }, (error, response, body) => {
-      expect(body.errors).toContain('Missing the person who created this question');
       done();
     });
   });

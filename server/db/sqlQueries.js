@@ -24,10 +24,12 @@ const tablesQuery = `create table if not exists users (
 
 create table if not exists meetups (
   id serial primary key ,
+  user_id integer not null ,
   created_on timestamp without time zone default now(),
   location varchar(200) not null ,
   topic varchar(200) not null ,
-  happening_on timestamp without time zone not null
+  happening_on timestamp without time zone not null,
+  foreign key (user_id) references users(id)                                
 );
 
 create table if not exists tags(

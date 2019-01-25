@@ -1,4 +1,3 @@
-/* eslint-disable consistent-return */
 import fs from 'fs';
 import Meetup from '../models/meetup';
 import uploadUtilities from '../middlewares/uploadUtilities';
@@ -16,6 +15,7 @@ class MeetupController {
       status: 200,
       data: meetups,
     });
+    return true;
   };
 
   create = async (req, res) => {
@@ -34,6 +34,7 @@ class MeetupController {
       location,
       topic,
       happeningOn,
+      userId: req.userData.id,
     });
 
     if (created && created.error) {
@@ -47,6 +48,7 @@ class MeetupController {
       status: 201,
       data: [{
         id: created.id,
+        userId: created.userId,
         topic: created.topic,
         location: created.location,
         happeningOn: created.happeningOn,
@@ -100,9 +102,13 @@ class MeetupController {
     if (meetupAndTag && meetupAndTag.error) {
       return res.status(meetupAndTag.status).json(meetupAndTag);
     }
-    res.status(200).json({
-      status: 200,
-      data: meetupAndTag,
+    res.status(201).json({
+      status: 201,
+      data: [{
+        id: meetupAndTag[0].id,
+        topic: meetupAndTag[0].topic,
+        tags: meetupAndTag[0].tag_name,
+      }],
     });
   };
 
@@ -136,9 +142,22 @@ class MeetupController {
     if (questions && questions.error) {
       return res.status(questions.status).json(questions);
     }
+    const questionsArr = [];
+    questions.forEach((question) => {
+      questionsArr.push({
+        id: question.id,
+        createdBy: question.created_by,
+        meetupId: question.meetup,
+        title: question.title,
+        body: question.body,
+        comments: question.comments,
+        upVotes: Number.parseInt(question.up_votes, 10),
+        downVotes: Number.parseInt(question.down_votes, 10),
+      });
+    });
     res.status(200).json({
       status: 200,
-      data: questions,
+      data: questionsArr,
     });
   };
 
@@ -155,12 +174,6 @@ class MeetupController {
         error: 'invalid meetup id',
       });
     }
-    if (!req.body.userId) {
-      return res.status(400).json({
-        status: 400,
-        error: 'userId is required',
-      });
-    }
     const status = req.body.status.toString().trim();
     if (status !== 'yes' && status !== 'no' && status !== 'maybe') {
       return res.status(400).json({
@@ -170,7 +183,7 @@ class MeetupController {
     }
     const rsvp = await Meetup.respondRsvp({
       status,
-      userId: Number.parseInt(req.body.userId, 10),
+      userId: Number.parseInt(req.userData.id, 10),
       meetupId: Number.parseInt(req.params.meetupId, 10),
     });
 
@@ -215,6 +228,51 @@ class MeetupController {
         status: 201,
         data: [insertedImage],
       });
+    });
+  };
+
+  changeTopic = async (req, res) => {
+    const meetup = await Meetup.updateMeetup({
+      field: 'topic',
+      meetupId: Number.parseInt(req.params.meetupId, 10),
+      value: req.body.topic,
+    });
+    if (meetup && meetup.error) {
+      return res.status(meetup.status).json(meetup);
+    }
+    res.status(200).json({
+      status: 200,
+      data: meetup,
+    });
+  };
+
+  changeDate = async (req, res) => {
+    const meetup = await Meetup.updateMeetup({
+      field: 'happening_on',
+      meetupId: Number.parseInt(req.params.meetupId, 10),
+      value: req.body.happeningOn,
+    });
+    if (meetup && meetup.error) {
+      return res.status(meetup.status).json(meetup);
+    }
+    res.status(200).json({
+      status: 200,
+      data: meetup,
+    });
+  };
+
+  changeLocation = async (req, res) => {
+    const meetup = await Meetup.updateMeetup({
+      field: 'location',
+      meetupId: Number.parseInt(req.params.meetupId, 10),
+      value: req.body.location,
+    });
+    if (meetup && meetup.error) {
+      return res.status(meetup.status).json(meetup);
+    }
+    res.status(200).json({
+      status: 200,
+      data: meetup,
     });
   };
 }

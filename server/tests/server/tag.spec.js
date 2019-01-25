@@ -1,15 +1,18 @@
 import request from 'request';
 import '../../app';
 import {
-  urlMeetups, urlRoot, loginAdmin, createMeetup,
+  urlMeetups, urlRoot, loginAdmin, createMeetup, createTag, addTagToMeetup,
 } from './testUtils';
 
 let adminObj;
 let meetupObj;
+let tagObj;
 let tagId;
 beforeAll(async (DONE) => {
   adminObj = await loginAdmin();
   meetupObj = await createMeetup(adminObj.token);
+  tagObj = await createTag(adminObj.token);
+  await addTagToMeetup(adminObj.token, meetupObj.id, tagObj.id);
   await request.post(`${urlRoot}/tags`, {
     json: {
       tagName: 'to-fail',
@@ -101,6 +104,39 @@ describe('Add tag to meetup', () => {
       headers: { token: adminObj.token },
     }, (error, response, body) => {
       expect(body.data.length).toBeDefined();
+      done();
+    });
+  });
+  it('should not add tag to a meetup that does not exist', (done) => {
+    request.post(`${urlMeetups}/1478525/tags`, {
+      json: {
+        tagId,
+      },
+      headers: { token: adminObj.token },
+    }, (error, response, body) => {
+      expect(body.error).toEqual('Meetup not found');
+      done();
+    });
+  });
+  it('should not add a tag that does not exist to a meetup', (done) => {
+    request.post(`${urlMeetups}/1/tags`, {
+      json: {
+        tagId: 147522,
+      },
+      headers: { token: adminObj.token },
+    }, (error, response, body) => {
+      expect(body.error).toEqual('Tag not found');
+      done();
+    });
+  });
+  it('should not add a tag to a meetup twice', (done) => {
+    request.post(`${urlMeetups}/${meetupObj.id}/tags`, {
+      json: {
+        tagId: tagObj.id,
+      },
+      headers: { token: adminObj.token },
+    }, (error, response, body) => {
+      expect(body.error).toEqual('Record already exists');
       done();
     });
   });

@@ -8,6 +8,7 @@ export default class Meetup {
     const meetupsQuery = `select
       m.id, m.topic, m.location,
              m.happening_on,
+             m.user_id,
              array_remove(array_agg(t.tag_name), null) as tags,
              array_remove(array_agg(i.image_path), null) as images
       from meetups m
@@ -21,6 +22,7 @@ export default class Meetup {
       allMeetups.forEach((row) => {
         requiredMeetups.push({
           id: row.id,
+          userId: row.user_id,
           title: row.topic,
           location: row.location,
           happeningOn: row.happening_on,
@@ -36,18 +38,20 @@ export default class Meetup {
 
   static addMeetup = async ({ ...meetupData }) => {
     const query = `insert into meetups (
-      location, topic, happening_on) 
-      values ($1, $2, $3) returning *;
+      location, topic, happening_on, user_id) 
+      values ($1, $2, $3, $4) returning *;
     `;
     try {
       const queryParams = [
         meetupData.location,
         meetupData.topic,
         meetupData.happeningOn,
+        meetupData.userId,
       ];
       const result = await executeQuery(query, queryParams);
       return {
         id: result[0].id,
+        userId: result[0].user_id,
         createdOn: result[0].created_on,
         location: result[0].location,
         topic: result[0].topic,
@@ -62,6 +66,7 @@ export default class Meetup {
     const query = `select
         m.id, m.topic, m.location,
              m.happening_on,
+             m.user_id,
              array_remove(array_agg(t.tag_name), null ) as tags,
              array_remove(array_agg(i.image_path), null ) as images
         from meetups m
@@ -80,6 +85,7 @@ export default class Meetup {
       }
       return {
         id: result[0].id,
+        userId: result[0].user_id,
         topic: result[0].topic,
         location: result[0].location,
         happeningOn: result[0].happening_on,
@@ -93,8 +99,7 @@ export default class Meetup {
 
   static getUpcomingMeetups = async () => {
     const query = `select
-      m.id, m.topic, m.location,
-       m.happening_on,
+      m.id, m.topic, m.location, m.user_id, m.happening_on,
        array_remove(array_agg(t.tag_name), null) as tags,
        array_remove(array_agg(i.image_path), null) as images
       from meetups m
@@ -109,6 +114,7 @@ export default class Meetup {
       result.forEach((row) => {
         meetups.push({
           id: row.id,
+          userId: row.user_id,
           title: row.topic,
           location: row.location,
           happeningOn: row.happening_on,
@@ -141,6 +147,12 @@ export default class Meetup {
           error: 'Meetup not found',
         };
       }
+      if (e.detail === `Key (tag_id)=(${tagId}) is not present in table "tags".`) {
+        return {
+          status: 404,
+          error: 'Tag not found',
+        };
+      }
       if (e.detail === `Key (meetup_id, tag_id)=(${meetupId}, ${tagId}) already exists.`) {
         return {
           status: 400,
@@ -168,11 +180,16 @@ export default class Meetup {
   };
 
   static getMeetupQuestions = async (meetupId) => {
-    const query = `select q.id, q.created_by, q.meetup, q.title, q.body, array_remove(array_agg(c.comment), null) as comments
+    const query = `select q.id, q.created_by, q.meetup, q.title, q.body, 
+        array_remove(array_agg(c.comment), null) as comments,
+        count(nullif(v.up_vote = false, true)) as up_votes,
+        count(nullif(v.down_vote = false, true)) as down_votes
       from questions q
       left join comments c on q.id = c.question_id
-      where meetup = $1
-      group by q.id`;
+      left join votes v on q.id = v.question_id
+      where q.meetup = $1
+      group by q.id
+      ;`;
     try {
       return await executeQuery(query, [meetupId]);
     } catch (e) {
@@ -202,12 +219,6 @@ export default class Meetup {
           error: 'User already responded to this meetup',
         };
       }
-      if (e.detail === `Key (user_id)=(${rsvpData.userId}) is not present in table "users".`) {
-        return {
-          status: 400,
-          error: 'User not available',
-        };
-      }
       if (e.detail === `Key (meetup)=(${rsvpData.meetupId}) is not present in table "meetups".`) {
         return {
           status: 400,
@@ -235,6 +246,31 @@ export default class Meetup {
         topic: result[0].topic,
         images: result[0].images,
       };
+    } catch (e) {
+      return databaseErrorObj;
+    }
+  };
+
+  static updateMeetup = async ({ ...updatePayload }) => {
+    const { field, value, meetupId } = updatePayload;
+    let dbField;
+    if (field === 'topic') {
+      dbField = 'topic';
+    } else if (field === 'location') {
+      dbField = 'location';
+    } else {
+      dbField = 'happening_on';
+    }
+    const query = `update meetups set ${dbField} = $1 where id = $2 returning *;`;
+    try {
+      const question = await executeQuery(query, [value, meetupId]);
+      if (!question.length) {
+        return {
+          status: 404,
+          error: 'meetup not found',
+        };
+      }
+      return question;
     } catch (e) {
       return databaseErrorObj;
     }

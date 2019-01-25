@@ -5,7 +5,6 @@ import commentValidation from '../middlewares/validateComment';
 
 const { checkComment } = commentValidation;
 
-
 const Router = express.Router();
 
 Router.get('/:questionId/comments', questionController.getComments);

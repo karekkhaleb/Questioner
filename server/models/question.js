@@ -38,7 +38,7 @@ export default class Question {
                   values ($1, $2, true) returning *;`;
           await executeQuery(query, [questionId, userId]);
         }
-        if (rows[0].up_vote === true) return { status: 403, error: 'you can not up-vote twice' };
+        if (rows[0] && rows[0].up_vote === true) return { status: 403, error: 'you can not up-vote twice' };
         query = `update votes set up_vote = true, down_vote = false
                   where question_id = $1 and user_id = $2 returning *;
                   `;
@@ -50,7 +50,7 @@ export default class Question {
                   values ($1, $2, true) returning *;`;
           await executeQuery(query, [questionId, userId]);
         }
-        if (rows[0].down_vote === true) return { status: 403, error: 'you can not down-vote twice' };
+        if (rows[0] && rows[0].down_vote === true) return { status: 403, error: 'you can not down-vote twice' };
         const insertQuery = `update votes set up_vote = false, down_vote = true
                   where question_id = $1 and user_id = $2 returning *;`;
         await executeQuery(insertQuery, [questionId, userId]);

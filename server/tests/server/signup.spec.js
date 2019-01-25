@@ -2,6 +2,23 @@ import request from 'request';
 import '../../app';
 import { urlAuth } from './testUtils';
 
+let defaultUser;
+beforeAll((DONE) => {
+  request.post(`${urlAuth}/signup`, {
+    json: {
+      firstname: 'default',
+      lastname: 'default',
+      email: 'default@gmail.com',
+      phoneNumber: 250722387998,
+      userName: 'default',
+      password: 'testpassword',
+    },
+  }, (error, response, body) => {
+    defaultUser = body.data[0].user;
+    DONE();
+  });
+});
+
 describe('signup api endpoint', () => {
   it('should create the users if all the fields are given', (done) => {
     request.post(`${urlAuth}/signup`, {
@@ -14,7 +31,38 @@ describe('signup api endpoint', () => {
         password: 'testpassword',
       },
     }, (error, response, body) => {
+      expect(body.data[0].user.email).toEqual('hello@gmail.com');
       expect(body.data[0].token).toBeDefined();
+      done();
+    });
+  });
+  it('should not allow duplicated emails', (done) => {
+    request.post(`${urlAuth}/signup`, {
+      json: {
+        firstname: 'firstname',
+        lastname: 'lastname',
+        email: defaultUser.email,
+        phoneNumber: 250722387998,
+        userName: 'teUser',
+        password: 'testpassword',
+      },
+    }, (error, response, body) => {
+      expect(body.error).toEqual('Email already taken, please chose another one');
+      done();
+    });
+  });
+  it('should not allow duplicated emails', (done) => {
+    request.post(`${urlAuth}/signup`, {
+      json: {
+        firstname: 'firstname',
+        lastname: 'lastname',
+        userName: defaultUser.user_name,
+        phoneNumber: 250722387998,
+        email: 'teUser@email.com',
+        password: 'testpassword',
+      },
+    }, (error, response, body) => {
+      expect(body.error).toEqual('userName already taken, please choose another one');
       done();
     });
   });

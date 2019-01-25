@@ -37,6 +37,18 @@ describe('login api endpoint', () => {
       done();
     });
   });
+  it('should tell if we give wrong email or password', (done) => {
+    request.post(`${urlAuth}/login`, {
+      json: {
+        email: 'null@test.com',
+        password: 'fail',
+      },
+    }, (error, response, body) => {
+      expect(body.status).toBe(401);
+      expect(body.error).toEqual('Wrong email or password');
+      done();
+    });
+  });
   it('should log in the user if everything is fine', (done) => {
     request.post(`${urlAuth}/login`, {
       json: {

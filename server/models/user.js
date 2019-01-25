@@ -32,14 +32,14 @@ export default class User {
     } catch (e) {
       if (e.detail === `Key (user_name)=(${userCredentials.userName}) already exists.`) {
         return {
-          status: 400,
-          error: 'Please chose another userName',
+          status: 409,
+          error: 'userName already taken, please choose another one',
         };
       }
       if (e.detail === `Key (email)=(${userCredentials.email}) already exists.`) {
         return {
-          status: 400,
-          error: 'Please chose another email',
+          status: 409,
+          error: 'Email already taken, please chose another one',
         };
       }
       return databaseErrorObj;

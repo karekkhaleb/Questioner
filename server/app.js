@@ -17,6 +17,7 @@ const rootUrl = '/api/v1';
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(morgan('dev'));
+app.use(`${rootUrl}/upload`, express.static('upload'));
 
 app.use(`${rootUrl}/meetups`, insureToken, meetupRoutes);
 app.use(`${rootUrl}/questions`, insureToken, questionRoutes);

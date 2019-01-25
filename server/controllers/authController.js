@@ -46,7 +46,7 @@ class AuthController {
       return res.status(databaseUser.status).json(databaseUser);
     }
     return res.status(400).json({
-      status: 400,
+      status: 401,
       error: 'Wrong email or password',
     });
   };

@@ -39,6 +39,26 @@ const createMeetup = async token => new Promise((resolve) => {
     resolve(body.data[0]);
   });
 });
+const createTag = async token => new Promise((resolve) => {
+  request.post(`${urlRoot}/tags`, {
+    json: {
+      tagName: 'to-fail',
+    },
+    headers: { token },
+  }, (error, response, body) => {
+    resolve(body.data[0]);
+  });
+});
+const addTagToMeetup = async (token, meetupId, tagId) => new Promise((resolve) => {
+  request.post(`${urlMeetups}/${meetupId}/tags`, {
+    json: {
+      tagId,
+    },
+    headers: { token },
+  }, (error, response, body) => {
+    resolve(body.data[0]);
+  });
+});
 
 const createQuestion = (meetupId, userId, token) => new Promise((resolve) => {
   request.post(`${urlMeetups}/${meetupId}/questions`, {
@@ -63,7 +83,9 @@ export {
   testMeetup,
   baseUrl,
   admin,
+  addTagToMeetup,
   loginAdmin,
+  createTag,
   createMeetup,
   createQuestion,
 };

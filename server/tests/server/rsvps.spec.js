@@ -37,17 +37,6 @@ describe('respond rsvps api endpoint', () => {
       done();
     });
   });
-  it('should ask for the user id if absent', (done) => {
-    request.post(`${urlMeetups}/${meetupObj.id}/rsvps`, {
-      json: {
-        status: 'yes',
-      },
-      headers: { token: adminObj.token },
-    }, (error, response, body) => {
-      expect(body.error).toEqual('userId is required');
-      done();
-    });
-  });
   it('should ask for the right status', (done) => {
     request.post(`${urlMeetups}/1/rsvps`, {
       json: {
@@ -81,18 +70,6 @@ describe('respond rsvps api endpoint', () => {
       headers: { token: adminObj.token },
     }, (error, response, body) => {
       expect(body.error).toEqual('Meetup not available');
-      done();
-    });
-  });
-  it('should tell if the user id we give does not exist', (done) => {
-    request.post(`${urlMeetups}/${meetupObj.id}/rsvps`, {
-      json: {
-        status: 'yes',
-        userId: 147852,
-      },
-      headers: { token: adminObj.token },
-    }, (error, response, body) => {
-      expect(body.error).toEqual('User not available');
       done();
     });
   });

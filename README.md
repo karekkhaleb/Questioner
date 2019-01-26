@@ -32,7 +32,7 @@
 * Install dependecies with `npm install` (You can also use yarn) from the terminal
 * Run tests with `npm test` (also yarn may work)
 
-## Information on the UI
+## Information on the UI (I have not yet connected this UI to the backend for now)
 * The UI folder is at the root folder and that is where every UI related file is located
 * If you want to login as an admin use email: `admin@mysite.com` and a password of `admin`
 * If you want to login as a regular user, use email: `user@mysite.com` and a password of `user`

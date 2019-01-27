@@ -28,7 +28,18 @@ export default class User {
     `;
     try {
       const result = await executeQuery(query, userParams);
-      return result[0];
+      // return result[0];
+      return {
+        id: result[0].id,
+        first_name: result[0].first_name,
+        last_name: result[0].last_name,
+        other_name: result[0].other_name,
+        phone_number: result[0].phone_number,
+        user_name: result[0].user_name,
+        email: result[0].email,
+        registered: result[0].registered,
+        isadin: result[0].isadmin,
+      };
     } catch (e) {
       if (e.detail === `Key (user_name)=(${userCredentials.userName}) already exists.`) {
         return {

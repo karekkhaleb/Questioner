@@ -29,7 +29,17 @@ class AuthController {
     if (Array.isArray(databaseUser) && databaseUser.length > 0
       && bcrypt.compareSync(req.body.password, databaseUser[0].password)
     ) {
-      const user = databaseUser[0];
+      const user = {
+        id: databaseUser[0].id,
+        first_name: databaseUser[0].first_name,
+        last_name: databaseUser[0].last_name,
+        other_name: databaseUser[0].other_name,
+        phone_number: databaseUser[0].phone_number,
+        user_name: databaseUser[0].user_name,
+        email: databaseUser[0].email,
+        registered: databaseUser[0].registered,
+        isadmin: databaseUser[0].isadmin,
+      };
       const token = jwt.sign({
         exp: Math.floor(Date.now() / 1000) + (60 * 60),
         user,

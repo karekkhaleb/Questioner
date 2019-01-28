@@ -32,7 +32,6 @@ export default class Meetup {
       });
       return requiredMeetups;
     } catch (e) {
-      console.log(e);
       return databaseErrorObj;
     }
   };

@@ -44,7 +44,7 @@ class MeetupController {
       });
     }
 
-    res.status(201).json({
+    return res.status(201).json({
       status: 201,
       data: [{
         id: created.id,
@@ -80,7 +80,7 @@ class MeetupController {
         error: upcomingMeetups.error,
       });
     }
-    res.status(200).json({ status: 200, data: upcomingMeetups });
+    return res.status(200).json({ status: 200, data: upcomingMeetups });
   };
 
   addTag = async (req, res) => {
@@ -102,7 +102,7 @@ class MeetupController {
     if (meetupAndTag && meetupAndTag.error) {
       return res.status(meetupAndTag.status).json(meetupAndTag);
     }
-    res.status(201).json({
+    return res.status(201).json({
       status: 201,
       data: [{
         id: meetupAndTag[0].id,
@@ -124,7 +124,7 @@ class MeetupController {
     if (deletedMeetup && deletedMeetup.error) {
       return res.status(deletedMeetup.status).json(deletedMeetup);
     }
-    res.status(200).json({
+    return res.status(200).json({
       status: 200,
       data: [{ message: 'Meetup deleted' }],
     });
@@ -155,7 +155,7 @@ class MeetupController {
         downVotes: Number.parseInt(question.down_votes, 10),
       });
     });
-    res.status(200).json({
+    return res.status(200).json({
       status: 200,
       data: questionsArr,
     });
@@ -194,7 +194,7 @@ class MeetupController {
       });
     }
 
-    res.status(200).json({
+    return res.status(200).json({
       status: 200,
       data: [{
         meetup: rsvp.meetupId,
@@ -224,7 +224,7 @@ class MeetupController {
         fs.unlinkSync(imagePath);
         return res.status(insertedImage.status).json(insertedImage);
       }
-      res.status(201).json({
+      return res.status(201).json({
         status: 201,
         data: [insertedImage],
       });
@@ -240,7 +240,7 @@ class MeetupController {
     if (meetup && meetup.error) {
       return res.status(meetup.status).json(meetup);
     }
-    res.status(200).json({
+    return res.status(200).json({
       status: 200,
       data: meetup,
     });
@@ -255,7 +255,7 @@ class MeetupController {
     if (meetup && meetup.error) {
       return res.status(meetup.status).json(meetup);
     }
-    res.status(200).json({
+    return res.status(200).json({
       status: 200,
       data: meetup,
     });
@@ -270,7 +270,7 @@ class MeetupController {
     if (meetup && meetup.error) {
       return res.status(meetup.status).json(meetup);
     }
-    res.status(200).json({
+    return res.status(200).json({
       status: 200,
       data: meetup,
     });

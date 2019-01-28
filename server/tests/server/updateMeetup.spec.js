@@ -27,6 +27,15 @@ describe('update meetup location', () => {
       done();
     });
   });
+  it('should not update a meetup that does not exist', (done) => {
+    request.patch(`${urlMeetups}/14785/location`, {
+      headers: { token: adminObj.token },
+      json: { location: 'busogo' },
+    }, (error, response, body) => {
+      expect(body.error).toEqual('meetup not found');
+      done();
+    });
+  });
 });
 describe('update meetup topic', () => {
   it('should update the topic of a meetup', (done) => {

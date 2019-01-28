@@ -29,7 +29,6 @@ describe('create question api endpoint', () => {
   it('should ask to give the meetup id as a number', (done) => {
     request.post(`${urlMeetups}/not-a-number/questions`, {
       json: {
-        createdBy: adminObj.user.id,
         title: 'test title',
         body: 'test body',
       },

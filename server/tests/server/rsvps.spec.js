@@ -6,9 +6,18 @@ import {
 
 let adminObj;
 let meetupObj;
+let meetupObj1;
 beforeAll(async (Done) => {
   adminObj = await loginAdmin();
   meetupObj = await createMeetup(adminObj.token);
+  meetupObj1 = await createMeetup(adminObj.token);
+  await request.post(`${urlMeetups}/${meetupObj1.id}/rsvps`, {
+    json: {
+      status: 'no',
+      userId: adminObj.user.id,
+    },
+    headers: { token: adminObj.token },
+  });
   Done();
 });
 
@@ -22,6 +31,30 @@ describe('respond rsvps api endpoint', () => {
       headers: { token: adminObj.token },
     }, (error, response, body) => {
       expect(body.data[0].status).toEqual('yes');
+      done();
+    });
+  });
+  it('should not respond rsvps to a meetup that does not exist', (done) => {
+    request.post(`${urlMeetups}/14785/rsvps`, {
+      json: {
+        status: 'yes',
+        userId: adminObj.user.id,
+      },
+      headers: { token: adminObj.token },
+    }, (error, response, body) => {
+      expect(body.error).toEqual('Meetup not available');
+      done();
+    });
+  });
+  it('should not respond rsvps twice to a meetup', (done) => {
+    request.post(`${urlMeetups}/${meetupObj1.id}/rsvps`, {
+      json: {
+        status: 'no',
+        userId: adminObj.user.id,
+      },
+      headers: { token: adminObj.token },
+    }, (error, response, body) => {
+      expect(body.error).toEqual('User already responded to this meetup');
       done();
     });
   });

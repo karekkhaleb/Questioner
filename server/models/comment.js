@@ -22,9 +22,6 @@ export default class Comment {
         comment: result[0].comment,
       };
     } catch (e) {
-      if (e.detail === `Key (user_id)=(${userId}) is not present in table "users".`) {
-        return { status: 404, error: 'User creating comment not found' };
-      }
       if (e.detail === `Key (question_id)=(${questionId}) is not present in table "questions".`) {
         return { status: 404, error: 'Question not found' };
       }

@@ -51,7 +51,7 @@ describe('signup api endpoint', () => {
       done();
     });
   });
-  it('should not allow duplicated emails', (done) => {
+  it('should not allow duplicated user names', (done) => {
     request.post(`${urlAuth}/signup`, {
       json: {
         firstname: 'firstname',
@@ -186,6 +186,48 @@ describe('signup api endpoint', () => {
       },
     }, (error, response, body) => {
       expect(body.error).toEqual('Phone Number should be a number');
+      done();
+    });
+  });
+  it('should not allow username as empty string', (done) => {
+    request.post(`${urlAuth}/signup`, {
+      json: {
+        firstname: 'Buhungiro',
+        lastname: 'Caleb',
+        email: 'karekkhaleb@gmail.com',
+        phoneNumber: 258748855,
+        userName: '          ',
+      },
+    }, (error, response, body) => {
+      expect(body.error).toEqual('UserName should not be an empty string');
+      done();
+    });
+  });
+  it('should not allow first name as empty string', (done) => {
+    request.post(`${urlAuth}/signup`, {
+      json: {
+        firstname: '             ',
+        lastname: 'Caleb',
+        email: 'karekkhaleb@gmail.com',
+        phoneNumber: 258748855,
+        userName: 'username',
+      },
+    }, (error, response, body) => {
+      expect(body.error).toEqual('Firstname should not be empty');
+      done();
+    });
+  });
+  it('should not allow last name as empty string', (done) => {
+    request.post(`${urlAuth}/signup`, {
+      json: {
+        firstname: 'firstName',
+        lastname: '                ',
+        email: 'karekkhaleb@gmail.com',
+        phoneNumber: 258748855,
+        userName: 'username',
+      },
+    }, (error, response, body) => {
+      expect(body.error).toEqual('Lastname should not be empty');
       done();
     });
   });

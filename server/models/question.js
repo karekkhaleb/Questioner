@@ -17,9 +17,6 @@ export default class Question {
         body: result[0].body,
       };
     } catch (e) {
-      if (e.detail === `Key (created_by)=(${createdBy}) is not present in table "users".`) {
-        return { status: 404, error: 'User creating question not found' };
-      }
       if (e.detail === `Key (meetup)=(${meetupId}) is not present in table "meetups".`) {
         return { status: 404, error: 'Meetup not found' };
       }
